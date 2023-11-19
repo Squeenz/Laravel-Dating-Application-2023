@@ -6,9 +6,17 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
+//Edit the form to take in other fields from the database
 const form = useForm({
-    name: '',
+    username: '',
+    first_name: '',
+    surname: '',
+    age: '',
     email: '',
+    location: '',
+    photos: '',
+    social_media: '',
+    interests: '',
     password: '',
     password_confirmation: '',
 });
@@ -26,19 +34,131 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="username" value="username" />
 
                 <TextInput
-                    id="name"
+                    id="username"
                     type="text"
                     class="mt-1 block w-full"
-                    v-model="form.name"
+                    v-model="form.username"
                     required
                     autofocus
-                    autocomplete="name"
+                    autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError class="mt-2" :message="form.errors.username" />
+            </div>
+
+            <div>
+                <InputLabel for="first_name" value="first name" />
+
+                <TextInput
+                    id="first_name"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.first_name"
+                    required
+                    autofocus
+                    autocomplete="first_name"
+                />
+
+                <InputError class="mt-2" :message="form.errors.first_name" />
+            </div>
+
+            <div>
+                <InputLabel for="surname" value="surname" />
+
+                <TextInput
+                    id="surname"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.surname"
+                    required
+                    autofocus
+                    autocomplete="surname"
+                />
+
+                <InputError class="mt-2" :message="form.errors.surname" />
+            </div>
+
+            <div>
+                <InputLabel for="age" value="age" />
+
+                <TextInput
+                    id="age"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.age"
+                    required
+                    autofocus
+                    autocomplete="age"
+                />
+
+                <InputError class="mt-2" :message="form.errors.age" />
+            </div>
+
+            <div>
+                <InputLabel for="location" value="location" />
+
+                <TextInput
+                    id="location"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.location"
+                    required
+                    autofocus
+                    autocomplete="location"
+                />
+
+                <InputError class="mt-2" :message="form.errors.location" />
+            </div>
+
+            <div>
+                <InputLabel for="photos" value="photos" />
+
+                <TextInput
+                    id="photos"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.photos"
+                    required
+                    autofocus
+                    autocomplete="photos"
+                />
+
+                <InputError class="mt-2" :message="form.errors.photos" />
+            </div>
+
+            <div>
+                <InputLabel for="social_media" value="social media:" />
+
+                <TextInput
+                    id="social_media"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.social_media"
+                    required
+                    autofocus
+                    autocomplete="social_media"
+                />
+
+                <InputError class="mt-2" :message="form.errors.social_media" />
+            </div>
+
+            <div>
+                <InputLabel for="interests" value="interests" />
+
+                <TextInput
+                    id="finterests"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.interests"
+                    required
+                    autofocus
+                    autocomplete="interests"
+                />
+
+                <InputError class="mt-2" :message="form.errors.interests" />
             </div>
 
             <div class="mt-4">
