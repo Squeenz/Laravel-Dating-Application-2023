@@ -17,7 +17,15 @@ defineProps({
 const user = usePage().props.auth.user;
 
 const form = useForm({
-    name: user.name,
+    username: user.username,
+    first_name: user.first_name,
+    surname: user.surname,
+    gender: user.gender,
+    age: user.age,
+    bio: user.bio,
+    interests: user.interests,
+    location: user.location,
+    social_media: user.social_media,
     email: user.email,
 });
 </script>
@@ -34,19 +42,156 @@ const form = useForm({
 
         <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="username" value="Username" />
 
                 <TextInput
-                    id="name"
+                    id="username"
                     type="text"
                     class="mt-1 block w-full"
-                    v-model="form.name"
+                    v-model="form.username"
                     required
                     autofocus
-                    autocomplete="name"
+                    autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError class="mt-2" :message="form.errors.username" />
+            </div>
+
+            <div>
+                <InputLabel for="first_name" value="First name" />
+
+                <TextInput
+                    id="first_name"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.first_name"
+                    required
+                    autofocus
+                    autocomplete="first_name"
+                />
+
+                <InputError class="mt-2" :message="form.errors.first_name" />
+            </div>
+
+            <div>
+                <InputLabel for="surname" value="Surname" />
+
+                <TextInput
+                    id="surname"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.surname"
+                    required
+                    autofocus
+                    autocomplete="surname"
+                />
+
+                <InputError class="mt-2" :message="form.errors.surname" />
+            </div>
+
+            <div>
+                <InputLabel for="age" value="Age" />
+
+                <input
+                    id="age"
+                    type="number"
+                    v-model="form.age"
+                    required
+                    autofocus
+                    autocomplete="age"
+                >
+
+                <!-- <TextInput
+                    id="age"
+                    type="number"
+                    class="mt-1 block w-full"
+                    v-model="form.age"
+                    required
+                    autofocus
+                    autocomplete="age"
+                /> -->
+
+                <InputError class="mt-2" :message="form.errors.age" />
+            </div>
+
+            <div>
+                <InputLabel for="gender" value="gender" />
+
+                <TextInput
+                    id="gender"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.gender"
+                    required
+                    autofocus
+                    autocomplete="gender"
+                />
+
+                <InputError class="mt-2" :message="form.errors.gender" />
+            </div>
+
+            <div>
+                <InputLabel for="bio" value="bio" />
+
+                <TextInput
+                    id="bio"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.bio"
+                    required
+                    autofocus
+                    autocomplete="bio"
+                />
+
+                <InputError class="mt-2" :message="form.errors.bio" />
+            </div>
+
+            <div>
+                <InputLabel for="location" value="Location" />
+
+                <TextInput
+                    id="location"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.location"
+                    required
+                    autofocus
+                    autocomplete="location"
+                />
+
+                <InputError class="mt-2" :message="form.errors.location" />
+            </div>
+
+            <div>
+                <InputLabel for="social_media" value="Social media" />
+
+                <TextInput
+                    id="social_media"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.social_media"
+                    required
+                    autofocus
+                    autocomplete="social_media"
+                />
+
+                <InputError class="mt-2" :message="form.errors.social_media" />
+            </div>
+
+            <div>
+                <InputLabel for="interests" value="Interests" />
+
+                <TextInput
+                    id="finterests"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.interests"
+                    required
+                    autofocus
+                    autocomplete="interests"
+                />
+
+                <InputError class="mt-2" :message="form.errors.interests" />
             </div>
 
             <div>
@@ -63,6 +208,8 @@ const form = useForm({
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
+
+
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
                 <p class="text-sm mt-2 text-gray-800">

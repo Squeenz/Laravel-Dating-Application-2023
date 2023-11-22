@@ -6,12 +6,13 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
-//Edit the form to take in other fields from the database
 const form = useForm({
     username: '',
     first_name: '',
     surname: '',
     age: '',
+    gender: '',
+    bio: '',
     email: '',
     location: '',
     photos: '',
@@ -34,7 +35,7 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="username" value="username" />
+                <InputLabel for="username" value="Username" />
 
                 <TextInput
                     id="username"
@@ -50,7 +51,7 @@ const submit = () => {
             </div>
 
             <div>
-                <InputLabel for="first_name" value="first name" />
+                <InputLabel for="first_name" value="First name" />
 
                 <TextInput
                     id="first_name"
@@ -66,7 +67,7 @@ const submit = () => {
             </div>
 
             <div>
-                <InputLabel for="surname" value="surname" />
+                <InputLabel for="surname" value="Surname" />
 
                 <TextInput
                     id="surname"
@@ -82,11 +83,11 @@ const submit = () => {
             </div>
 
             <div>
-                <InputLabel for="age" value="age" />
+                <InputLabel for="age" value="Age" />
 
                 <TextInput
                     id="age"
-                    type="text"
+                    type="number"
                     class="mt-1 block w-full"
                     v-model="form.age"
                     required
@@ -98,7 +99,39 @@ const submit = () => {
             </div>
 
             <div>
-                <InputLabel for="location" value="location" />
+                <InputLabel for="gender" value="Gender" />
+
+                <TextInput
+                    id="gender"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.gender"
+                    required
+                    autofocus
+                    autocomplete="gender"
+                />
+
+                <InputError class="mt-2" :message="form.errors.gender" />
+            </div>
+
+            <div>
+                <InputLabel for="bio" value="Bio" />
+
+                <TextInput
+                    id="bio"
+                    type="text"
+                    class="mt-1 block w-full"
+                    v-model="form.bio"
+                    required
+                    autofocus
+                    autocomplete="bio"
+                />
+
+                <InputError class="mt-2" :message="form.errors.bio" />
+            </div>
+
+            <div>
+                <InputLabel for="location" value="Location" />
 
                 <TextInput
                     id="location"
@@ -114,7 +147,7 @@ const submit = () => {
             </div>
 
             <div>
-                <InputLabel for="photos" value="photos" />
+                <InputLabel for="photos" value="Photos" />
 
                 <TextInput
                     id="photos"
@@ -130,7 +163,7 @@ const submit = () => {
             </div>
 
             <div>
-                <InputLabel for="social_media" value="social media:" />
+                <InputLabel for="social_media" value="Social media:" />
 
                 <TextInput
                     id="social_media"
@@ -146,7 +179,7 @@ const submit = () => {
             </div>
 
             <div>
-                <InputLabel for="interests" value="interests" />
+                <InputLabel for="interests" value="Interests" />
 
                 <TextInput
                     id="finterests"
