@@ -5,9 +5,11 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import { computed } from 'vue';
 
-var stage = 1;
+let stage = ref(1);
+let confirmBox = ref(false);
 
 const interests = [
   "Hiking and nature",
@@ -71,11 +73,11 @@ const submit = () => {
 
 //change the stage of the form
 const changeStep = (direction) => {
-    if (direction === 'next' && stage <= 5 && form.hasErrors === false) {
-        stage++;
+    if (direction === 'next' && stage.value <= 5) {
+        stage.value++;
     }
     else if (direction === 'prev'){
-        stage--;
+        stage.value--;
     }
 }
 
@@ -96,7 +98,7 @@ const addInterest = (interest) => {
         <Head title="Register" />
         <h1 class="text-[2rem] text-center">Register</h1>
         <p class="text-center">Step {{ stage }} out of 5</p>
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" :key="stage">
             <div v-if="stage === 1">
                 <div>
                     <InputLabel for="gender" value="Gender"/>
@@ -278,36 +280,28 @@ const addInterest = (interest) => {
                 </div>
             </div>
 
-
             <div v-if="stage === 5">
                 <div>
                     <h1>Profile Details</h1>
-                    <p>Username: {{ form.username }}</p>
-                    <p>First name: {{ form.first_name }}</p>
-                    <p>Surname: {{ form.surname }}</p>
-                    <p>Date of Birth: {{ form.dob }}</p>
-                    <p>Gender: {{ form.gender }}</p>
-                    <p>Bio: {{ form.bio }}</p>
-                    <p>Email: {{ form.email }}</p>
-                    <p>Location: {{ form.location }}</p>
-                    <p>Photos: {{ form.photos }}</p>
-                    <p>Social media: {{ form.social_media }}</p>
-                    <p>Interests: {{ form.interests }}</p>
+                    <div v-for="(value, field ) in form.data()" :key="field">
+                        <p v-if="field != 'password' && field != 'password_confirmation'">{{ field }}: {{ value }}</p>
+                        <InputError v-if="form.hasErrors" class="mt-2" :message="form.errors[field]"/>
+                    </div>
 
-                    <input type="checkbox"/>
-                    <label for="checkbox"> I confirm the detail are correct</label>
+                    <input type="checkbox" id="confirmBox" @click="confirmBox = !confirmBox" v-model="confirmBox"/>
+                    <label for="checkbox"> I confirm the details are correct</label>
                 </div>
             </div>
 
             <div>
                 <div class="justify-end mt-4 grid-flow-col grid items-end">
-                    <PrimaryButton v-if="stage != 1" class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="changeStep('prev')">
+                    <PrimaryButton v-if="stage != 1" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('prev')">
                         Previous Step
                     </PrimaryButton>
-                    <PrimaryButton v-if="stage != 5" class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="changeStep('next')">
+                    <PrimaryButton v-if="stage != 5" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('next')">
                         Next Step
                     </PrimaryButton>
-                    <PrimaryButton v-else class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    <PrimaryButton v-else class="ms-4" :class="{ 'opacity-25': !confirmBox }" :disabled=" !confirmBox">
                         Register
                     </PrimaryButton>
                 </div>
