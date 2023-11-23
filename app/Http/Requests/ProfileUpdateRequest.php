@@ -20,7 +20,6 @@ class ProfileUpdateRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
             'gender' => ['required', 'string', 'max:255'],
-            'age' => ['required', 'integer'],
             'bio' => ['required', 'string', 'max:255'],
             'location' => ['required', 'string', 'max:255'],
             'social_media' => ['required', 'string', 'max:255'],

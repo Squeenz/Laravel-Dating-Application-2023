@@ -22,7 +22,7 @@ class User extends Authenticatable
         'first_name',
         'surname',
         'gender',
-        'age',
+        'dob',
         'bio',
         'email',
         'location',
