@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,6 +14,19 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+     /**
+     * Display the user's profile
+     */
+    public function show($id): Response
+    {
+        $user = User::findOrFail($id);
+
+        return Inertia::render('Profile/Show', [
+            'userData' => $user,
+            'userPhotos' => $user->photos,
+        ]);
+    }
+
     /**
      * Display the user's profile form.
      */

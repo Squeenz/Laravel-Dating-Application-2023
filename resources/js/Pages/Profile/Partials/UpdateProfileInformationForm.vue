@@ -22,6 +22,7 @@ const form = useForm({
     surname: user.surname,
     gender: user.gender,
     age: user.age,
+    dob: user.dob,
     bio: user.bio,
     interests: user.interests,
     location: user.location,

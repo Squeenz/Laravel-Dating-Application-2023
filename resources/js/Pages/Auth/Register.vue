@@ -6,7 +6,6 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
-import { computed } from 'vue';
 
 let stage = ref(1);
 let confirmBox = ref(false);
@@ -73,7 +72,7 @@ const submit = () => {
 
 //change the stage of the form
 const changeStep = (direction) => {
-    if (direction === 'next' && stage.value <= 5) {
+    if (direction === 'next' && stage.value <= 4) {
         stage.value++;
     }
     else if (direction === 'prev'){
@@ -90,7 +89,6 @@ const addInterest = (interest) => {
         form.interests = form.interests.replace(interest + ",", "");
     }
 }
-
 </script>
 
 <template>
@@ -98,7 +96,7 @@ const addInterest = (interest) => {
         <Head title="Register" />
         <h1 class="text-[2rem] text-center">Register</h1>
         <p class="text-center">Step {{ stage }} out of 5</p>
-        <form @submit.prevent="submit" :key="stage">
+        <form @submit.prevent="submit" :key="stage" enctype="multipart/form-data">
             <div v-if="stage === 1">
                 <div>
                     <InputLabel for="gender" value="Gender"/>
@@ -249,23 +247,6 @@ const addInterest = (interest) => {
 
             <div v-if="stage === 3">
                 <div>
-                    <InputLabel for="photos" value="Profile Photos"/>
-                    <TextInput
-                        id="photos"
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.photos"
-
-                        autofocus
-                        autocomplete="photos"
-                    />
-
-                    <InputError class="mt-2" :message="form.errors.photos"/>
-                </div>
-            </div>
-
-            <div v-if="stage === 4">
-                <div>
                     <InputLabel for="social_media" value="Social Media"/>
                     <TextInput
                         id="social_media"
@@ -280,7 +261,7 @@ const addInterest = (interest) => {
                 </div>
             </div>
 
-            <div v-if="stage === 5">
+            <div v-if="stage === 4">
                 <div>
                     <h1>Profile Details</h1>
                     <div v-for="(value, field ) in form.data()" :key="field">
@@ -298,7 +279,7 @@ const addInterest = (interest) => {
                     <PrimaryButton v-if="stage != 1" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('prev')">
                         Previous Step
                     </PrimaryButton>
-                    <PrimaryButton v-if="stage != 5" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('next')">
+                    <PrimaryButton v-if="stage != 4" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('next')">
                         Next Step
                     </PrimaryButton>
                     <PrimaryButton v-else class="ms-4" :class="{ 'opacity-25': !confirmBox }" :disabled=" !confirmBox">
