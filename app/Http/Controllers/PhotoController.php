@@ -13,7 +13,7 @@ use Inertia\Inertia;
 class PhotoController extends Controller
 {
     /**
-     * Display the user's profile
+     * Get the link to the img
      */
     public function getPrivatePhotos($fileName)
     {
@@ -67,7 +67,7 @@ class PhotoController extends Controller
                     $file->store('photos', 'private');
 
                     //using the photo model we create the new item in the database and we pass,
-                    //auth id and the file path
+                    //auth id and the hashed file name
                     Photo::create([
                         'user_id' => Auth::user()->id,
                         'photo' => $file->hashName(),

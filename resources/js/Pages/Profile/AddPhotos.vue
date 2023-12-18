@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
+//define the prop to recieve the count of photos from the server
 defineProps(['numberPhotos']);
 
 //we define the form as the inertiajs useForm method
