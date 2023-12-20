@@ -35,6 +35,9 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('photos.create')" :active="route().current('photos.create')">
                                     Add Photos
                                 </NavLink>
+                                <NavLink :href="route('photos.remove')" :active="route().current('photos.remove')">
+                                    Remove Photos
+                                </NavLink>
                             </div>
                         </div>
 

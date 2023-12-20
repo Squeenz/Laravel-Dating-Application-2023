@@ -39,6 +39,8 @@ Route::middleware(['auth', 'checkPhotos'])->group(function () {
 
 Route::middleware('auth')->group(function() {
     Route::get('/photos/get/{filename}', [PhotoController::class, 'getPrivatePhotos'])->name('photos.get');
+    Route::get('/photos/remove', [PhotoController::class, 'remove'])->name('photos.remove');
+    Route::delete('/photos/destroy/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');
     Route::get('/photos/add', [PhotoController::class, 'create'])->name('photos.create');
     Route::post('/photos/upload', [PhotoController::class, 'store'])->name('photos.store');
 });

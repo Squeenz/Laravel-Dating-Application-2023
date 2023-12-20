@@ -30,7 +30,7 @@ const handlePhoto = (event) => {
 </script>
 
 <template>
-    <Head title="Register" />
+    <Head title="Add Photos" />
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Add Photos</h2>

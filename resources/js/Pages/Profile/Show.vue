@@ -2,7 +2,7 @@
 import { Head } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
-const { userData, userPhotos } = defineProps(['userData', 'userPhotos']);
+defineProps(['userData', 'userPhotos']);
 
 </script>
 

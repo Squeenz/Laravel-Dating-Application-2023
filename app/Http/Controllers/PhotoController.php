@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
+use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class PhotoController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Profile/AddPhotos', [
+        return Inertia::render('Photos/Add', [
             'numberPhotos' => Photo::where('user_id', Auth::user()->id)->count(),
         ]);
     }
@@ -86,6 +87,16 @@ class PhotoController extends Controller
     }
 
     /**
+     * Return the photo manager view with user photos
+     */
+    public function remove(): Response
+    {
+        return Inertia::render('Photos/Remove', [
+            'userPhotos' => Auth::user()->photos,
+        ]);
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(Photo $photo)
@@ -112,8 +123,18 @@ class PhotoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Photo $photo)
+    public function destroy(Photo $photo): RedirectResponse
     {
-        //
+        $this->authorize('delete', $photo);
+
+        //delete the image from the storage of the application
+        $filePath = '/photos/'. $photo->photo;
+
+        Storage::disk('private')->delete($filePath);
+
+        //delete the record from the datbase using the model
+        $photo->delete();
+
+        return redirect(route('photos.remove'));
     }
 }
