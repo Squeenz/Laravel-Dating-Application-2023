@@ -47,6 +47,7 @@ class MatchingController extends Controller
         $potentialMatches = $potentialMatches->take(10);
 
         return Inertia::render('Matchmaking/Game', [
+            'user' => Auth::user(),
             'potentialMatches' => $potentialMatches,
             'potentialMatchesPhotos' => $potentialMatchesPhotos,
         ]);

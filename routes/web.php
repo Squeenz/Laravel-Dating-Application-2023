@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\MatchingController;
+use App\Http\Controllers\LikeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,8 +39,13 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/matchmaking', [MatchingController::class, 'index'])->name('matchmaking');
+    Route::post('/like/{status}', [LikeController::class, 'store'])->name('like.store');
+});
+
+Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/photos/get/{filename}', [PhotoController::class, 'getPrivatePhotos'])->name('photos.get');
     Route::get('/photos/remove', [PhotoController::class, 'remove'])->name('photos.remove');
     Route::delete('/photos/destroy/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');

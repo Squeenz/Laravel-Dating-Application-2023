@@ -1,36 +1,34 @@
 <script setup>
 import { ref } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 
-const props = defineProps(['potentialMatches', 'potentialMatchesPhotos']);
+const props = defineProps(['user', 'potentialMatches', 'potentialMatchesPhotos']);
 
 const listIndex = ref(0);
 const currentPhotoIndex = ref(0);
 
-const changeProfile = (direction) => {
-  // Update the listIndex based on the provided direction (1 for next, -1 for previous)
-  listIndex.value += direction;
-
-  // Handle boundary conditions, e.g., looping back to the beginning
-  if (listIndex.value < 0) {
-    listIndex.value = props.potentialMatches.length - 1;
-  } else if (listIndex.value >= props.potentialMatches.length) {
-    listIndex.value = 0;
-  }
-};
-
 const changePicture = (direction) => {
-    currentPhotoIndex.value += direction;
-
+    //fix this later for the count of how many image sthe profiles have
     const lenghtImagesArray = props.potentialMatchesPhotos[props.potentialMatches[listIndex.value].id].length;
+
+    currentPhotoIndex.value += direction;
 
     if (currentPhotoIndex.value < 0) {
         currentPhotoIndex.value = 0;
     } else if (currentPhotoIndex.value >= lenghtImagesArray) {
         currentPhotoIndex.value = lenghtImagesArray - 1;
     }
+}
+
+const reactToProfile = (status) =>
+{
+    router.post(route('like.store', status), {
+        user_id: props.user.id, // Replace with the actual user_id
+        liked_user_id: props.potentialMatches[listIndex.value].id, // Replace with the actual liked_user_id
+        is_like: status,
+    });
 }
 
 </script>
@@ -56,6 +54,7 @@ const changePicture = (direction) => {
                     >
 
                     <PrimaryButton @click="changePicture(-1)">Prev</PrimaryButton>
+                    <h1>{{ currentPhotoIndex + 1 }} / 0 </h1>
                     <PrimaryButton @click="changePicture(1)">Next</PrimaryButton>
 
                     <h1>{{ potentialMatches[listIndex].first_name }} {{ potentialMatches[listIndex].surname }} ({{ potentialMatches[listIndex].username }})</h1>
@@ -65,8 +64,8 @@ const changePicture = (direction) => {
                     <p>{{ potentialMatches[listIndex].interests }}</p>
                 </div>
 
-                <PrimaryButton @click="changeProfile(-1)">Dislike</PrimaryButton>
-                <PrimaryButton @click="changeProfile(1)">Like</PrimaryButton>
+                <PrimaryButton @click="reactToProfile(0)">Dislike</PrimaryButton>
+                <PrimaryButton @click="reactToProfile(1)">Like</PrimaryButton>
 
             </div>
             <div v-else>
