@@ -87,16 +87,6 @@ class PhotoController extends Controller
     }
 
     /**
-     * Return the photo manager view with user photos
-     */
-    public function remove(): Response
-    {
-        return Inertia::render('Photos/Remove', [
-            'userPhotos' => Auth::user()->photos,
-        ]);
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(Photo $photo)
@@ -118,6 +108,16 @@ class PhotoController extends Controller
     public function update(Request $request, Photo $photo)
     {
         //
+    }
+
+    /**
+     * Return the photo manager view with user photos
+     */
+    public function remove(): Response
+    {
+        return Inertia::render('Photos/Remove', [
+            'userPhotos' => Auth::user()->photos,
+        ]);
     }
 
     /**
