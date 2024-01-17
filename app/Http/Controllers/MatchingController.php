@@ -6,6 +6,7 @@ use App\Models\Matching;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class MatchingController extends Controller
@@ -21,13 +22,20 @@ class MatchingController extends Controller
 
         // Get users with similar interests excluding the current user
         $potentialMatches = User::where('id', '!=', $user->id)
-            ->where(function ($query) use ($userInterests) {
-                foreach ($userInterests as $interest) {
-                    $query->orWhere('interests', 'LIKE', '%' . $interest . '%');
-                }
-            })
-            ->whereNotIn('id', $user->likes->pluck('liked_user_id'))
-            ->get();
+        ->where(function ($query) use ($userInterests) {
+            foreach ($userInterests as $interest) {
+                $query->orWhere('interests', 'LIKE', '%' . $interest . '%');
+            }
+        })
+        ->where(function ($query) use ($user) {
+            $query->whereNotExists(function ($subQuery) use ($user) {
+                $subQuery->select(DB::raw(1))
+                        ->from('likes')
+                        ->whereRaw('likes.liked_user_id = users.id')
+                        ->where('likes.user_id', $user->id);
+            });
+        })
+        ->get();
 
         // Calculate the number of matching interests for each user
         foreach ($potentialMatches as $potentialMatch) {

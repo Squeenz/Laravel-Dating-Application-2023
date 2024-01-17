@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MatchFound;
 use App\Models\Like;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 use function Laravel\Prompts\error;
@@ -41,6 +43,15 @@ class LikeController extends Controller
             $validated['is_like'] = $status;
 
             Like::create($validated);
+
+            $user = User::find($validated['user_id']);
+            $likedUser = User::find($validated['liked_user_id']);
+
+            // Check if it's a mutual like
+            if ($user->likes->where('liked_user_id', $likedUser->id)->isNotEmpty() && $likedUser->likes->where('liked_user_id', $user->id)->isNotEmpty()) {
+                // Trigger the MatchFound event
+                event(new MatchFound($user, $likedUser));
+            }
         }
         else
         {

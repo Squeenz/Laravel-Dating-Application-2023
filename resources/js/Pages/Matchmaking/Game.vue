@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -30,6 +30,13 @@ const reactToProfile = (status) =>
         is_like: status,
     });
 }
+
+onMounted(() => {
+    window.Echo.private('matches')
+            .listen('MatchFound', (e) => {
+                console.log(e.user1, e.user2);
+            })
+});
 
 </script>
 
