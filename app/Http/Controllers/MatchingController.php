@@ -8,13 +8,27 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class MatchingController extends Controller
 {
+    public function index(): Response
+    {
+        $user = User::find(Auth::user()->id);
+
+        $matches = Matching::where('user1_id', $user->id)
+                ->orWhere('user2_id', $user->id)
+                ->get();
+
+        return Inertia::render('Matches/Matches', [
+            'matches' => $matches,
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function matchmaking()
     {
         $user = Auth::user();
 
@@ -59,5 +73,34 @@ class MatchingController extends Controller
             'potentialMatches' => $potentialMatches,
             'potentialMatchesPhotos' => $potentialMatchesPhotos,
         ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'user1_id' => 'required|integer',
+            'user2_id' => 'required|integer',
+        ]);
+
+        $user1 = $validated['user1_id'];
+        $user2 = $validated['user2_id'];
+
+        DB::transaction(function () use ($user1, $user2) {
+            $existingRecord = Matching::where('user1_id', $user1)
+                ->where('user2_id', $user2)
+                ->lockForUpdate()
+                ->first();
+
+            if (!$existingRecord)
+            {
+                Matching::create([
+                    'user1_id' => $user1,
+                    'user2_id' => $user2,
+                ]);
+            }
+        });
     }
 }

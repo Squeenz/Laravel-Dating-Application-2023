@@ -37,17 +37,21 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/photos/remove', [PhotoController::class, 'remove'])->name('photos.remove');
 });
 
+//Matchmaking system routes
+Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
+    Route::get('/matches', [MatchingController::class, 'index'])->name('matches');
 
-Route::middleware(['auth', 'verified'])->group(function() {
-    Route::get('/matchmaking', [MatchingController::class, 'index'])->name('matchmaking');
+    Route::get('/matchmaking', [MatchingController::class, 'matchmaking'])->name('matchmaking');
+    Route::post('/matchmaking', [MatchingController::class, 'store'])->name('matchmaking.store');
     Route::post('/like/{status}', [LikeController::class, 'store'])->name('like.store');
 });
 
 Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/photos/get/{filename}', [PhotoController::class, 'getPrivatePhotos'])->name('photos.get');
-    Route::get('/photos/remove', [PhotoController::class, 'remove'])->name('photos.remove');
     Route::delete('/photos/destroy/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');
     Route::get('/photos/add', [PhotoController::class, 'create'])->name('photos.create');
     Route::post('/photos/upload', [PhotoController::class, 'store'])->name('photos.store');

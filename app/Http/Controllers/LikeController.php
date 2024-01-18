@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Events\MatchFound;
 use App\Models\Like;
+use App\Models\Matching;
 use App\Models\User;
+
 use Illuminate\Http\Request;
 
 use function Laravel\Prompts\error;
