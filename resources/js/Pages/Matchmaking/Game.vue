@@ -31,16 +31,15 @@ const reactToProfile = (status) =>
     });
 }
 
-onMounted(() => {
-    window.Echo.private('matches')
-            .listen('MatchFound', (e) => {
-                router.post(route('matchmaking.store'), {
-                    user1_id: e.user1.id,
-                    user2_id: e.user2.id,
-                });
-            })
-});
-
+// onMounted(() => {
+//     window.Echo.private('matches')
+//             .listen('MatchFound', (e) => {
+//                 router.post(route('matchmaking.store'), {
+//                     user1_id: e.user1.id,
+//                     user2_id: e.user2.id,
+//                 });
+//             })
+// });
 </script>
 
 <template>

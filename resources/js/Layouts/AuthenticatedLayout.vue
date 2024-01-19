@@ -1,13 +1,28 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+onMounted(() => {
+    Echo.private('matches')
+            .listen('MatchFound', (e) => {
+                router.post(route('matchmaking.store'), {
+                    user1_id: e.user1.id,
+                    user2_id: e.user2.id,
+                });
+            })
+});
+
+const stopListening = () =>{
+    Echo.leave('matches');
+}
+
 </script>
 
 <template>
@@ -74,7 +89,7 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
-                                        <DropdownLink :href="route('logout')" method="post" as="button">
+                                        <DropdownLink :href="route('logout')" @click="stopListening" method="post" as="button">
                                             Log Out
                                         </DropdownLink>
                                     </template>
