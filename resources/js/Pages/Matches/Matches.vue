@@ -6,8 +6,10 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 //define the prop to recieve the count of photos from the server
-defineProps(['matches']);
+const props = defineProps(['users']);
 
+
+console.log(props.user);
 </script>
 
 <template>
@@ -23,11 +25,13 @@ defineProps(['matches']);
                     <h1 class="text-[2rem] text-center">Your Matches</h1>
 
                     <div
-                        v-for="match in matches"
-                        :key="match.id"
+                        v-for="user in users"
+                        :key="user.id"
                         >
-                        <h1>User1</h1>
-                        <h1>User2</h1>
+                        <h1>{{ user.first_name }} {{ user.surname }}  ({{ user.username }})</h1>
+                        <h1>Age: {{ user.dob }}</h1>
+                        <h1>Bio: {{ user.bio }}</h1>
+                        <h1>Interests: {{ user.interests }}</h1>
                         <PrimaryButton>Test</PrimaryButton>
                     </div>
                 </div>

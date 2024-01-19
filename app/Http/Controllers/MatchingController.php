@@ -17,11 +17,26 @@ class MatchingController extends Controller
         $user = User::find(Auth::user()->id);
 
         $matches = Matching::where('user1_id', $user->id)
-                ->orWhere('user2_id', $user->id)
-                ->get();
+            ->orWhere('user2_id', $user->id)
+            ->get();
+
+        // Initialize an array to store other users
+        $otherUsers = [];
+
+        // Iterate through matches to find the other user for each match
+        foreach ($matches as $match) {
+            if ($match->user1_id == $user->id) {
+                $otherUserId = $match->user2_id;
+            } else {
+                $otherUserId = $match->user1_id;
+            }
+
+            // Fetch the other user based on 'user2_id' and add to the array
+            $otherUsers[] = User::find($otherUserId);
+        }
 
         return Inertia::render('Matches/Matches', [
-            'matches' => $matches,
+            'users' => $otherUsers,
         ]);
     }
 
