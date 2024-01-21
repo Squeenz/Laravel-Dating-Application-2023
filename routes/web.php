@@ -44,7 +44,6 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function () {
 //Matchmaking system routes
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
     Route::get('/matches', [MatchingController::class, 'index'])->name('matches');
-
     Route::get('/matchmaking', [MatchingController::class, 'matchmaking'])->name('matchmaking');
     Route::post('/matchmaking', [MatchingController::class, 'store'])->name('matchmaking.store');
     Route::post('/like/{status}', [LikeController::class, 'store'])->name('like.store');

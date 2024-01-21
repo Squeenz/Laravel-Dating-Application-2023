@@ -1,15 +1,10 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 
 //define the prop to recieve the count of photos from the server
 const props = defineProps(['users']);
 
-
-console.log(props.user);
 </script>
 
 <template>
@@ -32,7 +27,6 @@ console.log(props.user);
                         <h1>Age: {{ user.dob }}</h1>
                         <h1>Bio: {{ user.bio }}</h1>
                         <h1>Interests: {{ user.interests }}</h1>
-                        <PrimaryButton>Test</PrimaryButton>
                     </div>
                 </div>
             </div>

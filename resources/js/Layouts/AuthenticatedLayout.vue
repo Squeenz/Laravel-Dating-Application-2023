@@ -56,6 +56,9 @@ const stopListening = () =>{
                                 <NavLink :href="route('photos.remove')" :active="route().current('photos.remove')">
                                     Remove Photos
                                 </NavLink>
+                                <NavLink :href="route('matches')" :active="route().current('matches')">
+                                    Matches
+                                </NavLink>
                             </div>
                         </div>
 

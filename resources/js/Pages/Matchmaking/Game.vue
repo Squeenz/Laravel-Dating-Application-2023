@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -8,38 +8,53 @@ const props = defineProps(['user', 'potentialMatches', 'potentialMatchesPhotos']
 
 const listIndex = ref(0);
 const currentPhotoIndex = ref(0);
+const lengthImagesArray = ref(0);
+
+onMounted(() => {
+  // Watch for changes in user data and potential matches
+  watch([() => props.user, () => props.potentialMatches], () => {
+    setUserIndexAndPhotoCount();
+  });
+
+  setUserIndexAndPhotoCount();
+});
+
+const setUserIndexAndPhotoCount = () => {
+  currentPhotoIndex.value = 0;
+
+  if (props.user.length !== 0 && props.potentialMatches[listIndex.value]) {
+    const userId = props.potentialMatches[listIndex.value].id;
+
+    // Check if potentialMatchesPhotos for the current user is available
+    if (props.potentialMatchesPhotos[userId]) {
+      lengthImagesArray.value = props.potentialMatchesPhotos[userId].length;
+    } else {
+      lengthImagesArray.value = 0;
+    }
+  } else {
+    lengthImagesArray.value = 0;
+  }
+};
 
 const changePicture = (direction) => {
-    //fix this later for the count of how many image sthe profiles have
-    const lenghtImagesArray = props.potentialMatchesPhotos[props.potentialMatches[listIndex.value].id].length;
+  currentPhotoIndex.value += direction;
 
-    currentPhotoIndex.value += direction;
+  if (currentPhotoIndex.value < 0) {
+    currentPhotoIndex.value = 0;
+  } else if (currentPhotoIndex.value === lengthImagesArray.value) {
+    currentPhotoIndex.value = lengthImagesArray.value - 1;
+  }
+};
 
-    if (currentPhotoIndex.value < 0) {
-        currentPhotoIndex.value = 0;
-    } else if (currentPhotoIndex.value >= lenghtImagesArray) {
-        currentPhotoIndex.value = lenghtImagesArray - 1;
-    }
-}
+const reactToProfile = (status) => {
+  setUserIndexAndPhotoCount();
 
-const reactToProfile = (status) =>
-{
-    router.post(route('like.store', status), {
-        user_id: props.user.id, // Replace with the actual user_id
-        liked_user_id: props.potentialMatches[listIndex.value].id, // Replace with the actual liked_user_id
-        is_like: status,
-    });
-}
-
-// onMounted(() => {
-//     window.Echo.private('matches')
-//             .listen('MatchFound', (e) => {
-//                 router.post(route('matchmaking.store'), {
-//                     user1_id: e.user1.id,
-//                     user2_id: e.user2.id,
-//                 });
-//             })
-// });
+  router.post(route('like.store', status), {
+    user_id: props.user.id,
+    liked_user_id: props.potentialMatches[listIndex.value].id,
+    is_like: status,
+  });
+};
 </script>
 
 <template>
@@ -63,7 +78,7 @@ const reactToProfile = (status) =>
                     >
 
                     <PrimaryButton @click="changePicture(-1)">Prev</PrimaryButton>
-                    <h1>{{ currentPhotoIndex + 1 }} / 0 </h1>
+                    <h1>{{ currentPhotoIndex + 1 }} / {{ lengthImagesArray }} </h1>
                     <PrimaryButton @click="changePicture(1)">Next</PrimaryButton>
 
                     <h1>{{ potentialMatches[listIndex].first_name }} {{ potentialMatches[listIndex].surname }} ({{ potentialMatches[listIndex].username }})</h1>
