@@ -47,8 +47,6 @@ const changePicture = (direction) => {
 };
 
 const reactToProfile = (status) => {
-  setUserIndexAndPhotoCount();
-
   router.post(route('like.store', status), {
     user_id: props.user.id,
     liked_user_id: props.potentialMatches[listIndex.value].id,

@@ -1,6 +1,7 @@
 <script setup>
+import { Head, Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 //define the prop to recieve the count of photos from the server
 const props = defineProps(['users']);
@@ -18,15 +19,13 @@ const props = defineProps(['users']);
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <h1 class="text-[2rem] text-center">Your Matches</h1>
-
                     <div
                         v-for="user in users"
                         :key="user.id"
                         >
                         <h1>{{ user.first_name }} {{ user.surname }}  ({{ user.username }})</h1>
                         <h1>Age: {{ user.dob }}</h1>
-                        <h1>Bio: {{ user.bio }}</h1>
-                        <h1>Interests: {{ user.interests }}</h1>
+                        <Link :href="route('profile.show', user.id)"><PrimaryButton>Profile</PrimaryButton></Link>
                     </div>
                 </div>
             </div>
