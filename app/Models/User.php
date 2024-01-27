@@ -89,4 +89,14 @@ class User extends Authenticatable implements MustVerifyEmail
         ->where('user1_id', $this->id)
         ->orWhere('user2_id', $this->id);
     }
+
+    public function chatRooms(): BelongsToMany
+    {
+        return $this->belongsToMany(ChatRoom::class);
+    }
+
+    public function chatMessages(): HasMany
+    {
+        return $this->hasMany(ChatMessage::class);
+    }
 }

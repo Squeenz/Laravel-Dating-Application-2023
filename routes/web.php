@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ChatApplication;
+use App\Http\Controllers\ChatMessageController;
+use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\MatchingController;
@@ -56,5 +59,13 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/photos/upload', [PhotoController::class, 'store'])->name('photos.store');
 });
 
+//ChatApplication
+Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
+    Route::get('/chat', [ChatApplication::class, 'index'])->name('chat.app');
+    Route::get('/chat/{roomName}', [ChatApplication::class, 'show'])->name('chat.app.show');
+    //Store records
+    Route::post('/chat/message', [ChatMessageController::class, 'store'])->name('chat.store');
+    Route::post('/chat/room', [ChatRoomController::class, 'store'])->name('chat.room.store');
+});
 
 require __DIR__.'/auth.php';
