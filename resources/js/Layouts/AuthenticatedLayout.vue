@@ -16,10 +16,17 @@ onMounted(() => {
                     user1_id: e.user1.id,
                     user2_id: e.user2.id,
                 });
-            })
+            });
+    Echo.private('chatRooms')
+            .listen('CreateChatRoom', (e) => {
+                router.post(route('chat.room.store'), {
+                    user1_id: e.user1.id,
+                    user2_id: e.user2.id,
+                });
+            });
 });
 
-const stopListening = () =>{
+const stopListening = () => {
     Echo.leave('matches');
 }
 

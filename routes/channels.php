@@ -21,3 +21,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('matches', function(){
     return Auth::check();
 });
+
+Broadcast::channel('chatRooms', function(){
+    return Auth::check();
+});
