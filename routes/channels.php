@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ChatRoom;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 
@@ -24,4 +25,9 @@ Broadcast::channel('matches', function(){
 
 Broadcast::channel('chatRooms', function(){
     return Auth::check();
+});
+
+Broadcast::channel('chat.{chatRoomName}', function($user, $chatRoomName){
+    $chatRoom = ChatRoom::where('name', $chatRoomName)->first();
+    return $chatRoom && ($user->id === $chatRoom->user1_id || $user->id === $chatRoom->user2_id);
 });

@@ -44,9 +44,9 @@ class NewMessage implements ShouldBroadcast
         return [
             'chatMessage' => [
                 'id' => $this->chatMessage->id,
-                'content' => $this->chatMessage->content,
+                'user_id' => $this->chatMessage->user->id,
+                'content' => decrypt($this->chatMessage->content),
                 'chat_room_id' => $this->chatMessage->chatRoom->id,
-                // Add any other fields you want to broadcast
             ],
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewMessage;
 use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -24,6 +25,8 @@ class ChatMessageController extends Controller
         $validated['content'] = encrypt($validated['content']);
 
         $chatMessage = ChatMessage::create($validated);
+
+        event(new NewMessage($chatMessage));
 
         $room = $chatMessage->chatRoom;
 

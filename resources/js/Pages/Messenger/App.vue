@@ -2,9 +2,11 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, Link, router } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+
+const allChatMessages = ref([]);
 
 const props = defineProps({
     roomID: Number,
@@ -17,8 +19,22 @@ dayjs.extend(relativeTime);
 
 const page = usePage();
 const user = page.props.auth.user;
-
 const currentMessage = ref('');
+const chatRoomName = page.url.split('/')[2];
+
+onMounted(() => {
+    if (route().current('chat.app.show'))
+    {
+        props.chatMessages.forEach(chatMessage => {
+            allChatMessages.value.push(chatMessage);
+        });
+
+        Echo.private('chat.' + chatRoomName)
+            .listen('NewMessage', (e) => {
+                allChatMessages.value.push(e.chatMessage)
+            });
+    }
+});
 
 const message = () => {
     router.post(route('chat.store'), {
@@ -28,8 +44,6 @@ const message = () => {
     });
     currentMessage.value = "";
 };
-
-console.log(props.chatMessages);
 </script>
 
 <template>
@@ -63,11 +77,11 @@ console.log(props.chatMessages);
 
                         <div class="ml-[25rem]">
                             <div class="p-6 text-gray-900">Chat's Messages</div>
-                            <div v-if="chatMessages && chatMessages.length !== 0">
+                            <div v-if="allChatMessages && allChatMessages.length !== 0" class="overflow-y-auto h-[20rem] scroll-smooth">
                                 <div
-                                    class="bg-gray-500 p-4 m-5 rounded-lg text-white w-[30rem] scroll-smooth"
+                                    class="bg-gray-500 p-4 m-5 rounded-lg text-white w-[30rem]"
                                     :class="user.id == chatMessage.user_id ? 'float-right bg-red-900' : 'float-left'"
-                                    v-for="chatMessage in chatMessages"
+                                    v-for="chatMessage in allChatMessages"
                                     :key="chatMessage"
                                     >
                                         <div
