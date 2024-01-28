@@ -33,17 +33,21 @@ class ChatApplication extends Controller
         $userID = Auth::user()->id;
 
         $chatRoom = ChatRoom::with('chatMessages')
-        ->where('name', $roomName)
-        ->where('user1_id', $userID)
-        ->orWhere('user2_id', $userID)
-        ->first();
+            ->where(function ($query) use ($roomName, $userID) {
+                $query->where('name', $roomName)
+                    ->where(function ($innerQuery) use ($userID) {
+                        $innerQuery->where('user1_id', $userID)
+                            ->orWhere('user2_id', $userID);
+                    });
+            })
+            ->first();
 
         $chatRooms = ChatRoom::with(['user1', 'user2'])
-        ->where(function ($query) use ($userID) {
-            $query->where('user1_id', $userID)
-                ->orWhere('user2_id', $userID);
-        })
-        ->get();
+            ->where(function ($query) use ($userID) {
+                $query->where('user1_id', $userID)
+                    ->orWhere('user2_id', $userID);
+            })
+            ->get();
 
         if (!$chatRoom) {
             abort(404);
@@ -64,4 +68,5 @@ class ChatApplication extends Controller
             'otherUser' => $otherUser,
         ]);
     }
+
 }

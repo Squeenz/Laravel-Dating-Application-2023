@@ -29,6 +29,7 @@ const message = () => {
     currentMessage.value = "";
 };
 
+console.log(props.chatMessages);
 </script>
 
 <template>
@@ -55,6 +56,7 @@ const message = () => {
                             :class="route().current('chat.app.show', chatRoom.name) ? 'bg-red-900' : 'bg-slate-300'"
                             >
                                 <div class="h-20 w-20 bg-red-500 rounded-full text-center">IMG</div>
+                                <h1> {{  chatRoom.id }}</h1>
                                 <h1 v-if="chatRoom.user2.id !== user.id" class="mt-[1rem] font-bold">{{ chatRoom.user2.first_name }} {{ chatRoom.user2.surname }} {{ chatRoom.user2.username }}</h1>
                                 <h1 v-else class="mt-[1rem] font-bold">{{ chatRoom.user1.first_name }} {{ chatRoom.user1.surname }} {{ chatRoom.user1.username }}</h1>
                             </Link>
@@ -67,7 +69,7 @@ const message = () => {
                                     class="bg-gray-500 p-4 m-5 rounded-lg text-white w-[30rem] scroll-smooth"
                                     :class="user.id == chatMessage.user_id ? 'float-right bg-red-900' : 'float-left'"
                                     v-for="chatMessage in chatMessages"
-                                    :key="chatMessage.id"
+                                    :key="chatMessage"
                                     >
                                         <div
                                         v-if="user.id == chatMessage.user_id"
