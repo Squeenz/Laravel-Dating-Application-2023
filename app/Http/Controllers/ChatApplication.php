@@ -18,8 +18,8 @@ class ChatApplication extends Controller
 
         $chatRooms = ChatRoom::with(['user1', 'user2'])
         ->where(function ($query) use ($userID) {
-            $query->where('user1_id', '!=', $userID)
-                ->orWhere('user2_id', '!=', $userID);
+            $query->where('user1_id', $userID)
+                ->orWhere('user2_id', $userID);
         })
         ->get();
 
@@ -32,7 +32,7 @@ class ChatApplication extends Controller
     {
         $userID = Auth::user()->id;
 
-        $chatRoom = ChatRoom::with(['user1', 'user2', 'chatMessages'])
+        $chatRoom = ChatRoom::with('chatMessages')
         ->where('name', $roomName)
         ->where('user1_id', $userID)
         ->orWhere('user2_id', $userID)
@@ -40,22 +40,28 @@ class ChatApplication extends Controller
 
         $chatRooms = ChatRoom::with(['user1', 'user2'])
         ->where(function ($query) use ($userID) {
-            $query->where('user1_id', '!=', $userID)
-                ->orWhere('user2_id', '!=', $userID);
+            $query->where('user1_id', $userID)
+                ->orWhere('user2_id', $userID);
         })
         ->get();
-
 
         if (!$chatRoom) {
             abort(404);
         }
 
-        $chatMessages = $chatRoom->chatMessages;
+        // Decrypt each chat message content
+        $chatMessages = $chatRoom->chatMessages->map(function ($message) {
+            $message->content = decrypt($message->content);
+            return $message;
+        });
+
+        $otherUser = $chatRoom->user1_id == $userID ? $chatRoom->user2 : $chatRoom->user1;
 
         return Inertia::render('Messenger/App', [
             'roomID' => $chatRoom->id,
             'chatRooms' => $chatRooms,
             'chatMessages' => $chatMessages,
+            'otherUser' => $otherUser,
         ]);
     }
 }

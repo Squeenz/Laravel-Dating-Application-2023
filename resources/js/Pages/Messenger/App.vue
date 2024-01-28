@@ -3,12 +3,17 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, usePage, Link, router } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { ref } from 'vue';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 const props = defineProps({
     roomID: Number,
     chatRooms: Array,
     chatMessages: Array,
+    otherUser: Object,
 });
+
+dayjs.extend(relativeTime);
 
 const page = usePage();
 const user = page.props.auth.user;
@@ -24,7 +29,6 @@ const message = () => {
     currentMessage.value = "";
 };
 
-console.log(props.chatMessages);
 </script>
 
 <template>
@@ -47,11 +51,12 @@ console.log(props.chatMessages);
                             v-for="chatRoom in chatRooms"
                             :key="chatRoom.id"
                             :href="route('chat.app.show', chatRoom.name)"
-                            class="p-1 grid grid-cols-2 m-2 rounded-xl"
+                            class="p-1 grid grid-cols-3 m-2 rounded-xl"
                             :class="route().current('chat.app.show', chatRoom.name) ? 'bg-red-900' : 'bg-slate-300'"
                             >
                                 <div class="h-20 w-20 bg-red-500 rounded-full text-center">IMG</div>
-                                <h1 class="mt-[1rem]">{{ chatRoom.user2.first_name }} {{ chatRoom.user2.surname }} {{ chatRoom.user2.username }}</h1>
+                                <h1 v-if="chatRoom.user2.id !== user.id" class="mt-[1rem] font-bold">{{ chatRoom.user2.first_name }} {{ chatRoom.user2.surname }} {{ chatRoom.user2.username }}</h1>
+                                <h1 v-else class="mt-[1rem] font-bold">{{ chatRoom.user1.first_name }} {{ chatRoom.user1.surname }} {{ chatRoom.user1.username }}</h1>
                             </Link>
                         </div>
 
@@ -59,14 +64,24 @@ console.log(props.chatMessages);
                             <div class="p-6 text-gray-900">Chat's Messages</div>
                             <div v-if="chatMessages && chatMessages.length !== 0">
                                 <div
-                                    class="bg-gray-500 p-4 m-5 rounded-lg text-white w-[30rem]"
+                                    class="bg-gray-500 p-4 m-5 rounded-lg text-white w-[30rem] scroll-smooth"
                                     :class="user.id == chatMessage.user_id ? 'float-right bg-red-900' : 'float-left'"
                                     v-for="chatMessage in chatMessages"
                                     :key="chatMessage.id"
                                     >
-                                        <p v-if="user.id == chatMessage.user_id">{{  chatMessage.content }} <br/> {{ chatMessage.created_at }}</p>
-                                        <p v-else>{{ chatMessage.user2.first_name + " " + chatMessage.user2.surname + " " + chatMessage.user2.username }}: {{  chatMessage.content }} <br/> {{ chatMessage.created_at }}</p>
+                                        <div
+                                        v-if="user.id == chatMessage.user_id"
+                                            >
+                                            <h1>{{  chatMessage.content }}</h1> <br/>
+                                            <h6 class=" float-right text-[0.8rem] text-gray-300">{{ dayjs(chatMessage.created_at).fromNow() }}</h6>
+                                        </div>
 
+                                        <div
+                                        v-else
+                                            >
+                                            <h1>{{   otherUser.first_name + " " + otherUser.surname + " (" + otherUser.username + ")" }}: {{  chatMessage.content }} </h1> <br/>
+                                            <h6 class=" float-right text-[0.8rem] text-gray-300">{{ dayjs(chatMessage.created_at).fromNow() }}</h6>
+                                        </div>
                                 </div>
                             </div>
 
@@ -74,7 +89,7 @@ console.log(props.chatMessages);
                                 <h1 class="text-center">No chat to load</h1>
                             </div>
                             <div v-else>
-                                <textarea class="resize-none w-full" v-model="currentMessage"></textarea>
+                                <textarea class="resize-none w-full" v-model="currentMessage" name="message"></textarea>
                                 <PrimaryButton class="w-full justify-center" @click="message">Send Message</PrimaryButton>
                             </div>
                         </div>

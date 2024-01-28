@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Crypt;
 
 class ChatMessageController extends Controller
 {
@@ -18,6 +19,9 @@ class ChatMessageController extends Controller
             'user_id' => 'required|integer',
             'content' => 'required',
         ]);
+
+        // Encrypt the content before storing it in the database
+        $validated['content'] = encrypt($validated['content']);
 
         $chatMessage = ChatMessage::create($validated);
 
