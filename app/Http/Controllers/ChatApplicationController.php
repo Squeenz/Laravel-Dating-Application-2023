@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\ChatRoom;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 use Inertia\Inertia;
 
-use function Laravel\Prompts\error;
-
-class ChatApplication extends Controller
+class ChatApplicationController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $userID = Auth::user()->id;
 

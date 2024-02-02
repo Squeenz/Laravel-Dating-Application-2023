@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ChatApplication;
+use App\Http\Controllers\ChatApplicationController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\ProfileController;
@@ -61,9 +61,8 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
 //ChatApplication
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
-    Route::get('/chat', [ChatApplication::class, 'index'])->name('chat.app');
-    Route::get('/chat/{roomName}', [ChatApplication::class, 'show'])->name('chat.app.show');
-    //Store records
+    Route::get('/chat', [ChatApplicationController::class, 'index'])->name('chat.app');
+    Route::get('/chat/{roomName}', [ChatApplicationController::class, 'show'])->name('chat.app.show');
     Route::post('/chat/message', [ChatMessageController::class, 'store'])->name('chat.store');
     Route::post('/chat/room', [ChatRoomController::class, 'store'])->name('chat.room.store');
 });

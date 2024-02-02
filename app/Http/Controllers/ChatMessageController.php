@@ -6,7 +6,6 @@ use App\Events\NewMessage;
 use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Crypt;
 
 class ChatMessageController extends Controller
 {
