@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\CreateChatRoom;
 use App\Events\MatchFound;
 use App\Models\Like;
 use App\Models\User;
-use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
 
@@ -37,7 +35,6 @@ class LikeController extends Controller
             // Check if it's a mutual like
             if ($user->likes->where('liked_user_id', $likedUser->id)->isNotEmpty() && $likedUser->likes->where('liked_user_id', $user->id)->isNotEmpty()) {
                 event(new MatchFound($user, $likedUser));
-                event(new CreateChatRoom($user, $likedUser));
             }
         }
         else

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CreateChatRoom;
 use App\Models\Matching;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -100,21 +101,23 @@ class MatchingController extends Controller
             'user2_id' => 'required|integer',
         ]);
 
-        $user1 = $validated['user1_id'];
-        $user2 = $validated['user2_id'];
+        $user1 = User::find($validated['user1_id']);
+        $user2 = User::find($validated['user2_id']);
 
         DB::transaction(function () use ($user1, $user2) {
-            $existingRecord = Matching::where('user1_id', $user1)
-                ->where('user2_id', $user2)
+            $existingRecord = Matching::where('user1_id', $user1->id)
+                ->where('user2_id', $user2->id)
                 ->lockForUpdate()
                 ->first();
 
             if (!$existingRecord)
             {
                 Matching::create([
-                    'user1_id' => $user1,
-                    'user2_id' => $user2,
+                    'user1_id' => $user1->id,
+                    'user2_id' => $user2->id,
                 ]);
+
+                event(new CreateChatRoom($user1, $user2));
             }
         });
     }
