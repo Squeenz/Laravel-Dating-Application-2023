@@ -11,32 +11,34 @@ defineProps(['userData', 'userPhotos']);
     <Head :title="userData.username" />
     <AuthenticatedLayout>
       <template #header>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
+        <h2 class="font-semibold text-xl text-white leading-tight">Profile</h2>
       </template>
 
-      <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-          <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <h1>{{ userData.first_name }} {{ userData.surname }} ({{ userData.username }})</h1>
-            <h1>Date of birth: {{ userData.dob }}</h1>
-            <h1>Location: {{ userData.location }}</h1>
-            <h1>Interests: {{ userData.interests }}</h1>
-          </div>
-        </div>
+      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="sm:py-[1rem] sm:px-[1rem] bg-[#0A0A0A] shadow rounded-sm">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                    <h1>{{ userData.first_name }} {{ userData.surname }} ({{ userData.username }})</h1>
+                    <h1>Date of birth: {{ userData.dob }}</h1>
+                    <h1>Location: {{ userData.location }}</h1>
+                    <h1>Interests: {{ userData.interests }}</h1>
+                </div>
+                </div>
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
-          <h1>Photos</h1>
-          <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-            <div class="flex justify-center gap-4">
-                <img
-                v-for="photo in userPhotos"
-                class="h-[15rem]"
-                :src="route('photos.get', photo.photo)"
-                :alt="userData.first_name + ' photo'"
-                :key="photo.id"
-                />
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
+                <h1>Photos</h1>
+                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                    <div class="flex gap-1 flex-wrap justify-between">
+                        <img
+                        v-for="photo in userPhotos"
+                        class="h-[15rem]"
+                        :src="route('photos.get', photo.photo)"
+                        :alt="userData.first_name + ' photo'"
+                        :key="photo.id"
+                        />
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
       </div>
     </AuthenticatedLayout>

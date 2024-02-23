@@ -33,36 +33,30 @@ const handlePhoto = (event) => {
     <Head title="Add Photos" />
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Add Photos</h2>
+            <h2 class="font-semibold text-xl text-white leading-tight">
+                Add Photos
+            </h2>
         </template>
 
-        <div class="py-12">
+        <div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <h1 class="text-[2rem] text-center">Add Photos</h1>
-                    <p v-if="numberPhotos == 0"
-                     class="text-center"
-                     >
+                <div class="sm:h-[51.3rem] sm:py-[20rem] bg-[#0A0A0A] shadow rounded-sm text-white">
+                    <h3 v-if="numberPhotos == 0"
+                     class="text-center">
                      We have noticed you don't have any profile pictures
-                    </p>
-                    <form @submit.prevent="submit" enctype="multipart/form-data">
-                        <div>
-                            <div>
-                                <InputLabel for="photos" value="Profile Photos"/>
-
-                                <input class="mt-1 block w-full" type="file" @change="handlePhoto" accept="image/*" multiple>
-
-                                <InputError class="mt-2" :message="form.errors.photos"/>
+                    </h3>
+                    <form @submit.prevent="submit" enctype="multipart/form-data" class="grid grid-flow-row w-full text-center">
+                            <div class="sm:m-auto">
+                                <InputLabel v-if="numberPhotos != 0" for="photos" value="Select Profile Photos To Add" class="text-white"/>
+                                <input class="ml-[8rem] my-[2rem] " type="file" @change="handlePhoto" accept="image/*" multiple>
                             </div>
-                        </div>
 
-                        <div>
-                            <div class="justify-end mt-4 grid-flow-col grid items-end">
-                                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                                    Add Photos
-                                </PrimaryButton>
-                            </div>
-                        </div>
+                            <PrimaryButton
+                                class="w-[25rem] my-[2rem] m-auto justify-center"
+                                :class="{ 'opacity-25': form.processing }"
+                                :disabled="form.processing">
+                                Add Photos
+                            </PrimaryButton>
                     </form>
                 </div>
             </div>

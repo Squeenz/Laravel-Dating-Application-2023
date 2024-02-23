@@ -34,170 +34,213 @@ const form = useForm({
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
+            <h2 class="text-lg font-medium text-white">Profile Information</h2>
 
-            <p class="mt-1 text-sm text-gray-600">
+            <p class="mt-1 text-sm text-white">
                 Update your account's profile information and email address.
             </p>
         </header>
 
         <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="username" value="Username" />
+                <InputError class="mt-2" :message="form.errors.username"/>
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="username"
+                    value="Username"
+                    />
+                    <TextInput
+                        id="username"
+                        type="text"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        v-model="form.username"
+                        required
+                        autofocus
+                        autocomplete="username"
+                    />
+                </div>
 
-                <TextInput
-                    id="username"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.username"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.username" />
             </div>
 
             <div>
-                <InputLabel for="first_name" value="First name" />
-
-                <TextInput
-                    id="first_name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.first_name"
-                    required
-                    autofocus
-                    autocomplete="first_name"
-                />
-
                 <InputError class="mt-2" :message="form.errors.first_name" />
+                <div class="grid grid-flow-col">
+                    <InputLabel class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                     for="first_name"
+                     value="First name"
+                    />
+                    <TextInput
+                        id="first_name"
+                        type="text"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        v-model="form.first_name"
+                        required
+                        autofocus
+                        autocomplete="first_name"
+                    />
+                </div>
             </div>
 
             <div>
-                <InputLabel for="surname" value="Surname" />
-
-                <TextInput
-                    id="surname"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.surname"
-                    required
-                    autofocus
-                    autocomplete="surname"
-                />
-
                 <InputError class="mt-2" :message="form.errors.surname" />
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="surname"
+                    value="Surname"
+                    />
+                    <TextInput
+                        id="surname"
+                        type="text"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        v-model="form.surname"
+                        required
+                        autofocus
+                        autocomplete="surname"
+                    />
+                </div>
             </div>
 
             <div>
-                <InputLabel for="dob" value="Date of birth"/>
-                <TextInput
-                    id="dob"
-                    type="date"
-                    class="mt-1 block w-full"
-                    v-model="form.dob"
-                    required
-                    autofocus
-                    autocomplete="dob"
-                />
-
                 <InputError class="mt-2" :message="form.errors.dob" />
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="dob"
+                    value="Date of birth"
+                    />
+                    <TextInput
+                        id="dob"
+                        type="date"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        v-model="form.dob"
+                        required
+                        autofocus
+                        autocomplete="dob"
+                    />
+                </div>
             </div>
 
             <div>
-                <InputLabel for="gender" value="gender" />
-
-                <TextInput
-                    id="gender"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.gender"
-                    required
-                    autofocus
-                    autocomplete="gender"
-                />
-
                 <InputError class="mt-2" :message="form.errors.gender" />
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="gender"
+                    value="Gender"
+                    />
+                    <TextInput
+                        id="gender"
+                        type="text"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        v-model="form.gender"
+                        required
+                        autofocus
+                        autocomplete="gender"
+                    />
+                </div>
             </div>
 
             <div>
-                <InputLabel for="bio" value="bio" />
-
-                <TextInput
-                    id="bio"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.bio"
-                    required
-                    autofocus
-                    autocomplete="bio"
-                />
-
                 <InputError class="mt-2" :message="form.errors.bio" />
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="bio"
+                    value="Biography"
+                    />
+
+                    <TextInput
+                        id="bio"
+                        type="text"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        v-model="form.bio"
+                        required
+                        autofocus
+                        autocomplete="bio"
+                    />
+                </div>
             </div>
 
             <div>
-                <InputLabel for="location" value="Location" />
-
-                <TextInput
-                    id="location"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.location"
-                    required
-                    autofocus
-                    autocomplete="location"
-                />
-
                 <InputError class="mt-2" :message="form.errors.location" />
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="location"
+                    value="Location"
+                    />
+                    <TextInput
+                        id="location"
+                        type="text"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        v-model="form.location"
+                        required
+                        autofocus
+                        autocomplete="location"
+                    />
+                </div>
             </div>
 
             <div>
-                <InputLabel for="social_media" value="Social media" />
-
-                <TextInput
-                    id="social_media"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.social_media"
-                    required
-                    autofocus
-                    autocomplete="social_media"
-                />
-
                 <InputError class="mt-2" :message="form.errors.social_media" />
+
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="social_media"
+                    value="Social media"
+                    />
+                    <TextInput
+                        id="social_media"
+                        type="text"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        v-model="form.social_media"
+                        required
+                        autofocus
+                        autocomplete="social_media"
+                    />
+                </div>
             </div>
 
             <div>
-                <InputLabel for="interests" value="Interests" />
-
-                <TextInput
-                    id="finterests"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.interests"
-                    required
-                    autofocus
-                    autocomplete="interests"
-                />
-
                 <InputError class="mt-2" :message="form.errors.interests" />
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="interests"
+                    value="Interests"
+                    />
+                    <TextInput
+                        id="finterests"
+                        type="text"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        v-model="form.interests"
+                        required
+                        autofocus
+                        autocomplete="interests"
+                    />
+                </div>
             </div>
 
             <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
-
                 <InputError class="mt-2" :message="form.errors.email" />
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="email"
+                    value="Email"
+                    />
+                    <TextInput
+                        id="email"
+                        type="email"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        v-model="form.email"
+                        required
+                        autocomplete="username"
+                    />
+                </div>
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">

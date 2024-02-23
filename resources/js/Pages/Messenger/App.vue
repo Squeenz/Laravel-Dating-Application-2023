@@ -51,16 +51,18 @@ const message = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Chats</h2>
+            <h2 class="font-semibold text-xl text-white leading-tight">
+                Chats
+            </h2>
         </template>
 
-        <div class="py-12">
+        <div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="sm:h-[51.3rem] sm:py-[1rem] sm:px-[1rem] bg-[#0A0A0A] shadow rounded-sm text-white">
 
                     <div>
                         <div class="grid grid-flow-row w-[25rem] float-left">
-                            <div class="p-6 text-gray-900">Chat Rooms</div>
+                            <div class="p-6">Chat Rooms</div>
 
                             <Link
                             v-for="chatRoom in chatRooms"
@@ -76,8 +78,8 @@ const message = () => {
                         </div>
 
                         <div class="ml-[25rem]">
-                            <div class="p-6 text-gray-900">Chat's Messages</div>
-                            <div v-if="allChatMessages && allChatMessages.length !== 0" class="overflow-y-auto h-[20rem] scroll-smooth">
+                            <div class="p-6">Chat's Messages</div>
+                            <div v-if="allChatMessages && allChatMessages.length !== 0" class="overflow-y-auto h-[38rem] scroll-smooth">
                                 <div
                                     class="bg-gray-500 p-4 m-5 rounded-lg text-white w-[30rem]"
                                     :class="user.id == chatMessage.user_id ? 'float-right bg-red-900' : 'float-left'"
@@ -104,7 +106,7 @@ const message = () => {
                                 <h1 class="text-center">No chat to load</h1>
                             </div>
                             <div v-else>
-                                <textarea class="resize-none w-full" v-model="currentMessage" name="message"></textarea>
+                                <textarea class="resize-none w-full text-black" v-model="currentMessage" name="message"></textarea>
                                 <PrimaryButton class="w-full justify-center" @click="message">Send Message</PrimaryButton>
                             </div>
                         </div>

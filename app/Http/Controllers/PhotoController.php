@@ -76,7 +76,7 @@ class PhotoController extends Controller
                 }
 
                 //then redirect the user to the dashboard
-                return redirect(route('dashboard'));
+                return redirect(route('matchmaking'));
             }
         }
         else
