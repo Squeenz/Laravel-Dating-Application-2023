@@ -94,12 +94,12 @@ const addInterest = (interest) => {
 <template>
     <GuestLayout>
         <Head title="Register" />
-        <h1 class="text-[2rem] text-center">Register</h1>
-        <p class="text-center">Step {{ stage }} out of 5</p>
+        <h1 class="text-[2rem] text-center text-white">Register</h1>
+        <p class="text-center text-gray-200">Step {{ stage }} out of 5</p>
         <form @submit.prevent="submit" :key="stage" enctype="multipart/form-data">
             <div v-if="stage === 1">
                 <div>
-                    <InputLabel for="gender" value="Gender"/>
+                    <InputLabel class="text-white my-1" for="gender" value="Gender"/>
                     <TextInput
                         id="gender"
                         type="text"
@@ -112,7 +112,7 @@ const addInterest = (interest) => {
                 </div>
 
                 <div>
-                    <InputLabel for="firstname" value="First name"/>
+                    <InputLabel class="text-white my-1" for="firstname" value="First name"/>
                     <TextInput
                         id="firstname"
                         type="text"
@@ -125,7 +125,7 @@ const addInterest = (interest) => {
                 </div>
 
                 <div>
-                    <InputLabel for="surname" value="Surname"/>
+                    <InputLabel class="text-white my-1" for="surname" value="Surname"/>
                     <TextInput
                         id="surname"
                         type="text"
@@ -138,7 +138,7 @@ const addInterest = (interest) => {
                 </div>
 
                 <div>
-                    <InputLabel for="dob" value="Date of birth"/>
+                    <InputLabel class="text-white my-1" for="dob" value="Date of birth"/>
                     <TextInput
                         id="dob"
                         type="date"
@@ -151,7 +151,7 @@ const addInterest = (interest) => {
                 </div>
 
                 <div>
-                    <InputLabel for="location" value="Location"/>
+                    <InputLabel  class="text-white my-1" for="location" value="Location"/>
                     <TextInput
                         id="location"
                         type="text"
@@ -164,7 +164,7 @@ const addInterest = (interest) => {
                 </div>
 
                 <div>
-                    <InputLabel for="email" value="Email"/>
+                    <InputLabel class="text-white my-1" for="email" value="Email"/>
                     <TextInput
                         id="email"
                         type="email"
@@ -177,7 +177,7 @@ const addInterest = (interest) => {
                 </div>
 
                 <div>
-                    <InputLabel for="password" value="Password" />
+                    <InputLabel class="text-white my-1" for="password" value="Password" />
                     <TextInput
                         id="password"
                         type="password"
@@ -189,7 +189,7 @@ const addInterest = (interest) => {
                 </div>
 
                 <div>
-                    <InputLabel for="password_confirmation" value="Confirm Password" />
+                    <InputLabel class="text-white my-1" for="password_confirmation" value="Confirm Password" />
                     <TextInput
                         id="password_confirmation"
                         type="password"
@@ -203,7 +203,7 @@ const addInterest = (interest) => {
 
             <div v-if="stage === 2">
                 <div>
-                    <InputLabel for="username" value="Username"/>
+                    <InputLabel class="text-white my-1" for="username" value="Username"/>
                     <TextInput
                         id="username"
                         type="text"
@@ -216,7 +216,7 @@ const addInterest = (interest) => {
                 </div>
 
                 <div>
-                    <InputLabel for="bio" value="Bio"/>
+                    <InputLabel class="text-white my-1" for="bio" value="Bio"/>
                     <TextInput
                         id="bio"
                         type="text"
@@ -229,13 +229,13 @@ const addInterest = (interest) => {
                 </div>
 
                 <div>
-                    <InputLabel for="interests" value="Interests"/>
+                    <InputLabel class="text-white my-1" for="interests" value="Interests"/>
 
                     <div class="grid grid-cols-5 gap-2 text-center">
                         <button v-for="n in interests"
                             :key="n"
-                            :class="{'bg-red-800': form.interests.includes(n), 'bg-gray-500': !form.interests.includes(n)}"
-                            class="items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
+                            :class="{'bg-red-800': form.interests.includes(n), 'bg-gray-900': !form.interests.includes(n)}"
+                            class="items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition ease-in-out duration-150"
                             type="button"
                             @click="addInterest(n)"
                             >
@@ -247,7 +247,7 @@ const addInterest = (interest) => {
 
             <div v-if="stage === 3">
                 <div>
-                    <InputLabel for="social_media" value="Social Media"/>
+                    <InputLabel class="text-white my-1" for="social_media" value="Social Media"/>
                     <TextInput
                         id="social_media"
                         type="text"
@@ -263,14 +263,14 @@ const addInterest = (interest) => {
 
             <div v-if="stage === 4">
                 <div>
-                    <h1>Profile Details</h1>
+                    <h1 class="text-white">Profile Details</h1>
                     <div v-for="(value, field ) in form.data()" :key="field">
-                        <p v-if="field != 'password' && field != 'password_confirmation'">{{ field }}: {{ value }}</p>
+                        <p v-if="field != 'password' && field != 'password_confirmation'" class="text-white">{{ field }}: {{ value }}</p>
                         <InputError v-if="form.hasErrors" class="mt-2" :message="form.errors[field]"/>
                     </div>
 
                     <input type="checkbox" id="confirmBox" @click="confirmBox = !confirmBox" v-model="confirmBox"/>
-                    <label for="checkbox"> I confirm the details are correct</label>
+                    <label for="checkbox" class="text-red-600"> I confirm the details are correct</label>
                 </div>
             </div>
 
@@ -288,7 +288,7 @@ const addInterest = (interest) => {
                 </div>
                 <Link
                     :href="route('login')"
-                    class="float-right mt-4 underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    class="float-right mt-4 underline text-sm text-red-600 hover:text-red-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                     Already registered?
                 </Link>

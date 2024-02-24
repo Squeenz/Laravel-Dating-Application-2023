@@ -25,20 +25,23 @@ defineProps({
 
         <div>
             <div class="bg-[#0A0A0A] shadow rounded-sm max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+                <div class="sm:grid sm:grid-flow-col">
+                    <div class="p-4 sm:p-8 shadow sm:rounded-lg">
+                        <UpdateProfileInformationForm
+                            :must-verify-email="mustVerifyEmail"
+                            :status="status"
+                            class="max-w-xl"
+                        />
+                    </div>
+
+                    <div class="p-4 sm:p-8  shadow sm:rounded-lg">
+                        <UpdatePasswordForm class="max-w-xl" />
+                    </div>
+                </div>
+
                 <div class="p-4 sm:p-8 shadow sm:rounded-lg">
-                    <UpdateProfileInformationForm
-                        :must-verify-email="mustVerifyEmail"
-                        :status="status"
-                        class="max-w-xl"
-                    />
-                </div>
-
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <UpdatePasswordForm class="max-w-xl" />
-                </div>
-
-                <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                    <DeleteUserForm class="max-w-xl" />
+                    <DeleteUserForm/>
                 </div>
             </div>
         </div>

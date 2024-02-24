@@ -36,56 +36,71 @@ const updatePassword = () => {
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900">Update Password</h2>
+            <h2 class="text-lg font-medium text-white">Update Password</h2>
 
-            <p class="mt-1 text-sm text-gray-600">
+            <p class="mt-1 text-sm text-gray-300">
                 Ensure your account is using a long, random password to stay secure.
             </p>
         </header>
 
         <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="current_password" value="Current Password" />
-
-                <TextInput
-                    id="current_password"
-                    ref="currentPasswordInput"
-                    v-model="form.current_password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="current-password"
-                />
-
                 <InputError :message="form.errors.current_password" class="mt-2" />
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="current_password"
+                    value="Current Password"
+                    />
+                    <TextInput
+                        id="current_password"
+                        ref="currentPasswordInput"
+                        v-model="form.current_password"
+                        type="password"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        autocomplete="current-password"
+                    />
+                </div>
             </div>
 
             <div>
-                <InputLabel for="password" value="New Password" />
-
-                <TextInput
-                    id="password"
-                    ref="passwordInput"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
-
                 <InputError :message="form.errors.password" class="mt-2" />
+
+
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="password"
+                    value="New Password"
+                    />
+                    <TextInput
+                        id="password"
+                        ref="passwordInput"
+                        v-model="form.password"
+                        type="password"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+
+                        autocomplete="new-password"
+                    />
+                </div>
             </div>
 
             <div>
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput
-                    id="password_confirmation"
-                    v-model="form.password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    autocomplete="new-password"
-                />
-
                 <InputError :message="form.errors.password_confirmation" class="mt-2" />
+                 <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    for="password_confirmation"
+                    value="Confirm Password"
+                    />
+                    <TextInput
+                        id="password_confirmation"
+                        v-model="form.password_confirmation"
+                        type="password"
+                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        autocomplete="new-password"
+                    />
+                </div>
             </div>
 
             <div class="flex items-center gap-4">

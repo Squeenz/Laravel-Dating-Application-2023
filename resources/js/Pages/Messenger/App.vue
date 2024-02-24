@@ -103,7 +103,7 @@ const message = () => {
                             </div>
 
                             <div v-if="!route().current('chat.app.show')">
-                                <h1 class="text-center">No chat to load</h1>
+                                <h1 class="text-center">Select a chat room.</h1>
                             </div>
                             <div v-else>
                                 <textarea class="resize-none w-full text-black" v-model="currentMessage" name="message"></textarea>

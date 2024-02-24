@@ -36,7 +36,7 @@ const form = useForm({
         <header>
             <h2 class="text-lg font-medium text-white">Profile Information</h2>
 
-            <p class="mt-1 text-sm text-white">
+            <p class="mt-1 text-sm text-gray-300">
                 Update your account's profile information and email address.
             </p>
         </header>
@@ -190,7 +190,7 @@ const form = useForm({
                     <InputLabel
                     class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
                     for="social_media"
-                    value="Social media"
+                    value="Social Media"
                     />
                     <TextInput
                         id="social_media"
