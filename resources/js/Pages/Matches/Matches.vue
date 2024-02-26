@@ -2,6 +2,10 @@
 import { Head, Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 //define the prop to recieve the count of photos from the server
 const props = defineProps(['users']);
@@ -24,30 +28,38 @@ const props = defineProps(['users']);
                     <div
                         v-for="user in users"
                         :key="user.id"
-                        class="grid grid-flow-col m-2 justify-around bg-red-900 rounded-md"
                         >
-                        <img class="h-[5rem] w-[5rem] bg-red-500 rounded-full my-auto">
-                        <div class="my-auto">
-                            <h1>{{ user.first_name }} {{ user.surname }}  ({{ user.username }})</h1>
-                            <h1>Age: {{ user.dob }}</h1>
+                        <div v-if="dayjs(user.updated_at).date() >= dayjs().date()" >
+                            <div class="grid grid-flow-col w-full m-2 justify-around bg-red-900 rounded-md">
+                                <img class="h-[5rem] w-[5rem] bg-red-500 rounded-full my-auto">
+                                <div class="my-auto">
+                                    <h1>{{ user.first_name }} {{ user.surname }}  ({{ user.username }})</h1>
+                                    <h1>Age: {{ user.dob }}</h1>
+                                    <h1>Date: {{ dayjs(user.created_at).format("DD/MM/YYYY") }} ({{ dayjs(user.updated_at).fromNow() }})</h1>
+                                </div>
+                                <!-- <Link :href="route('profile.show', user.id)" class="my-auto"><PrimaryButton>Profile</PrimaryButton></Link> -->
+                            </div>
                         </div>
-                        <Link :href="route('profile.show', user.id)" class="my-auto"><PrimaryButton>Profile</PrimaryButton></Link>
                     </div>
                 </div>
 
-                <div class="sm:h-[51.3rem] sm:py-[1rem] sm:px-[1rem] bg-[#0A0A0A] shadow rounded-sm text-white">
+                <div class="sm:py-[1rem] sm:px-[1rem] bg-[#0A0A0A] shadow rounded-sm text-white">
                     <h1>Old Matches</h1>
                     <div
                         v-for="user in users"
                         :key="user.id"
-                        class="grid grid-flow-col m-2 justify-around bg-red-900 rounded-md"
                         >
-                        <img class="h-[5rem] w-[5rem] bg-red-500 rounded-full my-auto">
-                        <div class="my-auto">
-                            <h1>{{ user.first_name }} {{ user.surname }}  ({{ user.username }})</h1>
-                            <h1>Age: {{ user.dob }}</h1>
+                        <div v-if="dayjs(user.updated_at).date() <= dayjs().date()" >
+                            <div class="grid grid-flow-col w-full m-2 justify-around bg-red-900 rounded-md">
+                                <img class="h-[5rem] w-[5rem] bg-red-500 rounded-full my-auto">
+                                <div class="my-auto">
+                                    <h1>{{ user.first_name }} {{ user.surname }}  ({{ user.username }})</h1>
+                                    <h1>Age: {{ user.dob }}</h1>
+                                    <h1>Date: {{ dayjs(user.created_at).format("DD/MM/YYYY") }} ({{ dayjs(user.updated_at).fromNow() }})</h1>
+                                </div>
+                                <!-- <Link :href="route('profile.show', user.id)" class="my-auto"><PrimaryButton>Profile</PrimaryButton></Link> -->
+                            </div>
                         </div>
-                        <Link :href="route('profile.show', user.id)" class="my-auto"><PrimaryButton>Profile</PrimaryButton></Link>
                     </div>
                 </div>
             </div>

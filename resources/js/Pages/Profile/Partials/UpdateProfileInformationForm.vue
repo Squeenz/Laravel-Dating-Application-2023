@@ -4,6 +4,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
+import dayjs from 'dayjs';
 
 defineProps({
     mustVerifyEmail: {
@@ -29,6 +30,43 @@ const form = useForm({
     social_media: user.social_media,
     email: user.email,
 });
+
+const dateOfBirthCheck = (dob) => {
+    const currentDate = dayjs().format('YYYY/MM/DD').split('/');
+    const dateOfBirth = dayjs(dob).format('YYYY/MM/DD').split('/');
+
+    const currentYears = currentDate[0] - dateOfBirth[0];
+    const currentMonth = currentDate[1] - dateOfBirth[1];
+    const currentDay = currentDate[2] - dateOfBirth[2];
+
+    const age = ((currentYears * 365) + (currentMonth * 31) + currentDay) / 365;
+
+    const dateToCheck = dayjs(dob).format('YYYY/MM/DD');
+
+    if (!dayjs(dateToCheck).isValid() || dateOfBirth[0] > dayjs().year())
+    {
+        form.setError("dob", "Invalid");
+    }
+    else if (age <= 18)
+    {
+        form.setError("dob", "You are too young");
+    }
+    else
+    {
+        return true;
+    }
+
+    return false;
+}
+
+const submit = () => {
+    if (dateOfBirthCheck(form.dob))
+    {
+        console.log("true", form.dob);
+        form.patch(route('profile.update'));
+    }
+}
+
 </script>
 
 <template>
@@ -41,19 +79,19 @@ const form = useForm({
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+        <form @submit.prevent="submit" class="mt-6 space-y-6">
             <div>
                 <InputError class="mt-2" :message="form.errors.username"/>
                 <div class="grid grid-flow-col">
                     <InputLabel
-                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
                     for="username"
                     value="Username"
                     />
                     <TextInput
                         id="username"
                         type="text"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
                         v-model="form.username"
                         required
                         autofocus
@@ -66,14 +104,14 @@ const form = useForm({
             <div>
                 <InputError class="mt-2" :message="form.errors.first_name" />
                 <div class="grid grid-flow-col">
-                    <InputLabel class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    <InputLabel class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
                      for="first_name"
                      value="First name"
                     />
                     <TextInput
                         id="first_name"
                         type="text"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
                         v-model="form.first_name"
                         required
                         autofocus
@@ -86,14 +124,14 @@ const form = useForm({
                 <InputError class="mt-2" :message="form.errors.surname" />
                 <div class="grid grid-flow-col">
                     <InputLabel
-                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
                     for="surname"
                     value="Surname"
                     />
                     <TextInput
                         id="surname"
                         type="text"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
                         v-model="form.surname"
                         required
                         autofocus
@@ -106,14 +144,14 @@ const form = useForm({
                 <InputError class="mt-2" :message="form.errors.dob" />
                 <div class="grid grid-flow-col">
                     <InputLabel
-                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
                     for="dob"
                     value="Date of birth"
                     />
                     <TextInput
                         id="dob"
                         type="date"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
                         v-model="form.dob"
                         required
                         autofocus
@@ -126,14 +164,14 @@ const form = useForm({
                 <InputError class="mt-2" :message="form.errors.gender" />
                 <div class="grid grid-flow-col">
                     <InputLabel
-                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
                     for="gender"
                     value="Gender"
                     />
                     <TextInput
                         id="gender"
                         type="text"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
                         v-model="form.gender"
                         required
                         autofocus
@@ -146,7 +184,7 @@ const form = useForm({
                 <InputError class="mt-2" :message="form.errors.bio" />
                 <div class="grid grid-flow-col">
                     <InputLabel
-                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
                     for="bio"
                     value="Biography"
                     />
@@ -154,7 +192,7 @@ const form = useForm({
                     <TextInput
                         id="bio"
                         type="text"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
                         v-model="form.bio"
                         required
                         autofocus
@@ -167,14 +205,14 @@ const form = useForm({
                 <InputError class="mt-2" :message="form.errors.location" />
                 <div class="grid grid-flow-col">
                     <InputLabel
-                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
                     for="location"
                     value="Location"
                     />
                     <TextInput
                         id="location"
                         type="text"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
                         v-model="form.location"
                         required
                         autofocus
@@ -188,18 +226,37 @@ const form = useForm({
 
                 <div class="grid grid-flow-col">
                     <InputLabel
-                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
                     for="social_media"
                     value="Social Media"
                     />
                     <TextInput
                         id="social_media"
                         type="text"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
                         v-model="form.social_media"
                         required
                         autofocus
                         autocomplete="social_media"
+                    />
+                </div>
+            </div>
+
+            <div>
+                <InputError class="mt-2" :message="form.errors.email" />
+                <div class="grid grid-flow-col">
+                    <InputLabel
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
+                    for="email"
+                    value="Email"
+                    />
+                    <TextInput
+                        id="email"
+                        type="email"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        v-model="form.email"
+                        required
+                        autocomplete="email"
                     />
                 </div>
             </div>
@@ -224,24 +281,6 @@ const form = useForm({
                 </div>
             </div>
 
-            <div>
-                <InputError class="mt-2" :message="form.errors.email" />
-                <div class="grid grid-flow-col">
-                    <InputLabel
-                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
-                    for="email"
-                    value="Email"
-                    />
-                    <TextInput
-                        id="email"
-                        type="email"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
-                        v-model="form.email"
-                        required
-                        autocomplete="username"
-                    />
-                </div>
-            </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
                 <p class="text-sm mt-2 text-gray-800">

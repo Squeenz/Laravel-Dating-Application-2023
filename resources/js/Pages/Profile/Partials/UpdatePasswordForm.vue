@@ -48,7 +48,7 @@ const updatePassword = () => {
                 <InputError :message="form.errors.current_password" class="mt-2" />
                 <div class="grid grid-flow-col">
                     <InputLabel
-                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
                     for="current_password"
                     value="Current Password"
                     />
@@ -57,7 +57,7 @@ const updatePassword = () => {
                         ref="currentPasswordInput"
                         v-model="form.current_password"
                         type="password"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
                         autocomplete="current-password"
                     />
                 </div>
@@ -69,7 +69,7 @@ const updatePassword = () => {
 
                 <div class="grid grid-flow-col">
                     <InputLabel
-                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
                     for="password"
                     value="New Password"
                     />
@@ -78,7 +78,7 @@ const updatePassword = () => {
                         ref="passwordInput"
                         v-model="form.password"
                         type="password"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
 
                         autocomplete="new-password"
                     />
@@ -89,7 +89,7 @@ const updatePassword = () => {
                 <InputError :message="form.errors.password_confirmation" class="mt-2" />
                  <div class="grid grid-flow-col">
                     <InputLabel
-                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] ml-[1rem] w-full text-center text-white rounded-l-lg"
+                    class="m-auto text-[1rem] bg-[#191919] p-[0.6rem] w-[10rem] text-center text-white rounded-l-lg"
                     for="password_confirmation"
                     value="Confirm Password"
                     />
@@ -97,7 +97,7 @@ const updatePassword = () => {
                         id="password_confirmation"
                         v-model="form.password_confirmation"
                         type="password"
-                        class="block w-full border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
+                        class="block w-[20rem] mr-[6rem] border-0 bg-[#2C2C2C] text-white rounded-none rounded-r-lg"
                         autocomplete="new-password"
                     />
                 </div>

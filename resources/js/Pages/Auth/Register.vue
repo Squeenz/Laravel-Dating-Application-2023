@@ -3,9 +3,14 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import Checkbox from '@/Components/Checkbox.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 let stage = ref(1);
 let confirmBox = ref(false);
@@ -87,6 +92,28 @@ const addInterest = (interest) => {
         form.interests += interest + ",";
     } else {
         form.interests = form.interests.replace(interest + ",", "");
+    }
+}
+
+const dateOfBirthCheck = (dob) => {
+    const currentDate = dayjs().format('YYYY/MM/DD').split('/');
+    const dateOfBirth = dayjs(dob).format('YYYY/MM/DD').split('/');
+
+    const currentYears = currentDate[0] - dateOfBirth[0];
+    const currentMonth = currentDate[1] - dateOfBirth[1];
+    const currentDay = currentDate[2] - dateOfBirth[2];
+
+    const age = ((currentYears * 365) + (currentMonth * 31) + currentDay) / 365;
+
+    console.log(age);
+
+    if (!dateOfBirth.isValid)
+    {
+        form.setError("dob", "Invalid");
+    }
+    else if (age <= 18)
+    {
+        form.setError("dob", "You are too young");
     }
 }
 </script>
@@ -269,7 +296,9 @@ const addInterest = (interest) => {
                         <InputError v-if="form.hasErrors" class="mt-2" :message="form.errors[field]"/>
                     </div>
 
-                    <input type="checkbox" id="confirmBox" @click="confirmBox = !confirmBox" v-model="confirmBox"/>
+
+                   <!--<input type="checkbox" id="confirmBox" @click="confirmBox = !confirmBox" v-model="confirmBox"/> -->
+                    <checkbox id="confirmBox" @click="confirmBox = !confirmBox" v-model:checked="confirmBox"/>
                     <label for="checkbox" class="text-red-600"> I confirm the details are correct</label>
                 </div>
             </div>
@@ -282,7 +311,7 @@ const addInterest = (interest) => {
                     <PrimaryButton v-if="stage != 4" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('next')">
                         Next Step
                     </PrimaryButton>
-                    <PrimaryButton v-else class="ms-4" :class="{ 'opacity-25': !confirmBox }" :disabled=" !confirmBox">
+                    <PrimaryButton v-else class="ms-4" :class="{ 'opacity-25': !confirmBox }" :disabled=" !confirmBox" :on-click="dateOfBirthCheck(form.dob)">
                         Register
                     </PrimaryButton>
                 </div>
