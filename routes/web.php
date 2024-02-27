@@ -7,6 +7,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\MatchingController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\Notification;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,6 +40,10 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/photos/remove', [PhotoController::class, 'remove'])->name('photos.remove');
+});
+
+Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notification');
 });
 
 //Matchmaking system routes

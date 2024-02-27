@@ -64,22 +64,24 @@ const message = () => {
                         <div class="grid grid-flow-row w-[25rem] float-left">
                             <div class="p-6">Chat Rooms</div>
 
-                            <Link
-                            v-for="chatRoom in chatRooms"
-                            :key="chatRoom.id"
-                            :href="route('chat.app.show', chatRoom.name)"
-                            class="p-1 grid grid-cols-3 m-2 rounded-xl"
-                            :class="route().current('chat.app.show', chatRoom.name) ? 'bg-red-900' : 'bg-slate-300'"
-                            >
-                                <div class="h-20 w-20 bg-red-500 rounded-full text-center">IMG</div>
-                                <h1 v-if="chatRoom.user2.id !== user.id" class="mt-[1rem] font-bold">{{ chatRoom.user2.first_name }} {{ chatRoom.user2.surname }} ({{ chatRoom.user2.username }})</h1>
-                                <h1 v-else class="mt-[1rem] font-bold">{{ chatRoom.user1.first_name }} {{ chatRoom.user1.surname }} ({{ chatRoom.user1.username }})</h1>
-                            </Link>
+                            <div class="overflow-y-auto no-scrollbar h-[45rem] scroll-smooth">
+                                <Link
+                                v-for="chatRoom in chatRooms"
+                                :key="chatRoom.id"
+                                :href="route('chat.app.show', chatRoom.name)"
+                                class="p-1 grid grid-cols-3 m-2 rounded-xl"
+                                :class="route().current('chat.app.show', chatRoom.name) ? 'bg-red-900' : 'bg-slate-300'"
+                                >
+                                    <div class="h-20 w-20 bg-red-500 rounded-full text-center">IMG</div>
+                                    <h1 v-if="chatRoom.user2.id !== user.id" class="mt-[1rem] font-bold">{{ chatRoom.user2.first_name }} {{ chatRoom.user2.surname }} ({{ chatRoom.user2.username }})</h1>
+                                    <h1 v-else class="my-auto font-bold">{{ chatRoom.user1.first_name }} {{ chatRoom.user1.surname }} ({{ chatRoom.user1.username }})</h1>
+                                </Link>
+                            </div>
                         </div>
 
                         <div class="ml-[25rem]">
                             <div class="p-6">Chat's Messages</div>
-                            <div v-if="allChatMessages && allChatMessages.length !== 0" class="overflow-y-auto h-[38rem] scroll-smooth">
+                            <div v-if="allChatMessages && allChatMessages.length !== 0" class="overflow-y-auto no-scrollbar h-[38rem] scroll-smooth">
                                 <div
                                     class="bg-gray-500 p-4 m-5 rounded-lg text-white w-[30rem]"
                                     :class="user.id == chatMessage.user_id ? 'float-right bg-red-900' : 'float-left'"

@@ -3,6 +3,7 @@ import { ref, onMounted, watch } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { Heart, HeartCrack, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
 const props = defineProps(['user', 'potentialMatches', 'potentialMatchesPhotos']);
 
@@ -69,7 +70,7 @@ const reactToProfile = (status) => {
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div class="sm:py-[6.8rem] bg-[#0A0A0A] shadow rounded-sm">
             <div v-if="potentialMatches.length > 0" class="grid grid-flow-col justify-center">
-                <PrimaryButton @click="reactToProfile(0)" class="w-[10rem] mr-[5rem] justify-center">Dislike</PrimaryButton>
+                <PrimaryButton @click="reactToProfile(0)" class="w-[10rem] mr-[5rem] justify-center"> <HeartCrack :size="60"/> </PrimaryButton>
 
                 <div class="bg-white m-1 w-[30rem] rounded-md">
                     <div :key="potentialMatches[listIndex].id">
@@ -80,10 +81,10 @@ const reactToProfile = (status) => {
                             width="300"
                         >
 
-                        <div class="bg-red-800 grid grid-flow-col items-center text-center">
-                            <PrimaryButton @click="changePicture(-1)" class="justify-center">Prev</PrimaryButton>
+                        <div class="grid grid-flow-col justify-between items-center text-center">
+                            <PrimaryButton @click="changePicture(-1)" class="justify-center w-[4rem]"> <ChevronLeft /> </PrimaryButton>
                             <h1>{{ currentPhotoIndex + 1 }} / {{ lengthImagesArray }} </h1>
-                            <PrimaryButton @click="changePicture(1)" class="justify-center">Next</PrimaryButton>
+                            <PrimaryButton @click="changePicture(1)" class="justify-center w-[4rem]"> <ChevronRight /> </PrimaryButton>
                         </div>
 
                         <div class="p-2">
@@ -95,7 +96,7 @@ const reactToProfile = (status) => {
                     </div>
                 </div>
 
-                <PrimaryButton @click="reactToProfile(1)" class="w-[10rem] ml-[5rem] justify-center">Like</PrimaryButton>
+                <PrimaryButton @click="reactToProfile(1)" class="w-[10rem] ml-[5rem] justify-center"> <Heart :size="60"/> </PrimaryButton>
             </div>
             <div v-else>
               <p class="text-white text-center">No potential matches found.</p>

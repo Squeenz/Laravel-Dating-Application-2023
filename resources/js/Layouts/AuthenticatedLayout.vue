@@ -6,10 +6,13 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link, router } from '@inertiajs/vue3';
+import { Bell, MessageCircleHeart, Heart, Camera, CameraOff, ListChecks } from 'lucide-vue-next';
 
 const showingNavigationDropdown = ref(false);
 
 onMounted(() => {
+    Echo.private('notification').listen('UserNotification', (e) => { console.log(e) });
+
     Echo.private('matches')
             .listen('MatchFound', (e) => {
                 router.post(route('matchmaking.store'), {
@@ -52,24 +55,27 @@ const stopListening = () => {
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('matchmaking')" :active="route().current('matchmaking')">
-                                    Matchmaking
+                                   <Heart class="mr-1" :size="20"/> Matchmaking
                                 </NavLink>
                                 <NavLink :href="route('photos.create')" :active="route().current('photos.create')">
-                                    Add Photos
+                                   <Camera class="mr-1" :size="20"/> Add Photos
                                 </NavLink>
                                 <NavLink :href="route('photos.remove')" :active="route().current('photos.remove')">
-                                    Remove Photos
+                                    <CameraOff class="mr-1" :size="20"/> Remove Photos
                                 </NavLink>
                                 <NavLink :href="route('matches')" :active="route().current('matches')">
-                                    Matches
+                                    <ListChecks class="mr-1" :size="20"/> Matches
                                 </NavLink>
                                 <NavLink :href="route('chat.app')" :active="route().current('chat.app')">
-                                    Messenger
+                                    <MessageCircleHeart class="mr-1" :size="20"/> Messenger
                                 </NavLink>
                             </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
+                            <NavLink class="border-b-0 active:border-b-0 hover:border-b-0 focus:border-b-0" :href="route('notification')" :active="route().current('notification')">
+                                    <Bell :size="20" />
+                            </NavLink>
                             <!-- Settings Dropdown -->
                             <div class="ms-3 relative">
                                 <Dropdown align="right" width="48">

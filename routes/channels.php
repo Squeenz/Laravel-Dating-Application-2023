@@ -31,3 +31,7 @@ Broadcast::channel('chat.{chatRoomName}', function($user, $chatRoomName){
     $chatRoom = ChatRoom::where('name', $chatRoomName)->first();
     return $chatRoom && ($user->id === $chatRoom->user1_id || $user->id === $chatRoom->user2_id);
 });
+
+Broadcast::channel('notification', function(){
+    return Auth::check();
+});
