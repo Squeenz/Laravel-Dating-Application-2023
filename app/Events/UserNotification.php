@@ -14,14 +14,16 @@ class UserNotification implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $notification;
+    public $userID, $otherUserID, $type;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($notification)
+    public function __construct($user, $otherUser, $type)
     {
-        $this->notification = $notification;
+        $this->userID = $user->id;
+        $this->otherUserID = $otherUser->id;
+        $this->type = $type;
     }
 
     /**
@@ -33,6 +35,22 @@ class UserNotification implements ShouldBroadcast
     {
         return [
             new PrivateChannel('notification'),
+        ];
+    }
+
+    /**
+     * Get the data to broadcast.
+     *
+     * @return array
+     */
+    public function broadcastWith()
+    {
+        return [
+            'notification' => [
+                'user_id' => $this->userID,
+                'other_user_id' => $this->otherUserID,
+                'type' => $this->type,
+            ]
         ];
     }
 }

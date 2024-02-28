@@ -32,6 +32,8 @@ class MatchFound implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('matches');
+        return [
+            new PrivateChannel('matches')
+        ];
     }
 }

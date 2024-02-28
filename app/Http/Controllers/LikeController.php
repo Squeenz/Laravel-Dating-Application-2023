@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\MatchFound;
+use App\Events\UserNotification;
 use App\Models\Like;
 use App\Models\User;
 
@@ -31,6 +32,8 @@ class LikeController extends Controller
 
             $user = User::find($validated['user_id']);
             $likedUser = User::find($validated['liked_user_id']);
+
+            event(new UserNotification($user, $likedUser, "Like"));
 
             // Check if it's a mutual like
             if ($user->likes->where('liked_user_id', $likedUser->id)->isNotEmpty() && $likedUser->likes->where('liked_user_id', $user->id)->isNotEmpty()) {

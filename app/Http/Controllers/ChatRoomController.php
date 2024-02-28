@@ -13,7 +13,7 @@ class ChatRoomController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'user1_id' => 'required|integer',
@@ -38,7 +38,5 @@ class ChatRoomController extends Controller
                 ]);
             }
         });
-
-        return redirect(route('chat.app'));
     }
 }

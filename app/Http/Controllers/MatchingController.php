@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Events\UserNotification;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -103,6 +104,9 @@ class MatchingController extends Controller
 
         $user1 = User::find($validated['user1_id']);
         $user2 = User::find($validated['user2_id']);
+
+        event(new UserNotification($user1, $user2, "Match"));
+        event(new UserNotification($user2, $user1, "Match"));
 
         DB::transaction(function () use ($user1, $user2) {
             $existingRecord = Matching::where('user1_id', $user1->id)

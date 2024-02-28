@@ -33,6 +33,8 @@ class CreateChatRoom implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chatRooms');
+        return [
+            new PrivateChannel('chatRooms')
+        ];
     }
 }

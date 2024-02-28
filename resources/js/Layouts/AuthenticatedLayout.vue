@@ -5,14 +5,25 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link, router } from '@inertiajs/vue3';
-import { Bell, MessageCircleHeart, Heart, Camera, CameraOff, ListChecks } from 'lucide-vue-next';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import { Bell, MessageCircleHeart, Heart, Camera, CameraOff, ListChecks, BellPlus } from 'lucide-vue-next';
+
+const page = usePage();
 
 const showingNavigationDropdown = ref(false);
 
 onMounted(() => {
-    Echo.private('notification').listen('UserNotification', (e) => { console.log(e) });
-
+    Echo.private('notification')
+            .listen('UserNotification', (e) => {
+                if (page.props.auth.user.id === e.notification.other_user_id){
+                    router.post(route('notification.store'), {
+                        user_id: e.notification.other_user_id,
+                        other_user_id: e.notification.user_id,
+                        type: e.notification.type,
+                        read: 0,
+                    });
+                }
+            });
     Echo.private('matches')
             .listen('MatchFound', (e) => {
                 router.post(route('matchmaking.store'), {
@@ -27,6 +38,7 @@ onMounted(() => {
                     user2_id: e.user2.id,
                 });
             });
+
 });
 
 const stopListening = () => {
@@ -73,8 +85,11 @@ const stopListening = () => {
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
-                            <NavLink class="border-b-0 active:border-b-0 hover:border-b-0 focus:border-b-0" :href="route('notification')" :active="route().current('notification')">
-                                    <Bell :size="20" />
+                            <NavLink class="border-b-0 active:border-b-0 hover:border-b-0 focus:border-b-0 mr-[1rem]" :href="route('notification')" :active="route().current('notification')">
+                                <div>
+                                    <h1 class="my-[-0.6rem] mx-[0.9rem] absolute text-center text-[0.7rem] h-[1.4rem] px-1 w-auto text-red-100 border-2 border-red-800 bg-red-600 rounded-full z-40">1</h1>
+                                    <Bell class="text-red-900" :size="23" />
+                                </div>
                             </NavLink>
                             <!-- Settings Dropdown -->
                             <div class="ms-3 relative">

@@ -44,6 +44,7 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notification');
+    Route::post('/notifications/create', [NotificationController::class, 'store'])->name('notification.store');
 });
 
 //Matchmaking system routes
