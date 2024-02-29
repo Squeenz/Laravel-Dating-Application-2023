@@ -44,6 +44,8 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function () {
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notification');
     Route::post('/notifications/create', [NotificationController::class, 'store'])->name('notification.store');
+    Route::post('/notifications', [NotificationController::class, 'readNotifications'])->name('notification.read.all');
+    Route::delete('/notifications', [NotificationController::class, 'destroyAll'])->name('notification.destroy.all');
 });
 
 //Matchmaking system routes

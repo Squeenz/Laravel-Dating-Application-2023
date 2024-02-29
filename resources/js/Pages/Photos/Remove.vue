@@ -24,7 +24,6 @@ defineProps(['userPhotos']);
                                 class="h-[15rem]"
                                 :src="route('photos.get', photo.photo)"
                                 :alt="photo.photo + ' photo'"
-                                width="200"
                                 />
                                 <Link
                                     :href="route('photos.destroy', photo.id)"
