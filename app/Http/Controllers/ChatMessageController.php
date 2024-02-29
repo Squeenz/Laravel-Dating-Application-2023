@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewMessage;
+use App\Events\UserNotification;
 use App\Models\ChatMessage;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -28,6 +30,20 @@ class ChatMessageController extends Controller
         event(new NewMessage($chatMessage));
 
         $room = $chatMessage->chatRoom;
+
+        $user1ID = $chatMessage->user_id;
+
+        $user2Messages = ChatMessage::where('chat_room_id', $room->id)
+            ->where('user_id', '!=', $user1ID)
+            ->get();
+
+        // Extract user IDs from $user2Messages
+        $user2IDs = $user2Messages->pluck('user_id')->unique()->toArray();
+
+        $user1 = User::find($user1ID);
+        $user2 = User::whereIn('id', $user2IDs)->first();
+
+        event(new UserNotification($user1, $user2, "Message"));
 
         return redirect(route('chat.app.show', $room->name));
     }

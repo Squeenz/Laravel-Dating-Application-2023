@@ -15,7 +15,7 @@ class NotificationController extends Controller
      */
     public function index(): Response
     {
-        $notifications = Auth::user()->notifications()->with('otherUser')->get();
+        $notifications = Auth::user()->notifications()->with('otherUser')->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Notifications/Notifications', [
             'notifications' => $notifications,
