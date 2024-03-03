@@ -8,6 +8,7 @@ use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\MatchingController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\StaffController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -69,6 +70,10 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
     Route::get('/chat/{roomName}', [ChatApplicationController::class, 'show'])->name('chat.app.show');
     Route::post('/chat/message', [ChatMessageController::class, 'store'])->name('chat.store');
     Route::post('/chat/room', [ChatRoomController::class, 'store'])->name('chat.room.store');
+});
+
+Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
+    Route::get('/staff', [StaffController::class, 'index'])->name('staff.dashboard');
 });
 
 require __DIR__.'/auth.php';

@@ -1,7 +1,5 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Head, router, useForm } from '@inertiajs/vue3';
 import { MessageCircleHeart, Heart, ThumbsUp } from 'lucide-vue-next';
@@ -24,7 +22,6 @@ onMounted(() =>{
 const deleteAllNotifications = () => {
     router.delete(route('notification.destroy.all'));
 }
-
 </script>
 
 <template>
@@ -68,9 +65,9 @@ const deleteAllNotifications = () => {
                         </div>
                     </div>
 
-                    <!-- <h3 class="text-center">
+                    <h3 v-if="props.notifications.length === 0" class="text-center">
                      No notifications
-                    </h3> -->
+                    </h3>
                 </div>
             </div>
         </div>

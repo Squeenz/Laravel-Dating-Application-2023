@@ -70,11 +70,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Like::class, 'user_id');
     }
 
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(Notification::class, 'user_id');
-    }
-
     public function like(User $likedUser, bool $isLike = true)
     {
         $this->likes()->create([
@@ -103,5 +98,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function chatMessages(): HasMany
     {
         return $this->hasMany(ChatMessage::class);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
+
+    public function otherUserNotifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'other_user_id');
     }
 }

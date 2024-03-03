@@ -85,7 +85,12 @@ const stopListening = () => {
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
                             <NavLink class="border-b-0 active:border-b-0 hover:border-b-0 focus:border-b-0 mr-[1rem]" :href="route('notification')" :active="route().current('notification')">
                                 <div>
-                                    <h1 v-if="page.props.notification.unread != 0" class="my-[-0.6rem] mx-[0.9rem] absolute text-center text-[0.7rem] h-[1.4rem] px-1 w-auto text-red-100 border-2 border-red-800 bg-red-600 rounded-full z-40">{{ page.props.notification.unread }}</h1>
+                                    <h1
+                                        v-if="page.props.notification.unread != 0"
+                                        class="my-[-0.6rem] mx-[0.9rem] absolute text-center text-[0.7rem] h-[1.4rem] px-1 w-auto text-red-100 border-2 border-red-800 bg-red-600 rounded-full z-40"
+                                    >
+                                    {{ page.props.notification.unread }}
+                                    </h1>
                                     <Bell class="text-red-900" :size="23" />
                                 </div>
                             </NavLink>
@@ -117,6 +122,7 @@ const stopListening = () => {
                                     </template>
 
                                     <template #content>
+                                        <DropdownLink href="#"> Staff Dashboard </DropdownLink>
                                         <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
                                         <DropdownLink :href="route('logout')" @click="stopListening" method="post" as="button">
                                             Log Out
