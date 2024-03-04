@@ -15,12 +15,14 @@ const showingNavigationDropdown = ref(false);
 onMounted(() => {
     Echo.private('notification')
             .listen('UserNotification', (e) => {
-                router.post(route('notification.store'), {
-                    user_id: e.notification.other_user_id,
-                    other_user_id: e.notification.user_id,
-                    type: e.notification.type,
-                    read: 0,
-                });
+                if (page.props.auth.user.id === e.notification.other_user_id) {
+                        router.post(route('notification.store'), {
+                        user_id: e.notification.other_user_id,
+                        other_user_id: e.notification.user_id,
+                        type: e.notification.type,
+                        read: 0,
+                    });
+                }
             });
     Echo.private('matches')
             .listen('MatchFound', (e) => {

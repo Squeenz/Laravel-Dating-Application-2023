@@ -37,6 +37,8 @@ class ChatMessageController extends Controller
             ->where('user_id', '!=', $user1ID)
             ->get();
 
+        //causes and erro becaue at the start the user 2 message doesn't exist
+
         // Extract user IDs from $user2Messages
         $user2IDs = $user2Messages->pluck('user_id')->unique()->toArray();
 
