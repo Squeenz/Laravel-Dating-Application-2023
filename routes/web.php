@@ -25,16 +25,37 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
+
+Route::get('/', function() {
+    return Inertia::render('Landing', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('home');
 
-Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function () {
+Route::get('/policies', function() {
+    return Inertia::render('Policies/Policies', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+    ]);
+})->name('policies');
+
+Route::get('/policies/show', function() {
+    return Inertia::render('Policies/Show', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+    ]);
+})->name('policies.show');
+
+Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
