@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { ChevronDown, ChevronRight } from 'lucide-vue-next';
 
+const open = ref(true);
 
 const closeOnEscape = (e) => {
     if (open.value && e.key === 'Escape') {
@@ -17,8 +18,6 @@ const activeClass = computed(() => {
         ? "flex justify-between p-2 bg-gray-800 text-red-600 hover:bg-gray-800 hover:text-red-600 transition duration-150 ease-in-out"
         : "flex justify-between p-2 text-white hover:bg-gray-800 hover:text-red-600 transition duration-150 ease-in-out";
 });
-
-const open = ref(0);
 </script>
 
 <template>

@@ -9,6 +9,7 @@ use App\Http\Controllers\MatchingController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\StaffUserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -74,6 +75,8 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
 
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.dashboard');
+    Route::get('/staff/users', [StaffUserController::class, 'index'])->name('staff.dashboard.users');
+    Route::delete('/staff/{user}/delete', [StaffUserController::class, 'destroy'])->name('staff.dashboard.users.destroy');
 });
 
 require __DIR__.'/auth.php';

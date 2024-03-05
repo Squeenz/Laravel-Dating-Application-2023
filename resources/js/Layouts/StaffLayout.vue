@@ -5,7 +5,6 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavDropdown from '@/Components/NavDropdown.vue';
 import NavDropdownLink from '@/Components/NavDropdownLink.vue';
-
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
@@ -28,7 +27,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex-col justify-between">
                             <!-- Logo -->
                             <div class="shrink-0 flex justify-center my-[1rem]">
-                                <Link :href="route('matchmaking')">
+                                <Link :href="route('staff.dashboard')">
                                     <ApplicationLogo
                                         class="block h-[3.5rem] w-auto fill-current text-red-800"
                                     />
@@ -48,13 +47,8 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <NavDropdownLink
-                                            :href="route('matchmaking')" :active="route().current('matchmaking')">
+                                            :href="route('staff.dashboard.users')" :active="route().current('staff.dashboard.users')">
                                             View Users
-                                        </NavDropdownLink>
-
-                                        <NavDropdownLink
-                                            :href="route('matchmaking')" :active="route().current('matchmaking')">
-                                            Verify Users
                                         </NavDropdownLink>
                                     </template>
                                 </NavDropdown>
