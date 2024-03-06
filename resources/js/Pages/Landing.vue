@@ -19,7 +19,7 @@ defineProps({
     <GuestLayout :canLogin="canLogin" :canRegister="canRegister">
 
     <template #header>
-        <h1 class="text-white">Welcome to our site, we are a new dating service which focuses on gamers and non-profit service model. Unlike majority of
+        <h1 class="text-white text-center">Welcome to our site, we are a new dating service which focuses on gamers and non-profit service model. Unlike majority of
             dating applications we don't charge for basic features that people should have access to.
         </h1>
     </template>
@@ -54,13 +54,13 @@ defineProps({
                 <div class="flex flex-wrap justify-center text-white">
                     <h1 class="text-2xl italic">How does it work?</h1>
                     <div class="justify-center m-2 gap-3">
-                        <div class="bg-red-800 relative rounded-full right-[50%] top-[5.7rem] h-[23.4rem] w-3 float-right "></div>
+                        <div class="bg-red-800 relative rounded-full right-[50%] top-[6.3rem] h-[23.4rem] w-3 float-right hidden lg:inline-block"></div>
 
                         <div v-for="n in 5" :key="n" class="bg-[#1A1A1A] p-2 rounded-sm grid grid-flow-col w-[30rem] mx-5"
                             :class="n % 2 ? 'float-left my-[3rem]' : 'float-right my-[5rem]'">
 
                             <div class="my-auto mr-2 h-1 w-4 relative" :class="n % 2 ? 'left-[29.6rem]' : 'right-[6.6rem]'">
-                                <div class="bg-red-800 rounded-full h-2 w-[6rem] "> </div>
+                                <div class="bg-red-800 rounded-full h-2 w-[6rem] hidden lg:inline-block"> </div>
                             </div>
 
                             <h1 class="bg-red-900 text-center w-[4rem] text-3xl rounded-sm pt-[1rem] mr-2">{{ n }}</h1>

@@ -18,7 +18,7 @@ defineProps({
 
     <GuestLayout :canLogin="canLogin" :canRegister="canRegister">
         <template #header>
-            <p class=" text-white">
+            <p class=" text-white text-center">
                 We're committed to providing you with a safe and enjoyable experience. To ensure transparency and clarity,
                 please review our policies below. By using our website, you agree to abide by these policies and guidelines.
             </p>

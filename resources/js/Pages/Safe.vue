@@ -19,7 +19,7 @@ defineProps({
     <GuestLayout :canLogin="canLogin" :canRegister="canRegister">
 
     <template #header>
-        <h1 class="text-white">
+        <h1 class="text-white text-center">
             Your safety is our top priority, and we want to ensure that your dating experience is enjoyable and secure. Follow these guidelines to stay safe while using our platform:
         </h1>
     </template>
