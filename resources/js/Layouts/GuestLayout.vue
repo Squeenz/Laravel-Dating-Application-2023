@@ -39,10 +39,10 @@ const props = defineProps({
                                 <NavLink :href="route('policies')" :active="route().current('policies')">
                                     Policies
                                 </NavLink>
-                                <NavLink :href="route('matchmaking')" :active="route().current('matchmaking')">
+                                <NavLink :href="route('safe')" :active="route().current('safe')">
                                     How To Stay Safe
                                 </NavLink>
-                                <NavLink :href="route('matchmaking')" :active="route().current('matchmaking')">
+                                <NavLink :href="route('support')" :active="route().current('support')">
                                     Support
                                 </NavLink>
                             </div>

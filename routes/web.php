@@ -55,6 +55,20 @@ Route::get('/policies/show', function() {
     ]);
 })->name('policies.show');
 
+Route::get('/how-to-stay-safe', function() {
+    return Inertia::render('Safe', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+    ]);
+})->name('safe');
+
+Route::get('/support', function() {
+    return Inertia::render('Support/Main', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+    ]);
+})->name('support');
+
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

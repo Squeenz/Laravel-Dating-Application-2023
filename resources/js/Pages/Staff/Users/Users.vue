@@ -10,8 +10,6 @@ import { ChevronsLeft, ChevronLeft, ChevronsRight, ChevronRight } from 'lucide-v
 dayjs.extend(relativeTime);
 
 const props = defineProps(['users']);
-
-console.log(props.users);
 </script>
 
 <template>
