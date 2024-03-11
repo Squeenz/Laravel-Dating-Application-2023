@@ -80,6 +80,11 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <NavDropdownLink
+                                            :href="route('staff.dashboard.pages')" :active="route().current('staff.dashboard.pages')">
+                                            Page Controller
+                                        </NavDropdownLink>
+
+                                        <!-- <NavDropdownLink
                                             :href="route('matchmaking')" :active="route().current('matchmaking')">
                                             Landing
                                         </NavDropdownLink>
@@ -102,7 +107,7 @@ const showingNavigationDropdown = ref(false);
                                         <NavDropdownLink
                                             :href="route('matchmaking')" :active="route().current('matchmaking')">
                                             Terms and conditions
-                                        </NavDropdownLink>
+                                        </NavDropdownLink> -->
                                     </template>
                                 </NavDropdown>
 
@@ -171,13 +176,13 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Heading -->
             <header class="bg-[#242424] shadow ml-[10rem]" v-if="$slots.header">
-                <div class="mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <div class="mx-auto py-6 px-4 sm:px-6 lg:px-8 bg-gray-800">
                     <slot name="header" />
                 </div>
             </header>
 
             <!-- Page Content -->
-            <main class="ml-[10rem]">
+            <main class="ml-[10rem] bg-gray-900">
                 <slot />
             </main>
         </div>

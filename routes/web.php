@@ -8,6 +8,7 @@ use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\MatchingController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffUserController;
 use Illuminate\Foundation\Application;
@@ -34,40 +35,46 @@ use Inertia\Inertia;
 //     ]);
 // });
 
-Route::get('/', function() {
-    return Inertia::render('Landing', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-})->name('home');
+// Route::get('/', function() {
+//     return Inertia::render('Landing', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//     ]);
+// })->name('home');
 
-Route::get('/policies', function() {
-    return Inertia::render('Policies/Policies', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-})->name('policies');
+// Route::get('/policies', function() {
+//     return Inertia::render('Policies/Policies', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//     ]);
+// })->name('policies');
 
-Route::get('/policies/show', function() {
-    return Inertia::render('Policies/Show', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-})->name('policies.show');
+// Route::get('/policies/show', function() {
+//     return Inertia::render('Policies/Show', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//     ]);
+// })->name('policies.show');
 
-Route::get('/how-to-stay-safe', function() {
-    return Inertia::render('Safe', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-})->name('safe');
+// Route::get('/how-to-stay-safe', function() {
+//     return Inertia::render('Safe', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//     ]);
+// })->name('safe');
 
-Route::get('/support', function() {
-    return Inertia::render('Support/Main', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-})->name('support');
+// Route::get('/support', function() {
+//     return Inertia::render('Support/Main', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//     ]);
+// })->name('support');
+
+Route::get('/', function(){
+    return redirect(route('page.index', 'home'));
+});
+
+Route::get('/page/{slugName}', [PageController::class, 'index'])->name('page.index');
 
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
@@ -110,6 +117,14 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
 
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.dashboard');
+    //Staff page control
+    Route::get('/staff/pages', [PageController::class, 'create'])->name('staff.dashboard.pages');
+    Route::post('/staff/pages', [PageController::class, 'store'])->name('staff.dashboard.pages.store');
+    Route::patch('/staff/page/update/{page}', [PageController::class, 'update'])->name('staff.dashboard.pages.update');
+    Route::delete('/staff/page/delete/{page}', [PageController::class, 'destroy'])->name('staff.dashboard.pages.destroy');
+
+
+    //Staff user control
     Route::get('/staff/users', [StaffUserController::class, 'index'])->name('staff.dashboard.users');
     Route::delete('/staff/{user}/delete', [StaffUserController::class, 'destroy'])->name('staff.dashboard.users.destroy');
 });
