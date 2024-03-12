@@ -28,7 +28,13 @@ class ContentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'display_block_id' => 'required',
+            'title' => 'nullable',
+            'desc' => 'required',
+        ]);
+
+        Content::create($validate);
     }
 
     /**

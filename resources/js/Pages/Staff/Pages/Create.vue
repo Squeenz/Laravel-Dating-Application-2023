@@ -10,6 +10,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 
+const page = usePage();
+
 const props = defineProps({
     pages: Array,
 });
@@ -54,7 +56,7 @@ const edit = (id) => {
                                 <p class="w-[40rem]">The page slug serves as the internal identifier for backend processes and is used in the URL. It must adhere to URL standards to ensure validity.</p>
                             </div>
 
-                            <form class="p-5" @submit.prevent="createForm.post(route('staff.dashboard.pages.store'), { onSuccess: () => { createForm.clear(); } })">
+                            <form class="p-5" @submit.prevent="createForm.post(route('staff.dashboard.pages.store'), { onSuccess: () => { createForm.reset(); } })">
                                 <div>
                                     <InputLabel class="text-white">Page name:</InputLabel>
                                     <InputError :message="createForm.errors.page_name"/>
@@ -81,7 +83,7 @@ const edit = (id) => {
                                 <p>Delete</p>
                             </div>
 
-                            <div v-for="page in props.pages" :key="page">
+                            <div v-for="page in page.props.pages" :key="page.id">
                                 <div class="flex justify-around p-2 m-2 bg-gray-700 rounded-sm">
                                     <h1 class="my-auto mx-2">{{ page.id }}</h1>
                                     <p class="my-auto mx-2">{{ page.page_name }}</p>

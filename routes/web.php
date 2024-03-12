@@ -3,6 +3,8 @@
 use App\Http\Controllers\ChatApplicationController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\ChatRoomController;
+use App\Http\Controllers\ContentController;
+use App\Http\Controllers\DisplayBlockController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\MatchingController;
@@ -120,6 +122,11 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
     //Staff page control
     Route::get('/staff/pages', [PageController::class, 'create'])->name('staff.dashboard.pages');
     Route::post('/staff/pages', [PageController::class, 'store'])->name('staff.dashboard.pages.store');
+
+    Route::get('/staff/page/edit/{page}', [PageController::class, 'edit'])->name('staff.dashboard.pages.edit');
+    Route::post('/staff/page/layout', [DisplayBlockController::class, 'store'])->name('staff.dashboard.pages.display.store');
+    // Route::post('/staff/page/display/content', [ContentController::class, 'store'])->name('staff.dashboard.pages.content.store');
+
     Route::patch('/staff/page/update/{page}', [PageController::class, 'update'])->name('staff.dashboard.pages.update');
     Route::delete('/staff/page/delete/{page}', [PageController::class, 'destroy'])->name('staff.dashboard.pages.destroy');
 

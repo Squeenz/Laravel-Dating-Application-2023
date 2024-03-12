@@ -65,7 +65,6 @@ const props = defineProps({
 
                     <!-- Navigation Links -->
                     <div
-                        v-if="props.canLogin !== false && props.canRegister !== false"
                         class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                         >
                         <NavLink :href="route('login')" :active="route().current('login')">
@@ -76,7 +75,9 @@ const props = defineProps({
                         </NavLink>
                     </div>
 
-                    <div class="hidden sm:flex sm:items-center sm:ms-6">
+                    <div
+                        class="hidden sm:flex sm:items-center sm:ms-6"
+                        >
                             <!-- Settings Dropdown -->
                             <div class="ms-3 relative">
                                 <Dropdown align="right" width="48">

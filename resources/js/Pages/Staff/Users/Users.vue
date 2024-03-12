@@ -39,7 +39,7 @@ const props = defineProps(['users']);
                                 <h1>{{ user.surname }}</h1>
                                 <h1>{{ user.email }}</h1>
                                 <h1>{{ dayjs(user.created_at).format("DD/MM/YYYY") }}</h1>
-                                <Link method="delete" :href="route('staff.dashboard.users.destroy', user.id)"><PrimaryButton class="justify-center mx-2">Delete</PrimaryButton></Link>
+                                <Link method="delete" :href="route('staff.dashboard.users.destroy', user.id)" as="button"><PrimaryButton class="justify-center mx-2">Delete</PrimaryButton></Link>
                             </div>
                         </div>
 

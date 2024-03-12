@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('page_name');
             $table->string('slug')->unique();
-            $table->string('desc');
             $table->timestamps();
         });
     }

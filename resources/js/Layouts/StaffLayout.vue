@@ -10,11 +10,9 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import { Heart, Users, Layers3, LifeBuoy, Settings, TableProperties } from 'lucide-vue-next';
 
-
 const page = usePage();
 
 const showingNavigationDropdown = ref(false);
-
 </script>
 
 <template>
@@ -82,6 +80,20 @@ const showingNavigationDropdown = ref(false);
                                         <NavDropdownLink
                                             :href="route('staff.dashboard.pages')" :active="route().current('staff.dashboard.pages')">
                                             Page Controller
+                                        </NavDropdownLink>
+
+                                        <NavDropdownLink
+                                            v-for="page in page.props.pages"
+                                            :href="route('staff.dashboard.pages')" :active="route().current('staff.dashboard.pages')"
+                                            :key="page"
+                                        >
+                                            {{ page.page_name }}
+                                        </NavDropdownLink>
+
+
+                                        <NavDropdownLink
+                                            :href="route('matchmaking')" :active="route().current('matchmaking')">
+                                            Policies
                                         </NavDropdownLink>
 
                                         <!-- <NavDropdownLink

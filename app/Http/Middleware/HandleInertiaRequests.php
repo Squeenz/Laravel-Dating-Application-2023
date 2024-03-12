@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Page;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -41,7 +42,8 @@ class HandleInertiaRequests extends Middleware
             ],
             'notification' => fn () => [
                 'unread' => $request->user() ? $request->user()->notifications()->where('read', '=', 0)->count() : 0,
-            ]
+            ],
+            'pages' => Page::all()->toArray(),
         ];
     }
 }

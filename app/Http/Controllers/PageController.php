@@ -34,11 +34,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        $pages = Page::all();
-
-        return Inertia::render('Staff/Pages/Create', [
-            'pages' => $pages,
-        ]);
+        return Inertia::render('Staff/Pages/Create');
     }
 
     /**
@@ -75,7 +71,14 @@ class PageController extends Controller
      */
     public function edit(Page $page)
     {
-        //
+        $layout = $page->layout;
+
+        $displayBlocks = $layout->displayBlocks()->with('contents')->get();
+
+        return Inertia::render('Staff/Pages/Edit', [
+            'layoutID' => $layout->id,
+            'displayBlocksWithContent' => $displayBlocks,
+        ]);
     }
 
     /**
