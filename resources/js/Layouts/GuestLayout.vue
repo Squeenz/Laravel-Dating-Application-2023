@@ -75,7 +75,7 @@ const props = defineProps({
                         </NavLink>
                     </div>
 
-                    <div
+                    <div v-if="canLogin === true && canRegister === true"
                         class="hidden sm:flex sm:items-center sm:ms-6"
                         >
                             <!-- Settings Dropdown -->

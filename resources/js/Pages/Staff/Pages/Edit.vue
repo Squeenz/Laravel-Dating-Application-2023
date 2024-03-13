@@ -19,33 +19,63 @@ const props = defineProps({
 });
 
 const pageComponents = ref([
-    { label: 'Text Box', type: 'textBox', new: true},
-    { label: 'Grid List',  type: 'gridList', new: true},
-    { label: 'Special List',  type: 'specialList', new: true},
+    { label: 'Text Box', type: 'textBox', new: true },
+    // { label: 'Grid List',  type: 'gridList', new: true},
+    // { label: 'Special List',  type: 'specialList', new: true },
 ]);
 
 const pageLayout = ref([]);
 const editing = ref(false);
+const createNew = ref(false);
+const elementID = ref(0);
 
 const title = ref('');
 const desc = ref('');
 
-onMounted(() => {
-    for (const key in props.displayBlocksWithContent) {
-        const item = props.displayBlocksWithContent[key];
+const loadData = (list) =>
+{
+    for (const key in list) {
+        const item = list[key];
         pageLayout.value.push(item);
     }
-});
-
-const createNewItem = (elType) => {
-    router.post(route('staff.dashboard.pages.display.store'), {
-        layout_id: props.layoutID,
-        type: elType,
-        title: elType === 'gridList' || elType === 'specialList' ? 'null' : title.value,
-        desc: desc.value,
-    })
 }
 
+onMounted(() => {
+    loadData(props.displayBlocksWithContent);
+});
+
+const createNewItem = (element) => {
+    router.post(route('staff.dashboard.pages.display.store'),
+    {// Data
+        layout_id: props.layoutID,
+        type: element.type,
+        title: element.type === 'gridList' || element.type === 'specialList' ? 'null' : title.value,
+        desc: desc.value,
+    },
+    { // Options
+        onSuccess: (response) => {
+            createNew.value = false;
+            pageLayout.value  = response.props.displayBlocksWithContent;
+            title.value = '';
+            desc.value = '';
+        },
+    });
+};
+
+const edit = (element) => {
+    elementID.value = element.id;
+    editing.value = !editing.value;
+};
+
+const del = (element) => {
+    router.delete(route('staff.dashboard.pages.content.destroy', { content: element.id }),
+    {
+        onSuccess: (response) => {
+            pageLayout.value  = response.props.displayBlocksWithContent;
+        }
+    }
+    );
+};
 
 </script>
 
@@ -77,18 +107,19 @@ const createNewItem = (elType) => {
                                     v-model="pageLayout"
                                     :group="{ name: 'pageComponents' }"
                                     item-key="id"
+                                    @add="createNew = true"
                                  >
                                  <template #item="{element}">
                                     <div class="my-[1rem] bg-gray-700 p-[2rem] rounded-sm">
                                         <div v-if="element.type === 'textBox'">
                                             <div class="float-right grid grid-flow-col">
-                                                <Pencil class="m-2 text-orange-500" :size="20"/>
-                                                <Trash2 class="m-2 text-red-500" :size="20"/>
+                                                <Pencil v-if="createNew != true" class="m-2 text-orange-500" :size="20" @click="edit(element)"/>
+                                                <Trash2 class="m-2 text-red-500" :size="20" @click="del(element)"/>
                                             </div>
 
                                             <h1 class="text-gray-600 font-extrabold">Text Box</h1>
 
-                                            <div v-if="editing === true || element.new === true">
+                                            <div v-if="(editing === true && elementID === element.id ) || (createNew === true && element.new === true)">
                                                 <InputLabel class="text-white">Title: </InputLabel>
                                                 <TextInput class="w-full text-black" v-model="title"/>
 
@@ -101,7 +132,7 @@ const createNewItem = (elType) => {
                                             </div>
                                         </div>
 
-                                        <div v-if="element.type === 'gridList'">
+                                        <!-- <div v-if="element.type === 'gridList'">
                                             <div class="float-right grid grid-flow-col">
                                                 <Pencil class="mr-2 text-orange-500" :size="20"/>
                                                 <Trash2 class="ml-2 text-red-500" :size="20"/>
@@ -118,13 +149,13 @@ const createNewItem = (elType) => {
                                                 <p> {{ content.desc }}</p>
                                             </div>
 
-                                            <div v-if="editing === true || element.new === true">
+                                            <div v-if="editing === true || element.editing === true">
                                                 <InputLabel class="text-white">Desc: </InputLabel>
                                                 <TextInput class="w-full text-black" v-model="desc"/>
                                             </div>
-                                        </div>
+                                        </div> -->
 
-                                        <div v-if="element.type === 'specialList'">
+                                        <!-- <div v-if="element.type === 'specialList'">
                                             <div class="float-right grid grid-flow-col">
                                                 <Pencil class="mr-2 text-orange-500" :size="20"/>
                                                 <Trash2 class="ml-2 text-red-500" :size="20"/>
@@ -141,15 +172,15 @@ const createNewItem = (elType) => {
                                                 <p> {{ content.desc }}</p>
                                             </div>
 
-                                            <div v-if="editing === true || element.new === true">
+                                            <div v-if="editing === true || element.editing === true">
                                                 <InputLabel class="text-white">Desc: </InputLabel>
                                                 <TextInput class="w-full text-black" v-model="desc"/>
                                             </div>
-                                        </div>
+                                        </div> -->
 
                                             <div>
-                                                <PrimaryButton v-if="element.new === true" @click="createNewItem(element.type)" class="my-2 w-full justify-center">Add</PrimaryButton>
-                                                <PrimaryButton v-if="editing === true" class="my-2 w-full justify-center">Save</PrimaryButton>
+                                                <PrimaryButton v-if="(createNew === true && element.new === true)" @click="createNewItem(element)" class="my-2 w-full justify-center">Add</PrimaryButton>
+                                                <PrimaryButton v-if="(editing === true && elementID === element.id )" class="my-2 w-full justify-center">Save</PrimaryButton>
                                             </div>
 
 
@@ -174,7 +205,6 @@ const createNewItem = (elType) => {
                                     <h1 class="m-2 p-2 bg-gray-500 rounded-sm"> {{ element.label }} </h1>
                                 </template>
                             </draggable>
-
                         </div>
                     </div>
                 </div>

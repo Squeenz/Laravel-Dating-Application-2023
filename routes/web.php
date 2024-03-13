@@ -125,7 +125,7 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
 
     Route::get('/staff/page/edit/{page}', [PageController::class, 'edit'])->name('staff.dashboard.pages.edit');
     Route::post('/staff/page/layout', [DisplayBlockController::class, 'store'])->name('staff.dashboard.pages.display.store');
-    // Route::post('/staff/page/display/content', [ContentController::class, 'store'])->name('staff.dashboard.pages.content.store');
+    Route::delete('/staff/page/layout/content/delete/{content}', [ContentController::class, 'destroy'])->name('staff.dashboard.pages.content.destroy');
 
     Route::patch('/staff/page/update/{page}', [PageController::class, 'update'])->name('staff.dashboard.pages.update');
     Route::delete('/staff/page/delete/{page}', [PageController::class, 'destroy'])->name('staff.dashboard.pages.destroy');

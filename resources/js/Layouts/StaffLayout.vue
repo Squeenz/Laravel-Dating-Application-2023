@@ -84,7 +84,7 @@ const showingNavigationDropdown = ref(false);
 
                                         <NavDropdownLink
                                             v-for="page in page.props.pages"
-                                            :href="route('staff.dashboard.pages')" :active="route().current('staff.dashboard.pages')"
+                                            :href="route('staff.dashboard.pages.edit', page.id)" :active="route().current('staff.dashboard.pages')"
                                             :key="page"
                                         >
                                             {{ page.page_name }}
