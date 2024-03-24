@@ -1,11 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { Head, usePage, Link, router, useForm } from '@inertiajs/vue3';
 import StaffLayout from '@/Layouts/StaffLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import dayjs from 'dayjs';
 
-import { Trash2, Pencil, ShieldAlert, Save, Boxes } from 'lucide-vue-next';
+import { Trash2, Pencil, ShieldAlert, Save, Boxes, Plus } from 'lucide-vue-next';
 
 import draggable from 'vuedraggable';
 
@@ -20,15 +20,19 @@ const props = defineProps({
 
 const pageComponents = ref([
     { label: 'Text Box', type: 'textBox', new: true },
-    // { label: 'Grid List',  type: 'gridList', new: true},
-    // { label: 'Special List',  type: 'specialList', new: true },
+    { label: 'Grid List',  type: 'gridList', new: true},
+    { label: 'Special List',  type: 'specialList', new: true },
 ]);
 
 const pageLayout = ref([]);
-const editing = ref(false);
-const createNew = ref(false);
-const elementID = ref(0);
 
+const states = reactive({
+    editing: false,
+    createNew: false,
+    addItem: false,
+});
+
+const elementID = ref(0);
 const title = ref('');
 const desc = ref('');
 
@@ -54,17 +58,22 @@ const createNewItem = (element) => {
     },
     { // Options
         onSuccess: (response) => {
-            createNew.value = false;
             pageLayout.value  = response.props.displayBlocksWithContent;
             title.value = '';
             desc.value = '';
+            states.createNew = false;
         },
     });
 };
 
+const addItemToGrid = (element) => {
+    elementID.value = element.id;
+    states.addItem = !states.addItem;
+};
+
 const edit = (element) => {
     elementID.value = element.id;
-    editing.value = !editing.value;
+    states.editing = !states.editing;
 };
 
 const del = (element) => {
@@ -107,35 +116,35 @@ const del = (element) => {
                                     v-model="pageLayout"
                                     :group="{ name: 'pageComponents' }"
                                     item-key="id"
-                                    @add="createNew = true"
+                                    @add="states.createNew = false"
                                  >
                                  <template #item="{element}">
                                     <div class="my-[1rem] bg-gray-700 p-[2rem] rounded-sm">
                                         <div v-if="element.type === 'textBox'">
                                             <div class="float-right grid grid-flow-col">
-                                                <Pencil v-if="createNew != true" class="m-2 text-orange-500" :size="20" @click="edit(element)"/>
-                                                <Trash2 class="m-2 text-red-500" :size="20" @click="del(element)"/>
+                                                <Pencil v-if="states.createNew != false || element.new != true " class="m-2 text-orange-500" :size="20" @click="edit(element)"/>
+                                                <Trash2 v-if="states.createNew != false || element.new != true" class="m-2 text-red-500" :size="20" @click="del(element)"/>
                                             </div>
 
                                             <h1 class="text-gray-600 font-extrabold">Text Box</h1>
 
-                                            <div v-if="(editing === true && elementID === element.id ) || (createNew === true && element.new === true)">
+                                            <div v-if="(states.editing === true && elementID === element.id ) || (states.createNew === false && element.new === true)">
                                                 <InputLabel class="text-white">Title: </InputLabel>
                                                 <TextInput class="w-full text-black" v-model="title"/>
 
                                                 <InputLabel class="text-white">Desc: </InputLabel>
                                                 <TextInput class="w-full text-black" v-model="desc"/>
                                             </div>
+
                                             <div v-else>
                                                 <p>{{ element.contents[0].title }}</p>
                                                 <p>{{ element.contents[0].desc }}</p>
                                             </div>
                                         </div>
 
-                                        <!-- <div v-if="element.type === 'gridList'">
+                                        <div v-if="element.type === 'gridList'">
                                             <div class="float-right grid grid-flow-col">
-                                                <Pencil class="mr-2 text-orange-500" :size="20"/>
-                                                <Trash2 class="ml-2 text-red-500" :size="20"/>
+                                                <Trash2 v-if="states.createNew != false || element.new != true" class="mr-2 text-red-500" :size="20" @click="del(element)"/>
                                             </div>
 
                                             <h1 class="text-gray-600 font-extrabold">Grid List</h1>
@@ -149,11 +158,23 @@ const del = (element) => {
                                                 <p> {{ content.desc }}</p>
                                             </div>
 
-                                            <div v-if="editing === true || element.editing === true">
-                                                <InputLabel class="text-white">Desc: </InputLabel>
-                                                <TextInput class="w-full text-black" v-model="desc"/>
+
+
+
+                                            <div
+                                                class="bg-gray-800 p-[0.4rem] rounded-sm my-[0.3rem]"
+                                                @click="addItemToGrid(element)"
+                                                >
+                                                <Plus class="float-left my-[0.9rem] mx-[1rem] text-gray-400" :size="20"/>
+                                                <h1 v-if="!states.addItem || elementID != element.id" class="my-[0.7rem] font-extrabold text-gray-400">Add Item</h1>
+                                                <div v-if="states.addItem && elementID === element.id">
+                                                    <h1 class=" my-[0.7rem] font-extrabold text-white">Description: </h1>
+                                                    <TextInput class="w-full text-black" v-model="desc"/>
+                                                </div>
                                             </div>
-                                        </div> -->
+
+                                            <PrimaryButton v-if="states.addItem && elementID === element.id" @click="addItemToGrid(element)" class="my-2 w-full justify-center">Add</PrimaryButton>
+                                        </div>
 
                                         <!-- <div v-if="element.type === 'specialList'">
                                             <div class="float-right grid grid-flow-col">
@@ -179,8 +200,8 @@ const del = (element) => {
                                         </div> -->
 
                                             <div>
-                                                <PrimaryButton v-if="(createNew === true && element.new === true)" @click="createNewItem(element)" class="my-2 w-full justify-center">Add</PrimaryButton>
-                                                <PrimaryButton v-if="(editing === true && elementID === element.id )" class="my-2 w-full justify-center">Save</PrimaryButton>
+                                                <PrimaryButton v-if="(states.createNew === false && element.new === true) && states.addItemToGrid" @click="createNewItem(element)" class="my-2 w-full justify-center">Add</PrimaryButton>
+                                                <PrimaryButton v-if="(states.editing === true && elementID === element.id )" class="my-2 w-full justify-center">Save</PrimaryButton>
                                             </div>
 
 
