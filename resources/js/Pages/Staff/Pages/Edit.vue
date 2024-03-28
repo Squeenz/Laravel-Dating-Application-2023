@@ -49,14 +49,13 @@ onMounted(() => {
 });
 
 const createNewItem = (element) => {
-    router.post(route('staff.dashboard.pages.display.store'),
-    {// Data
+    router.post(route('staff.dashboard.pages.display.store'), {
         layout_id: props.layoutID,
         type: element.type,
         title: element.type === 'gridList' || element.type === 'specialList' ? 'null' : title.value,
         desc: desc.value,
     },
-    { // Options
+    {
         onSuccess: (response) => {
             pageLayout.value  = response.props.displayBlocksWithContent;
             title.value = '';
@@ -66,9 +65,25 @@ const createNewItem = (element) => {
     });
 };
 
-const addItemToGrid = (element) => {
+const toggleAddItem = (element) =>
+{
     elementID.value = element.id;
     states.addItem = !states.addItem;
+}
+
+const addItemToGrid = (content) => {
+    router.post(route('staff.dashboard.pages.content.store'), {
+        display_block_id: elementID.value,
+        title: 'null',
+        desc: content,
+    },
+    {
+        onSuccess: (response) => {
+            pageLayout.value  = response.props.displayBlocksWithContent;
+            desc.value = '';
+            states.addItem = false;
+        },
+    });
 };
 
 const edit = (element) => {
@@ -77,13 +92,11 @@ const edit = (element) => {
 };
 
 const del = (element) => {
-    router.delete(route('staff.dashboard.pages.content.destroy', { content: element.id }),
-    {
+    router.delete(route('staff.dashboard.pages.content.destroy', { content: element.contents[0].id }),{
         onSuccess: (response) => {
             pageLayout.value  = response.props.displayBlocksWithContent;
         }
-    }
-    );
+    });
 };
 
 </script>
@@ -149,6 +162,17 @@ const del = (element) => {
 
                                             <h1 class="text-gray-600 font-extrabold">Grid List</h1>
 
+                                            <!-- <div v-if="elementID === element.id">
+                                                <div
+                                                    v-for="(content, index) in gridList"
+                                                    :key="content"
+                                                    class="bg-gray-800 p-[0.4rem] rounded-sm my-[0.3rem]">
+                                                    <Trash2 class="float-left my-[0.9rem] mx-[1rem] text-red-500" :size="20"/>
+                                                    <h1 class=" font-extrabold">Item {{ index + 1 }}:</h1>
+                                                    <p> {{ content.desc }}</p>
+                                                </div>
+                                            </div> -->
+
                                             <div
                                                 v-for="(content, index) in element.contents"
                                                 :key="content"
@@ -158,12 +182,9 @@ const del = (element) => {
                                                 <p> {{ content.desc }}</p>
                                             </div>
 
-
-
-
                                             <div
                                                 class="bg-gray-800 p-[0.4rem] rounded-sm my-[0.3rem]"
-                                                @click="addItemToGrid(element)"
+                                                @click="toggleAddItem(element)"
                                                 >
                                                 <Plus class="float-left my-[0.9rem] mx-[1rem] text-gray-400" :size="20"/>
                                                 <h1 v-if="!states.addItem || elementID != element.id" class="my-[0.7rem] font-extrabold text-gray-400">Add Item</h1>
@@ -173,7 +194,7 @@ const del = (element) => {
                                                 </div>
                                             </div>
 
-                                            <PrimaryButton v-if="states.addItem && elementID === element.id" @click="addItemToGrid(element)" class="my-2 w-full justify-center">Add</PrimaryButton>
+                                            <PrimaryButton v-if="states.addItem && elementID === element.id && !element.new" @click="addItemToGrid(desc)" class="my-2 w-full justify-center">Add</PrimaryButton>
                                         </div>
 
                                         <!-- <div v-if="element.type === 'specialList'">
@@ -200,7 +221,7 @@ const del = (element) => {
                                         </div> -->
 
                                             <div>
-                                                <PrimaryButton v-if="(states.createNew === false && element.new === true) && states.addItemToGrid" @click="createNewItem(element)" class="my-2 w-full justify-center">Add</PrimaryButton>
+                                                <PrimaryButton v-if="(states.createNew === false && element.new === true) && !states.addItemToGrid" @click="createNewItem(element)" class="my-2 w-full justify-center">Add</PrimaryButton>
                                                 <PrimaryButton v-if="(states.editing === true && elementID === element.id )" class="my-2 w-full justify-center">Save</PrimaryButton>
                                             </div>
 

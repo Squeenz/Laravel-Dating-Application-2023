@@ -117,19 +117,19 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
     Route::post('/chat/room', [ChatRoomController::class, 'store'])->name('chat.room.store');
 });
 
-Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
+Route::middleware(['auth'])->group(function(){
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.dashboard');
     //Staff page control
     Route::get('/staff/pages', [PageController::class, 'create'])->name('staff.dashboard.pages');
     Route::post('/staff/pages', [PageController::class, 'store'])->name('staff.dashboard.pages.store');
-
     Route::get('/staff/page/edit/{page}', [PageController::class, 'edit'])->name('staff.dashboard.pages.edit');
-    Route::post('/staff/page/layout', [DisplayBlockController::class, 'store'])->name('staff.dashboard.pages.display.store');
-    Route::delete('/staff/page/layout/content/delete/{content}', [ContentController::class, 'destroy'])->name('staff.dashboard.pages.content.destroy');
-
     Route::patch('/staff/page/update/{page}', [PageController::class, 'update'])->name('staff.dashboard.pages.update');
     Route::delete('/staff/page/delete/{page}', [PageController::class, 'destroy'])->name('staff.dashboard.pages.destroy');
 
+    Route::post('/staff/page/layout', [DisplayBlockController::class, 'store'])->name('staff.dashboard.pages.display.store');
+
+    Route::post('/staff/page/layout/content', [ContentController::class, 'store'])->name('staff.dashboard.pages.content.store');
+    Route::delete('/staff/page/layout/content/delete/{content}', [ContentController::class, 'destroy'])->name('staff.dashboard.pages.content.destroy');
 
     //Staff user control
     Route::get('/staff/users', [StaffUserController::class, 'index'])->name('staff.dashboard.users');
