@@ -126,10 +126,11 @@ Route::middleware(['auth'])->group(function(){
     Route::patch('/staff/page/update/{page}', [PageController::class, 'update'])->name('staff.dashboard.pages.update');
     Route::delete('/staff/page/delete/{page}', [PageController::class, 'destroy'])->name('staff.dashboard.pages.destroy');
 
-    Route::post('/staff/page/layout', [DisplayBlockController::class, 'store'])->name('staff.dashboard.pages.display.store');
-
-    Route::post('/staff/page/layout/content', [ContentController::class, 'store'])->name('staff.dashboard.pages.content.store');
-    Route::delete('/staff/page/layout/content/delete/{content}', [ContentController::class, 'destroy'])->name('staff.dashboard.pages.content.destroy');
+    Route::post('/staff/page/display', [DisplayBlockController::class, 'store'])->name('staff.dashboard.pages.display.store');
+    Route::post('/staff/page/content', [ContentController::class, 'store'])->name('staff.dashboard.pages.content.store');
+    Route::delete('/staff/page/content/deleteRelative/{content}', [ContentController::class, 'destroyRelative'])->name('staff.dashboard.pages.content.destroyRelative');
+    Route::delete('/staff/page/content/delete/{content}', [ContentController::class, 'destroy'])->name('staff.dashboard.pages.content.destroy');
+    Route::patch('/staff/page/content/update/{content}', [ContentController::class, 'update'])->name('staff.dashboard.pages.content.update');
 
     //Staff user control
     Route::get('/staff/users', [StaffUserController::class, 'index'])->name('staff.dashboard.users');

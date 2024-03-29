@@ -7,18 +7,12 @@ import DisplayBlocks from '@/Components/DisplayBlocks.vue';
 const props = defineProps({
     pages: Object,
     displayBlocks: Object,
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    }
 });
 </script>
 
 <template>
     <Head title="Welcome" />
-    <GuestLayout :canLogin="props.canLogin" :canRegister="props.canRegister" :pages="props.pages">
+    <GuestLayout :pages="props.pages">
 
     <template #header>
         <h1 class="text-white text-center">Welcome to our site, we are a new dating service which focuses on gamers and non-profit service model. Unlike majority of

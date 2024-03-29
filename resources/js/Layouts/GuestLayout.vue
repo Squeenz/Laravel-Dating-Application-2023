@@ -5,19 +5,17 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import { Bell, MessageCircleHeart, Heart, Camera, CameraOff, ListChecks, BellPlus } from 'lucide-vue-next';
+import { computed } from 'vue';
 
 const page = usePage();
 
 const props = defineProps({
-    pages: Object,
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    }
+    pages: Object
 });
 
+const user = computed(()=>{
+    return page.props.auth.user;
+});
 </script>
 
 <template>
@@ -40,11 +38,11 @@ const props = defineProps({
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
 
                                 <NavLink
-                                v-for="page in props.pages"
-                                :key="page.id"
-                                :href="route('page.index', page.slug)" :active="route().current('page.index', page.slug)"
-                                >
-                                    {{ page.page_name }}
+                                    v-for="page in props.pages"
+                                    :key="page.id"
+                                    :href="route('page.index', page.slug)" :active="route().current('page.index', page.slug)"
+                                    >
+                                        {{ page.page_name }}
                                 </NavLink>
 
                                 <!-- <NavLink :href="route('home')" :active="route().current('home')">
@@ -65,6 +63,7 @@ const props = defineProps({
 
                     <!-- Navigation Links -->
                     <div
+                        v-if="user === null"
                         class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                         >
                         <NavLink :href="route('login')" :active="route().current('login')">
@@ -75,7 +74,7 @@ const props = defineProps({
                         </NavLink>
                     </div>
 
-                    <div v-if="canLogin === true && canRegister === true"
+                    <div v-else
                         class="hidden sm:flex sm:items-center sm:ms-6"
                         >
                             <!-- Settings Dropdown -->
