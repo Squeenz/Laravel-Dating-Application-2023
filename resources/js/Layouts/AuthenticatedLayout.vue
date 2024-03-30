@@ -66,6 +66,7 @@ const stopListening = () => {
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
                                 <NavLink :href="route('matchmaking')" :active="route().current('matchmaking')">
                                    <Heart class="mr-1" :size="20"/> Matchmaking
                                 </NavLink>

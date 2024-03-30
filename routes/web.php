@@ -96,6 +96,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/staff/policies', [PolicyController::class, 'staffIndex'])->name('staff.dashboard.policies');
     Route::post('/staff/policies/create', [PolicyController::class, 'store'])->name('staff.dashboard.policies.store');
     Route::delete('/staff/policies/delete/{policy}', [PolicyController::class, 'destroy'])->name('staff.dashboard.policies.destroy');
+    Route::patch('/staff/policies/update/{policy}', [PolicyController::class,  'update'])->name('staff.dashboard.policies.update');
 
     //User Control Routes
     Route::get('/staff/users', [StaffUserController::class, 'index'])->name('staff.dashboard.users');

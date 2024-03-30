@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link} from '@inertiajs/vue3';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import dayjs from 'dayjs';
@@ -32,7 +32,7 @@ const props = defineProps({
                         <h1 class="font-bold m-2 text-2xl">{{ policy.title }}</h1>
                         <p class="m-1">Created: {{ dayjs(policy.created_at).format('DD/MM/YYYY H:m:s a') }}</p>
                         <p class="m-1">Updated: {{ dayjs(policy.updated_at).format('DD/MM/YYYY H:m:s a') }}</p>
-                        <Link href="#" class="mt-[1rem] mx-[1rem]"><PrimaryButton class="bg-red-900 justify-center w-full">READ NOW</PrimaryButton></Link>
+                        <Link :href="route('policies.show', policy)" class="mt-[1rem] mx-[1rem]"><PrimaryButton class="bg-red-900 justify-center w-full">READ NOW</PrimaryButton></Link>
                     </div>
                 </div>
             </div>

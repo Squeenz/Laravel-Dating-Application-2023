@@ -14,8 +14,10 @@ const props = defineProps({
 
 const states = reactive({
     create: false,
+    edit: false,
 });
 
+const selectedPolicyID = ref(0);
 const title = ref('');
 const content = ref('');
 
@@ -32,6 +34,39 @@ const create = () =>
         }
     });
 };
+
+const editToggle = (policy) =>
+{
+    states.edit = !states.edit;
+
+    if (states.edit)
+    {
+        selectedPolicyID.value = policy.id;
+        title.value = policy.title;
+        content.value = policy.content;
+    }
+    else
+    {
+        selectedPolicyID.value = 0;
+    }
+}
+
+const edit = () => {
+    router.patch(route('staff.dashboard.policies.update', { policy: selectedPolicyID.value }),
+    {
+        title: title.value,
+        content: content.value,
+    },
+    {
+        preserveScroll: true,
+        onSuccess: () => {
+            states.edit = false;
+            selectedPolicyID.value = 0;
+            title.value = '';
+            content.value = '';
+        }
+    });
+}
 
 const del = (policy) =>
 {
@@ -70,6 +105,7 @@ const del = (policy) =>
                                 <div
                                     v-if="states.create"
                                     class="bg-gray-700 my-[1rem] p-[1rem] rounded-md">
+                                    <p>Create Form</p>
                                     <InputLabel class="text-white my-[1rem]">Title:</InputLabel>
                                     <TextInput class="w-full text-black" v-model="title"/>
                                     <InputLabel class="text-white my-[1rem]">Content:</InputLabel>
@@ -82,19 +118,35 @@ const del = (policy) =>
                                     <div
                                         v-for="policy in props.policies"
                                         :key="policy"
+                                        :class="selectedPolicyID === policy.id ? 'bg-gray-900' : ''"
                                         class="bg-gray-700 p-[1rem] rounded-md text-center">
                                         <div class="float-right flex">
-                                            <Pencil class="text-orange-500"/>
+                                            <Pencil class="text-orange-500" @click="editToggle(policy)"/>
                                             <Trash2 class="text-red-500 ml-[1rem]" @click="del(policy)"/>
                                         </div>
-                                        <div class="mt-[2rem]">
+
+                                        <div
+                                            class="mt-[2rem]">
                                             <h1 class="text-xl font-bold ">{{ policy.title }}</h1>
                                             <p class="italic text-gray-400">Updated: {{ dayjs(policy.created_at).format('DD/MM/YYYY') }}</p>
                                             <p class="italic text-gray-400">Created: {{ dayjs(policy.updated_at).format('DD/MM/YYYY') }}</p>
+                                            <Link :href="route('policies.show', policy)"><PrimaryButton class="m-2 w-full justify-center">VIEW</PrimaryButton></Link>
                                         </div>
-                                        <PrimaryButton class="m-2 w-full justify-center">VIEW</PrimaryButton>
                                     </div>
                                 </div>
+
+                                <Transition name="fade">
+                                    <div
+                                        v-if="states.edit"
+                                        class="bg-gray-700 my-[1rem] p-[1rem] rounded-md">
+                                        <p>Edit Form</p>
+                                        <InputLabel class="text-white my-[1rem]">Title:</InputLabel>
+                                        <TextInput class="w-full text-black" v-model="title"/>
+                                        <InputLabel class="text-white my-[1rem]">Content:</InputLabel>
+                                        <textarea class="border-gray-300 text-black focus:border-red-500 focus:ring-red-500 rounded-[0.2rem] shadow-sm w-full resize-none h-[20rem]" v-model="content"></textarea>
+                                        <PrimaryButton class="justify-center w-full my-[1rem]" @click="edit">edit</PrimaryButton>
+                                    </div>
+                                </Transition>
                             </div>
                         </div>
                     </div>

@@ -149,7 +149,7 @@ const showingNavigationDropdown = ref(false);
 
             <div class="sm:flex sm:items-center sm:ms-6 bg-[#111111] p-5">
                 <!-- Settings Dropdown -->
-                <div class="ms-3 relative">
+                <div class="relative left-[85%]">
                     <Dropdown align="right" width="48">
                         <template #trigger>
                             <span class="inline-flex rounded-md">

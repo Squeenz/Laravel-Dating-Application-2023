@@ -62,8 +62,6 @@ class PolicyController extends Controller
     {
         $validPolicy = Policy::findOrFail($policy->id);
 
-        //$validPolicy = Policy::where('title', '=', $policy->title)->get();
-
         return Inertia::render('Policies/Show', [
             'policy' => $validPolicy,
         ]);
@@ -82,7 +80,12 @@ class PolicyController extends Controller
      */
     public function update(Request $request, Policy $policy)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+        ]);
+
+        $policy->update($validated);
     }
 
     /**

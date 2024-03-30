@@ -9,13 +9,10 @@ import { computed } from 'vue';
 
 const page = usePage();
 
-const props = defineProps({
-    pages: Object
-});
-
 const user = computed(()=>{
     return page.props.auth.user;
 });
+
 </script>
 
 <template>
@@ -36,25 +33,19 @@ const user = computed(()=>{
                         <div class="flex">
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-
                                 <NavLink
-                                    v-for="page in props.pages"
+                                    v-for="page in page.props.pages"
                                     :key="page.id"
                                     :href="route('page.index', page.slug)" :active="route().current('page.index', page.slug)"
                                     >
                                         {{ page.page_name }}
                                 </NavLink>
 
-                                <!-- <NavLink :href="route('home')" :active="route().current('home')">
-                                    Home
-                                </NavLink>
-                                <NavLink :href="route('policies')" :active="route().current('policies')">
+                                <NavLink :href="route('policies.index')" :active="route().current('policies.index')">
                                     Policies
                                 </NavLink>
-                                <NavLink :href="route('safe')" :active="route().current('safe')">
-                                    How To Stay Safe
-                                </NavLink>
-                                <NavLink :href="route('support')" :active="route().current('support')">
+
+                                <!-- <NavLink :href="route('support')" :active="route().current('support')">
                                     Support
                                 </NavLink> -->
                             </div>
