@@ -11,6 +11,7 @@ use App\Http\Controllers\MatchingController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffUserController;
 use Illuminate\Foundation\Application;
@@ -28,55 +29,13 @@ use Inertia\Inertia;
 |
 */
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
-
-// Route::get('/', function() {
-//     return Inertia::render('Landing', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//     ]);
-// })->name('home');
-
-// Route::get('/policies', function() {
-//     return Inertia::render('Policies/Policies', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//     ]);
-// })->name('policies');
-
-// Route::get('/policies/show', function() {
-//     return Inertia::render('Policies/Show', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//     ]);
-// })->name('policies.show');
-
-// Route::get('/how-to-stay-safe', function() {
-//     return Inertia::render('Safe', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//     ]);
-// })->name('safe');
-
-// Route::get('/support', function() {
-//     return Inertia::render('Support/Main', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//     ]);
-// })->name('support');
-
 Route::get('/', function(){
     return redirect(route('page.index', 'home'));
 });
 
 Route::get('/page/{slugName}', [PageController::class, 'index'])->name('page.index');
+Route::get('/policies', [PolicyController::class, 'index'])->name('policies.index');
+Route::get('/policies/{policy}', [PolicyController::class, 'show'])->name('policies.show');
 
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
@@ -117,22 +76,28 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
     Route::post('/chat/room', [ChatRoomController::class, 'store'])->name('chat.room.store');
 });
 
+//Staff routes
 Route::middleware(['auth'])->group(function(){
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.dashboard');
-    //Staff page control
+
+    //Page System Routes
     Route::get('/staff/pages', [PageController::class, 'create'])->name('staff.dashboard.pages');
     Route::post('/staff/pages', [PageController::class, 'store'])->name('staff.dashboard.pages.store');
     Route::get('/staff/page/edit/{page}', [PageController::class, 'edit'])->name('staff.dashboard.pages.edit');
     Route::patch('/staff/page/update/{page}', [PageController::class, 'update'])->name('staff.dashboard.pages.update');
     Route::delete('/staff/page/delete/{page}', [PageController::class, 'destroy'])->name('staff.dashboard.pages.destroy');
-
     Route::post('/staff/page/display', [DisplayBlockController::class, 'store'])->name('staff.dashboard.pages.display.store');
     Route::post('/staff/page/content', [ContentController::class, 'store'])->name('staff.dashboard.pages.content.store');
     Route::delete('/staff/page/content/deleteRelative/{content}', [ContentController::class, 'destroyRelative'])->name('staff.dashboard.pages.content.destroyRelative');
     Route::delete('/staff/page/content/delete/{content}', [ContentController::class, 'destroy'])->name('staff.dashboard.pages.content.destroy');
     Route::patch('/staff/page/content/update/{content}', [ContentController::class, 'update'])->name('staff.dashboard.pages.content.update');
 
-    //Staff user control
+    //Policies System Routes
+    Route::get('/staff/policies', [PolicyController::class, 'staffIndex'])->name('staff.dashboard.policies');
+    Route::post('/staff/policies/create', [PolicyController::class, 'store'])->name('staff.dashboard.policies.store');
+    Route::delete('/staff/policies/delete/{policy}', [PolicyController::class, 'destroy'])->name('staff.dashboard.policies.destroy');
+
+    //User Control Routes
     Route::get('/staff/users', [StaffUserController::class, 'index'])->name('staff.dashboard.users');
     Route::delete('/staff/{user}/delete', [StaffUserController::class, 'destroy'])->name('staff.dashboard.users.destroy');
 });

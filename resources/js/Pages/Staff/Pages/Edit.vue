@@ -10,7 +10,6 @@ import { Trash2, Pencil, ShieldAlert, Save, Boxes, Plus } from 'lucide-vue-next'
 import draggable from 'vuedraggable';
 
 import InputLabel from '@/Components/InputLabel.vue';
-import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 
 const props = defineProps({
