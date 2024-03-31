@@ -20,9 +20,8 @@ const props = defineProps({
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="sm:py-[1.5rem] bg-[#0A0A0A] shadow rounded-sm">
                 <div class="flex flex-col justify-center p-[1rem] gap-3 text-white w-full">
-                   <v-html>
-                        {{ props.policy.content }}
-                   </v-html>
+
+                    <div class="prose text-white max-w-none" v-html="props.policy.content"></div>
                 </div>
             </div>
         </div>

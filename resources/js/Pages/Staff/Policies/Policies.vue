@@ -1,10 +1,11 @@
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
-import { Head, usePage, Link, router, useForm } from '@inertiajs/vue3';
+import { ref, reactive } from 'vue';
+import { Head, Link, router } from '@inertiajs/vue3';
 import StaffLayout from '@/Layouts/StaffLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import dayjs from 'dayjs';
-import { Trash2, Pencil, ShieldAlert, Save, Boxes, Plus } from 'lucide-vue-next';
+import { Trash2, Pencil, ShieldAlert, Plus } from 'lucide-vue-next';
+import TextEditor from '@/Components/TextEditor.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 
@@ -13,7 +14,7 @@ const props = defineProps({
 })
 
 const states = reactive({
-    create: false,
+    create: true,
     edit: false,
 });
 
@@ -109,7 +110,10 @@ const del = (policy) =>
                                     <InputLabel class="text-white my-[1rem]">Title:</InputLabel>
                                     <TextInput class="w-full text-black" v-model="title"/>
                                     <InputLabel class="text-white my-[1rem]">Content:</InputLabel>
-                                    <textarea class="border-gray-300 text-black focus:border-red-500 focus:ring-red-500 rounded-[0.2rem] shadow-sm w-full" v-model="content"></textarea>
+
+                                    <TextEditor v-model="content"/>
+
+                                    <!-- <textarea class="border-gray-300 text-black focus:border-red-500 focus:ring-red-500 rounded-[0.2rem] shadow-sm w-full" v-model="content"></textarea> -->
                                     <PrimaryButton class="justify-center w-full my-[1rem]" @click="create">create</PrimaryButton>
                                 </div>
                                 </Transition>
@@ -143,7 +147,10 @@ const del = (policy) =>
                                         <InputLabel class="text-white my-[1rem]">Title:</InputLabel>
                                         <TextInput class="w-full text-black" v-model="title"/>
                                         <InputLabel class="text-white my-[1rem]">Content:</InputLabel>
-                                        <textarea class="border-gray-300 text-black focus:border-red-500 focus:ring-red-500 rounded-[0.2rem] shadow-sm w-full resize-none h-[20rem]" v-model="content"></textarea>
+
+                                        <TextEditor v-model="content"/>
+
+                                        <!-- <textarea class="border-gray-300 text-black focus:border-red-500 focus:ring-red-500 rounded-[0.2rem] shadow-sm w-full resize-none h-[20rem]" v-model="content"></textarea> -->
                                         <PrimaryButton class="justify-center w-full my-[1rem]" @click="edit">edit</PrimaryButton>
                                     </div>
                                 </Transition>
