@@ -78,8 +78,18 @@ class MatchingController extends Controller
 
         $potentialMatchesPhotos = [];
 
-        foreach ($potentialMatches as $potentialMatch) {
-            $potentialMatchesPhotos[$potentialMatch->id] = $potentialMatch->photos;
+        foreach ($potentialMatches as $key => $potentialMatch)
+        {
+            $potentialMatchHasPhotos = $potentialMatch->hasPhotos()->get();
+
+            if ($potentialMatchHasPhotos->isEmpty())
+            {
+                unset($potentialMatches[$key]);
+            }
+            else
+            {
+                $potentialMatchesPhotos[$potentialMatch->id] = $potentialMatch->photos;
+            }
         }
 
         // You can limit the results to 10 after sorting

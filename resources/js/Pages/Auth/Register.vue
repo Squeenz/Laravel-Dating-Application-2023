@@ -63,7 +63,6 @@ const form = useForm({
     email: '',
     location: '',
     photos: '',
-    social_media: '',
     interests: '',
     password: '',
     password_confirmation: '',
@@ -105,9 +104,9 @@ const dateOfBirthCheck = (dob) => {
 
     const age = ((currentYears * 365) + (currentMonth * 31) + currentDay) / 365;
 
-    console.log(age);
+    const dateToCheck = dayjs(dob).format('YYYY/MM/DD');
 
-    if (!dateOfBirth.isValid)
+    if (!dayjs(dateToCheck).isValid() || dateOfBirth[0] > dayjs().year())
     {
         form.setError("dob", "Invalid");
     }
@@ -115,6 +114,12 @@ const dateOfBirthCheck = (dob) => {
     {
         form.setError("dob", "You are too young");
     }
+    else
+    {
+        return true;
+    }
+
+    return false;
 }
 </script>
 
@@ -124,7 +129,7 @@ const dateOfBirthCheck = (dob) => {
 
         <div class="w-full sm:max-w-3xl mt-6 px-6 py-4 bg-[#0A0A0A] shadow-md overflow-hidden sm:rounded-lg mx-auto">
             <h1 class="text-[2rem] text-center text-white">Register</h1>
-            <p class="text-center text-gray-200">Step {{ stage }} out of 5</p>
+            <p class="text-center text-gray-200">Step {{ stage }} out of 3</p>
             <form @submit.prevent="submit" :key="stage" enctype="multipart/form-data">
                 <div v-if="stage === 1">
                     <div>
@@ -276,22 +281,6 @@ const dateOfBirthCheck = (dob) => {
 
                 <div v-if="stage === 3">
                     <div>
-                        <InputLabel class="text-white my-1" for="social_media" value="Social Media"/>
-                        <TextInput
-                            id="social_media"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.social_media"
-
-                            autofocus
-                            autocomplete="social_media"
-                        />
-                        <InputError class="mt-2" :message="form.errors.social_media"/>
-                    </div>
-                </div>
-
-                <div v-if="stage === 4">
-                    <div>
                         <h1 class="text-white">Profile Details</h1>
                         <div v-for="(value, field ) in form.data()" :key="field">
                             <p v-if="field != 'password' && field != 'password_confirmation'" class="text-white">{{ field }}: {{ value }}</p>
@@ -310,7 +299,7 @@ const dateOfBirthCheck = (dob) => {
                         <PrimaryButton v-if="stage != 1" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('prev')">
                             Previous Step
                         </PrimaryButton>
-                        <PrimaryButton v-if="stage != 4" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('next')">
+                        <PrimaryButton v-if="stage != 3" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('next')">
                             Next Step
                         </PrimaryButton>
                         <PrimaryButton v-else class="ms-4" :class="{ 'opacity-25': !confirmBox }" :disabled=" !confirmBox" :on-click="dateOfBirthCheck(form.dob)">
