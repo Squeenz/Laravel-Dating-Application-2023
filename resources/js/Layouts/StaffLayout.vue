@@ -17,8 +17,8 @@ const showingNavigationDropdown = ref(false);
 
 <template>
     <div>
-        <div class="min-h-screen bg-[#1A1A1A]">
-            <nav class="bg-[#111111] w-[15rem] h-screen float-left">
+        <div class="min-h-screen bg-[#111111]">
+            <nav class="bg-[#111111] w-[15rem] float-left">
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto px-[1rem]">
                     <div>
@@ -147,7 +147,7 @@ const showingNavigationDropdown = ref(false);
                 </div>
             </nav>
 
-            <div class="sm:flex sm:items-center sm:ms-6 bg-[#111111] p-5">
+            <div class="sm:flex sm:items-center bg-[#111111] p-5 ml-[15rem]">
                 <!-- Settings Dropdown -->
                 <div class="relative left-[85%]">
                     <Dropdown align="right" width="48">
@@ -187,14 +187,14 @@ const showingNavigationDropdown = ref(false);
             </div>
 
             <!-- Page Heading -->
-            <header class="bg-[#242424] shadow ml-[10rem]" v-if="$slots.header">
+            <header class="bg-[#242424] shadow ml-[15rem]" v-if="$slots.header">
                 <div class="mx-auto py-6 px-4 sm:px-6 lg:px-8 bg-gray-800">
                     <slot name="header" />
                 </div>
             </header>
 
             <!-- Page Content -->
-            <main class="ml-[10rem] bg-gray-900">
+            <main class="ml-[15rem] bg-gray-900">
                 <slot />
             </main>
         </div>

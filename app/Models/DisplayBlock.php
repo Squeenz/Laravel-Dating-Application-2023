@@ -11,8 +11,7 @@ class DisplayBlock extends Model
 {
     use HasFactory;
 
-    protected $fillable =
-    [
+    protected $fillable = [
         'layout_id',
         'type',
     ];

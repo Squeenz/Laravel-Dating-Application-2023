@@ -10,8 +10,7 @@ class Content extends Model
 {
     use HasFactory;
 
-    protected $fillable =
-    [
+    protected $fillable = [
         'display_block_id',
         'title',
         'desc',

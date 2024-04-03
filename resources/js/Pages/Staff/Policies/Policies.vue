@@ -14,7 +14,7 @@ const props = defineProps({
 })
 
 const states = reactive({
-    create: true,
+    create: false,
     edit: false,
 });
 
@@ -32,6 +32,8 @@ const create = () =>
         preserveScroll: true,
         onSuccess: () => {
             states.create = !states.create;
+            title.value = '';
+            content.value = '';
         }
     });
 };
@@ -87,7 +89,7 @@ const del = (policy) =>
         </template>
 
         <div>
-            <div class="mx-auto ml-[5rem]">
+            <div class="mx-auto">
                 <div class="shadow rounded-sm text-white">
                     <div class="grid grid-flow-col">
                         <div class="bg-gray-700">
@@ -113,8 +115,7 @@ const del = (policy) =>
 
                                     <TextEditor v-model="content"/>
 
-                                    <!-- <textarea class="border-gray-300 text-black focus:border-red-500 focus:ring-red-500 rounded-[0.2rem] shadow-sm w-full" v-model="content"></textarea> -->
-                                    <PrimaryButton class="justify-center w-full my-[1rem]" @click="create">create</PrimaryButton>
+                                   <PrimaryButton class="justify-center w-full my-[1rem]" @click="create">create</PrimaryButton>
                                 </div>
                                 </Transition>
 
@@ -149,8 +150,6 @@ const del = (policy) =>
                                         <InputLabel class="text-white my-[1rem]">Content:</InputLabel>
 
                                         <TextEditor v-model="content"/>
-
-                                        <!-- <textarea class="border-gray-300 text-black focus:border-red-500 focus:ring-red-500 rounded-[0.2rem] shadow-sm w-full resize-none h-[20rem]" v-model="content"></textarea> -->
                                         <PrimaryButton class="justify-center w-full my-[1rem]" @click="edit">edit</PrimaryButton>
                                     </div>
                                 </Transition>

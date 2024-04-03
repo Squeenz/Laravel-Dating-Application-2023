@@ -19,7 +19,7 @@ import { Users, MonitorDot, Ticket, TicketX, TicketCheck, Info, Heart, ThumbsUp 
         </template>
 
         <div>
-            <div class="mx-auto ml-[5rem]">
+            <div class="mx-auto">
                 <div class="shadow rounded-sm text-white">
                     <div class="bg-orange-600 p-5 m-2 rounded-sm grid grid-flow-col justify-center text-center items-center">
                         <Info class="mr-[1rem]" :size="40"/>

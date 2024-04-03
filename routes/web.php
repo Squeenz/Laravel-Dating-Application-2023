@@ -12,6 +12,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffUserController;
 use Illuminate\Foundation\Application;
@@ -37,12 +38,16 @@ Route::get('/page/{slugName}', [PageController::class, 'index'])->name('page.ind
 Route::get('/policies', [PolicyController::class, 'index'])->name('policies.index');
 Route::get('/policies/{policy}', [PolicyController::class, 'show'])->name('policies.show');
 
+
+Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
+    Route::post('/report', [ReportController::class, 'store'])->name('report.store');
+});
+
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
     Route::get('/photos/remove', [PhotoController::class, 'remove'])->name('photos.remove');
 });
 

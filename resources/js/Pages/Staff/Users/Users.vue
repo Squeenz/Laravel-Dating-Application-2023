@@ -23,7 +23,7 @@ const props = defineProps(['users']);
         </template>
 
         <div>
-            <div class="mx-auto ml-[5rem]">
+            <div class="mx-auto">
                 <div class="shadow rounded-sm text-white">
 
                     <div class="grid grid-flow-row">
