@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use PhpParser\Node\Expr\FuncCall;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -107,5 +108,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function otherUserNotifications(): HasMany
     {
         return $this->hasMany(Notification::class, 'other_user_id');
+    }
+
+    public function reportSuspect(): HasMany
+    {
+        return $this->hasMany(Report::class, 'suspect');
+    }
+
+    public function reportComplainant(): HasMany
+    {
+        return $this->hasMany(Report::class, 'complainant');
     }
 }

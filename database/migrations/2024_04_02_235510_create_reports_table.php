@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('complainant')->constrained('users')->delete('cascade');
             $table->string('violated_rule');
             $table->longText('extra_information')->nullable();
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

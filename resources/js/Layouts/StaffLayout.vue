@@ -46,7 +46,17 @@ const showingNavigationDropdown = ref(false);
                                     <template #content>
                                         <NavDropdownLink
                                             :href="route('staff.dashboard.users')" :active="route().current('staff.dashboard.users')">
-                                            View Users
+                                            View
+                                        </NavDropdownLink>
+
+                                        <NavDropdownLink
+                                            :href="route('staff.dashboard.reports')" :active="route().current('staff.dashboard.users')">
+                                            Reports
+                                        </NavDropdownLink>
+
+                                        <NavDropdownLink
+                                            :href="route('staff.dashboard.suspensions')" :active="route().current('staff.dashboard.suspensions')">
+                                            Suspensions
                                         </NavDropdownLink>
                                     </template>
                                 </NavDropdown>

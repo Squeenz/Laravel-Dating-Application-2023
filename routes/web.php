@@ -14,6 +14,8 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\StaffReportController;
+use App\Http\Controllers\StaffSuspensionController;
 use App\Http\Controllers\StaffUserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -103,9 +105,15 @@ Route::middleware(['auth'])->group(function(){
     Route::delete('/staff/policies/delete/{policy}', [PolicyController::class, 'destroy'])->name('staff.dashboard.policies.destroy');
     Route::patch('/staff/policies/update/{policy}', [PolicyController::class,  'update'])->name('staff.dashboard.policies.update');
 
-    //User Control Routes
+    //User System Routes
     Route::get('/staff/users', [StaffUserController::class, 'index'])->name('staff.dashboard.users');
     Route::delete('/staff/{user}/delete', [StaffUserController::class, 'destroy'])->name('staff.dashboard.users.destroy');
+
+
+    Route::get('/staff/users/reports', [StaffReportController::class, 'index'])->name('staff.dashboard.reports');
+
+    Route::get('/staff/users/suspensions', [StaffSuspensionController::class, 'index'])->name('staff.dashboard.suspensions');
+    Route::post('/staff/user/suspension', [StaffSuspensionController::class, 'store'])->name('staff.dashboard.suspension.store');
 });
 
 require __DIR__.'/auth.php';

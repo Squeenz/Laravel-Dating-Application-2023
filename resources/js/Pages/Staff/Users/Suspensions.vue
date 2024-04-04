@@ -1,0 +1,76 @@
+<script setup>
+import { ref, reactive } from 'vue';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/vue3';
+import { X } from 'lucide-vue-next';
+import StaffLayout from '@/Layouts/StaffLayout.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
+import dayjs from 'dayjs';
+
+const page = usePage();
+
+const props = defineProps({
+    suspensions: Object,
+});
+</script>
+
+<template>
+    <Head title="Reports" />
+
+    <StaffLayout>
+        <template #header>
+            <h2 class="font-semibold ml-[4rem] text-xl text-white leading-tight">
+                Reports
+            </h2>
+        </template>
+
+        <div>
+            <div class="mx-auto">
+                <div class="shadow rounded-sm text-white">
+                    <div class="grid grid-flow-col">
+                        <div class="bg-gray-700 grid grid-flow-col">
+                            <div class="m-[1rem] bg-gray-600 p-[2rem] rounded-sm">
+                                <section class="bg-gray-700 rounded-sm p-2 grid grid-flow-col text-center">
+                                    <h1>ID</h1>
+                                    <h1>Report ID</h1>
+                                    <h1>Handler</h1>
+                                    <h1>Note</h1>
+                                    <h1>From</h1>
+                                    <h1>To</h1>
+                                    <h1>Created</h1>
+                                </section>
+
+                                <div
+                                    v-for="suspension in props.suspensions"
+                                    :key="suspension"
+                                    class="bg-gray-500 rounded-sm p-2 grid grid-flow-col text-center hover:bg-gray-800"
+                                    >
+                                    <h1>{{ suspension.id }}</h1>
+                                    <h1>{{ suspension.report }}</h1>
+                                    <h1>{{ suspension.handler }}</h1>
+                                    <h1>{{ suspension.note }}</h1>
+                                    <h1>{{ dayjs(suspension.from).format('DD/MM/YYYY mm:hh:ss') }}</h1>
+                                    <h1>{{ dayjs(suspension.to).format('DD/MM/YYYY mm:hh:ss') }}</h1>
+                                    <h1>{{ dayjs(suspension.created_at).format('DD/MM/YYYY mm:hh:ss') }}</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </StaffLayout>
+</template>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
