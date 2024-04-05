@@ -31,7 +31,41 @@ const props = defineProps({
                     <div class="grid grid-flow-col">
                         <div class="bg-gray-700 grid grid-flow-col">
                             <div class="m-[1rem] bg-gray-600 p-[2rem] rounded-sm">
-                                <section class="bg-gray-700 rounded-sm p-2 grid grid-flow-col text-center">
+
+                                <table class="w-full bg-gray-700 rounded-sm">
+                                <thead>
+                                    <tr>
+                                    <th class="p-[0.5rem]">ID</th>
+                                    <th>Report ID</th>
+                                    <th>Handler</th>
+                                    <th>Note</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Created</th>
+                                    <th>Suspended</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        v-for="suspension in props.suspensions"
+                                        :key="suspension"
+                                        class="bg-gray-500 text-center hover:bg-gray-800"
+                                        >
+                                        <td class="p-[0.5rem]">{{ suspension.id }}</td>
+                                        <td>{{ suspension.report }}</td>
+                                        <td>{{ suspension.handler }}</td>
+                                        <td>{{ suspension.note }}</td>
+                                        <td>{{ dayjs(suspension.from).format('DD/MM/YYYY mm:hh:ss') }}</td>
+                                        <td>{{ dayjs(suspension.to).format('DD/MM/YYYY mm:hh:ss') }}</td>
+                                        <td>{{ dayjs(suspension.created_at).format('DD/MM/YYYY mm:hh:ss') }}</td>
+                                        <td v-if="suspension.suspended === 1" class="text-red-300"> Yes</td>
+                                        <td v-else class="text-green-300">No</td>
+                                    </tr>
+                                </tbody>
+                                </table>
+
+
+                                <!-- <section class="bg-gray-700 rounded-sm p-2 grid grid-flow-col text-center">
                                     <h1>ID</h1>
                                     <h1>Report ID</h1>
                                     <h1>Handler</h1>
@@ -53,7 +87,7 @@ const props = defineProps({
                                     <h1>{{ dayjs(suspension.from).format('DD/MM/YYYY mm:hh:ss') }}</h1>
                                     <h1>{{ dayjs(suspension.to).format('DD/MM/YYYY mm:hh:ss') }}</h1>
                                     <h1>{{ dayjs(suspension.created_at).format('DD/MM/YYYY mm:hh:ss') }}</h1>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('report')->constrained('reports')->delete('cascade');
             $table->foreignId('handler')->constrained('users')->delete('cascade');
             $table->longText('note')->nullable();
+            $table->boolean('suspended')->default(0);
             $table->dateTime('from')->nullable();
             $table->dateTime('to')->nullable();
             $table->timestamps();

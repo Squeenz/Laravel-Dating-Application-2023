@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use App\Models\Suspension;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\UserSuspensionNotification;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -38,12 +40,25 @@ class StaffSuspensionController extends Controller
         $validated = $request->validate([
             'report' => 'required|integer',
             'handler' => 'required|integer',
+            'suspended' => 'required|integer',
             'note' => 'nullable',
             'from' => 'nullable',
             'to' => 'nullable',
         ]);
 
         Suspension::create($validated);
+
+        if ($validated['suspended'] === 1)
+        {
+            $report = Report::findOrFail($validated['report']);
+
+            $user = $report->suspect()->get();
+
+            if ($user)
+            {
+                Notification::send($user, new UserSuspensionNotification($validated['from'], $validated['to'], $report->violated_rule));
+            };
+        };
     }
 
     /**

@@ -17,6 +17,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffReportController;
 use App\Http\Controllers\StaffSuspensionController;
 use App\Http\Controllers\StaffUserController;
+use App\Http\Controllers\SuspensionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,9 +41,9 @@ Route::get('/page/{slugName}', [PageController::class, 'index'])->name('page.ind
 Route::get('/policies', [PolicyController::class, 'index'])->name('policies.index');
 Route::get('/policies/{policy}', [PolicyController::class, 'show'])->name('policies.show');
 
-
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
     Route::post('/report', [ReportController::class, 'store'])->name('report.store');
+    Route::get('/suspended', [SuspensionController::class, 'index'])->name('suspended.index');
 });
 
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
@@ -84,7 +85,7 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function(){
 });
 
 //Staff routes
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth', 'checkSuspension'])->group(function(){
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.dashboard');
 
     //Page System Routes
@@ -111,6 +112,7 @@ Route::middleware(['auth'])->group(function(){
 
 
     Route::get('/staff/users/reports', [StaffReportController::class, 'index'])->name('staff.dashboard.reports');
+    Route::patch('/staff/users/{report}/update', [StaffReportController::class, 'update'])->name('staff.dashboard.report.update');
 
     Route::get('/staff/users/suspensions', [StaffSuspensionController::class, 'index'])->name('staff.dashboard.suspensions');
     Route::post('/staff/user/suspension', [StaffSuspensionController::class, 'store'])->name('staff.dashboard.suspension.store');

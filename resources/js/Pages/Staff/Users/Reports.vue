@@ -26,10 +26,10 @@ const form = useForm({
     note: '',
     from: '',
     to: '',
+    suspended: 0,
 });
 
-const reportToggle = (report) =>
-{
+const reportToggle = (report) => {
     states.reportToggle = true;
     chosenReport.value = report;
     form.report = chosenReport.value.id;
@@ -37,6 +37,19 @@ const reportToggle = (report) =>
 
 const suspendToggle = () => {
     states.suspendToggle = !states.suspendToggle;
+}
+
+const suspend = () => {
+    form.from !== '' && form.to !== '' ? form.suspended = 1 : form.suspended = 0;
+}
+
+const submit = () => {
+    form.post(route('staff.dashboard.suspension.store'), {
+         onSuccess: () => {
+            states.reportToggle = false; form.reset();
+            router.patch(route('staff.dashboard.report.update', chosenReport.value ));
+        }
+    })
 }
 
 </script>
@@ -75,7 +88,8 @@ const suspendToggle = () => {
                                     <h1>{{ report.suspect.first_name }} {{ report.suspect.surname }} ({{ report.suspect.username }})</h1>
                                     <h1>{{ report.complainant.first_name }} {{ report.complainant.surname }} ({{ report.complainant.username }})</h1>
                                     <h1>{{ report.violated_rule }}</h1>
-                                    <h1 class="text-gray-400">{{ report.status }}</h1>
+                                    <h1 v-if="report.status === 0" class="text-gray-400">Unsolved</h1>
+                                    <h1 v-else class="text-green-400">Resolved</h1>
                                 </div>
                             </div>
 
@@ -126,7 +140,7 @@ const suspendToggle = () => {
                                         </div>
                                     </section>
 
-                                    <form @submit.prevent="form.post(route('staff.dashboard.suspension.store'), { onSuccess: () => { states.reportToggle = false; form.reset(); }})">
+                                    <form @submit.prevent="submit">
                                         <section>
                                             <div class="my-[1rem]">
                                                 <InputLabel class="text-white">Note (did the user break the guidlines, etc..)</InputLabel>
@@ -150,7 +164,7 @@ const suspendToggle = () => {
                                             </div>
                                         </section>
 
-                                        <PrimaryButton class="w-full justify-center">close case</PrimaryButton>
+                                        <PrimaryButton class="w-full justify-center" @click="suspend">close case</PrimaryButton>
                                     </form>
                                 </div>
 
