@@ -5,9 +5,15 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { ShieldAlert, X } from 'lucide-vue-next';
+import { ShieldAlert, X, ShieldEllipsis } from 'lucide-vue-next';
 
-defineProps(['userData', 'userPhotos']);
+const props = defineProps({
+    userData: Object,
+    userPhotos: Object,
+    canReport: Boolean,
+});
+
+console.log(props.canReport);
 
 const options = [
   'Harassment',
@@ -99,7 +105,12 @@ const toggleReportMenu = () =>
                     <div
                         v-if="page.props.auth.user.id != urlUserID"
                         class="float-right">
-                        <PrimaryButton class="bg-red-500 text-center justify-center" @click="toggleReportMenu">report<ShieldAlert class="ml-[0.5rem]" :size="20"/></PrimaryButton>
+                        <PrimaryButton v-if="props.canReport" class="bg-red-500 text-center justify-center" @click="toggleReportMenu">report<ShieldAlert class="ml-[0.5rem]" :size="20"/></PrimaryButton>
+                        <div v-else class="border-2 p-1 border-red-500 rounded-md bg-red-800 text-gray-200 text-center">
+                            <ShieldEllipsis class="mx-auto" :size="50"/>
+                            <h1>User already reported, </h1>
+                            <p>Report is being processed</p>
+                        </div>
                     </div>
 
                     <h1>{{ userData.first_name }} {{ userData.surname }} ({{ userData.username }})</h1>

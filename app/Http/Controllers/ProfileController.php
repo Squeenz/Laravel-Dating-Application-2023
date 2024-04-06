@@ -19,11 +19,33 @@ class ProfileController extends Controller
      */
     public function show($id): Response
     {
+        $currentUser = Auth::user();
+
         $user = User::findOrFail($id);
+
+        $currentUserReports = $currentUser->reportComplainant;
+
+        $validMatchingReportBetweenUsers = null;
+        $canReport = false;
+
+        foreach ($currentUserReports as $currentUserReport)
+        {
+            if (!$validMatchingReportBetweenUsers && $currentUserReport->status != 1 && $currentUserReport->suspect == $id)
+            {
+                $canReport = false;
+                $validMatchingReportBetweenUsers = $currentUserReport;
+            }
+        }
+
+        if (!$validMatchingReportBetweenUsers)
+        {
+            $canReport = true;
+        }
 
         return Inertia::render('Profile/Show', [
             'userData' => $user,
             'userPhotos' => $user->photos,
+            'canReport' => $canReport,
         ]);
     }
 

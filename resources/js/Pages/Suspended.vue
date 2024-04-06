@@ -1,7 +1,12 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import { Gavel } from 'lucide-vue-next';
+import dayjs from 'dayjs';
 
+const props = defineProps({
+    report: Object,
+    suspension: Object,
+});
 </script>
 
 <template>
@@ -15,7 +20,7 @@ import { Gavel } from 'lucide-vue-next';
 
                 <section class="bg-gray-800 p-[1rem] flex flex-wrap rounded-sm">
                     <h1>Reason:</h1>
-                    <p class="text-gray-400 mx-1">Harrasment</p>
+                    <p class="text-gray-400 mx-1">{{ props.report.violated_rule }}</p>
                 </section>
 
                 <p class="text-gray-400 my-2">If you think this is a mistake contact our support team</p>
@@ -24,12 +29,12 @@ import { Gavel } from 'lucide-vue-next';
             <div class="grid grid-flow-col gap-5">
                 <div class=" text-white bg-gray-900 rounded-md p-[1rem] my-[2rem] border-b-2 border-gray-800">
                     <h1>From</h1>
-                    <p class="text-gray-400">05/04/2024</p>
+                    <p class="text-gray-400">{{ props.suspension.from }}</p>
                 </div>
 
                 <div class=" text-white bg-gray-900 rounded-md p-[1rem] my-[2rem] border-b-2 border-gray-800">
                     <h1>To</h1>
-                    <p class="text-gray-400">05/04/2025</p>
+                    <p class="text-gray-400">{{ props.suspension.to }}</p>
                 </div>
             </div>
         </div>

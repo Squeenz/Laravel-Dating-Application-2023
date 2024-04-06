@@ -50,13 +50,16 @@ class CheckSuspension
                 }
             }
 
-            $filteredSuspensions = $currentSuspension;
-
-            $filteredSuspensionsDate = new DateTime($filteredSuspensions->to);
-
-            if ($currentDateTime < $filteredSuspensionsDate)
+            if ($currentSuspension)
             {
-                 return redirect(route('suspended.index'));
+                $filteredSuspensions = $currentSuspension;
+
+                $filteredSuspensionsDate = new DateTime($filteredSuspensions->to);
+
+                if ($currentDateTime < $filteredSuspensionsDate)
+                {
+                    return redirect(route('suspended.index'));
+                }
             }
         }
 
