@@ -63,31 +63,6 @@ const props = defineProps({
                                     </tr>
                                 </tbody>
                                 </table>
-
-
-                                <!-- <section class="bg-gray-700 rounded-sm p-2 grid grid-flow-col text-center">
-                                    <h1>ID</h1>
-                                    <h1>Report ID</h1>
-                                    <h1>Handler</h1>
-                                    <h1>Note</h1>
-                                    <h1>From</h1>
-                                    <h1>To</h1>
-                                    <h1>Created</h1>
-                                </section>
-
-                                <div
-                                    v-for="suspension in props.suspensions"
-                                    :key="suspension"
-                                    class="bg-gray-500 rounded-sm p-2 grid grid-flow-col text-center hover:bg-gray-800"
-                                    >
-                                    <h1>{{ suspension.id }}</h1>
-                                    <h1>{{ suspension.report }}</h1>
-                                    <h1>{{ suspension.handler }}</h1>
-                                    <h1>{{ suspension.note }}</h1>
-                                    <h1>{{ dayjs(suspension.from).format('DD/MM/YYYY mm:hh:ss') }}</h1>
-                                    <h1>{{ dayjs(suspension.to).format('DD/MM/YYYY mm:hh:ss') }}</h1>
-                                    <h1>{{ dayjs(suspension.created_at).format('DD/MM/YYYY mm:hh:ss') }}</h1>
-                                </div> -->
                             </div>
                         </div>
                     </div>

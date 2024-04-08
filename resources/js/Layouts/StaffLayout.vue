@@ -106,30 +106,6 @@ const showingNavigationDropdown = ref(false);
                                             Policies
                                         </NavDropdownLink>
 
-                                        <!-- <NavDropdownLink
-                                            :href="route('matchmaking')" :active="route().current('matchmaking')">
-                                            Landing
-                                        </NavDropdownLink>
-
-                                        <NavDropdownLink
-                                            :href="route('matchmaking')" :active="route().current('matchmaking')">
-                                            Policies
-                                        </NavDropdownLink>
-
-                                        <NavDropdownLink
-                                            :href="route('matchmaking')" :active="route().current('matchmaking')">
-                                            Safety
-                                        </NavDropdownLink>
-
-                                        <NavDropdownLink
-                                            :href="route('matchmaking')" :active="route().current('matchmaking')">
-                                            Support
-                                        </NavDropdownLink>
-
-                                        <NavDropdownLink
-                                            :href="route('matchmaking')" :active="route().current('matchmaking')">
-                                            Terms and conditions
-                                        </NavDropdownLink> -->
                                     </template>
                                 </NavDropdown>
 
@@ -141,13 +117,8 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <NavDropdownLink
-                                            :href="route('matchmaking')" :active="route().current('matchmaking')">
+                                            :href="route('staff.dashboard.tickets')" :active="route().current('staff.dashboard.tickets')">
                                             Tickets
-                                        </NavDropdownLink>
-
-                                        <NavDropdownLink
-                                            :href="route('matchmaking')" :active="route().current('matchmaking')">
-                                            Closed Tickets
                                         </NavDropdownLink>
                                     </template>
                                 </NavDropdown>

@@ -23,7 +23,7 @@ const options = [
 </script>
 
 <template>
-    <Head title="Welcome" />
+    <Head title="Create a Ticket" />
 
 
     <GuestLayout>

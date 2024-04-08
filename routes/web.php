@@ -15,6 +15,7 @@ use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffReportController;
+use App\Http\Controllers\StaffSupportTicketController;
 use App\Http\Controllers\StaffSuspensionController;
 use App\Http\Controllers\StaffUserController;
 use App\Http\Controllers\SupportTicketChatRoomMessagesController;
@@ -49,10 +50,8 @@ Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
     Route::get('/suspended', [SuspensionController::class, 'index'])->name('suspended.index');
 
     Route::get('/support/tickets', [SupportTicketController::class, 'index'])->name('support.index');
-
     Route::get('/support/ticket/chat/{supportTicket}', [SupportTicketController::class, 'show'])->name('support.show');
     Route::post('/support/message/send', [SupportTicketChatRoomMessagesController::class, 'store'])->name('support.message.store');
-
     Route::get('/support', [SupportTicketController::class, 'create'])->name('support.create');
     Route::post('/support/create', [SupportTicketController::class, 'store'])->name('support.store');
 });
@@ -120,13 +119,16 @@ Route::middleware(['auth', 'checkSuspension'])->group(function(){
     //User System Routes
     Route::get('/staff/users', [StaffUserController::class, 'index'])->name('staff.dashboard.users');
     Route::delete('/staff/{user}/delete', [StaffUserController::class, 'destroy'])->name('staff.dashboard.users.destroy');
-
-
     Route::get('/staff/users/reports', [StaffReportController::class, 'index'])->name('staff.dashboard.reports');
     Route::patch('/staff/users/{report}/update', [StaffReportController::class, 'update'])->name('staff.dashboard.report.update');
-
     Route::get('/staff/users/suspensions', [StaffSuspensionController::class, 'index'])->name('staff.dashboard.suspensions');
     Route::post('/staff/user/suspension', [StaffSuspensionController::class, 'store'])->name('staff.dashboard.suspension.store');
+
+    //Support Ticket Routes
+    Route::get('/staff/tickets', [StaffSupportTicketController::class, 'index'])->name('staff.dashboard.tickets');
+    Route::get('/staff/tickets/{supportTicket}', [StaffSupportTicketController::class, 'show'])->name('staff.dashboard.tickets.show');
+    Route::patch('/staff/tickets/update/{supportTicket}/handler', [StaffSupportTicketController::class, 'updateHandlerAndStatus'])->name('staff.dashboard.tickets.update.handler.status');
+    Route::patch('/staff/tickets/update/{supportTicket}/status/{status}', [StaffSupportTicketController::class, 'updateStatus'])->name('staff.dashboard.tickets.update.status');
 });
 
 require __DIR__.'/auth.php';

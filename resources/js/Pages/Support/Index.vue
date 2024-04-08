@@ -36,15 +36,16 @@ const sendMessage = () => {
 </script>
 
 <template>
-    <Head title="Welcome" />
+    <Head title="Tickets" />
 
     <GuestLayout>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div class="sm:py-[2rem] bg-[#0A0A0A] shadow rounded-sm">
-                <div class="flex grid-flow-col text-white justify-evenly">
+                <div v-if="props.tickets.length != 0" class="flex grid-flow-col text-white justify-evenly">
                     <div class="p-2 w-[50%]">
                         <h1 class="text-center mb-[1rem]">Tickets</h1>
-                        <div class="overflow-y-auto no-scrollbar h-[38rem] scroll-smooth">
+                        <div
+                            class="overflow-y-auto no-scrollbar h-[38rem] scroll-smooth">
                             <Link
                             v-for="ticket in props.tickets"
                             :key="ticket"
@@ -52,7 +53,7 @@ const sendMessage = () => {
                             :href="route('support.show', { supportTicket: ticket })"
                             >
                                 <div
-                                    :class=" ticket.status === 0 ? 'bg-red-500' : 'bg-orange-500' "
+                                    :class="ticket.status === 0 || ticket.status === 1 ? 'bg-red-500' : 'bg-green-500' "
                                     class="p-1 rounded-t-md">
                                     <Loader class="float-left mr-[1rem]"/>
                                     <h1 v-if="ticket.status === 0"> Unsolved </h1>
@@ -99,6 +100,9 @@ const sendMessage = () => {
                             <PrimaryButton class="w-full justify-center" @click="sendMessage">Send Message</PrimaryButton>
                         </div>
                     </div>
+                </div>
+                <div v-else class="text-center p-[1rem] rounded-md text-white h-[36rem]">
+                    <h1> You have no tickets</h1>
                 </div>
           </div>
     </div>
