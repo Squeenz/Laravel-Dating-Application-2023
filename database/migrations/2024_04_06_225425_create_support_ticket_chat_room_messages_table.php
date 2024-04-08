@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('photos', function (Blueprint $table) {
+        Schema::create('support_ticket_chat_room_messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->longText('photo');
+            $table->foreignId('user')->constrained('users')->onDelete('cascade');
+            $table->foreignId('support_chat_room')->constrained('support_ticket_chat_rooms')->onDelete('cascade');
+            $table->string('content');
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('photos');
+        Schema::dropIfExists('support_ticket_chat_room_messages');
     }
 };

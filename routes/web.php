@@ -17,7 +17,10 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffReportController;
 use App\Http\Controllers\StaffSuspensionController;
 use App\Http\Controllers\StaffUserController;
+use App\Http\Controllers\SupportTicketChatRoomMessagesController;
+use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\SuspensionController;
+use App\Models\SupportTicketChatRoomMessages;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -44,6 +47,14 @@ Route::get('/policies/{policy}', [PolicyController::class, 'show'])->name('polic
 Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
     Route::post('/report', [ReportController::class, 'store'])->name('report.store');
     Route::get('/suspended', [SuspensionController::class, 'index'])->name('suspended.index');
+
+    Route::get('/support/tickets', [SupportTicketController::class, 'index'])->name('support.index');
+
+    Route::get('/support/ticket/chat/{supportTicket}', [SupportTicketController::class, 'show'])->name('support.show');
+    Route::post('/support/message/send', [SupportTicketChatRoomMessagesController::class, 'store'])->name('support.message.store');
+
+    Route::get('/support', [SupportTicketController::class, 'create'])->name('support.create');
+    Route::post('/support/create', [SupportTicketController::class, 'store'])->name('support.store');
 });
 
 Route::middleware(['auth', 'verified', 'checkPhotos', 'checkSuspension'])->group(function() {

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('suspect')->constrained('users')->delete('cascade');
-            $table->foreignId('complainant')->constrained('users')->delete('cascade');
+            $table->foreignId('suspect')->constrained('users')->onDelete('cascade');
+            $table->foreignId('complainant')->constrained('users')->onDelete('cascade');
             $table->string('violated_rule');
             $table->longText('extra_information')->nullable();
             $table->boolean('status')->default(0);

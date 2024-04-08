@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('suspensions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('report')->constrained('reports')->delete('cascade');
-            $table->foreignId('handler')->constrained('users')->delete('cascade');
+            $table->foreignId('report')->constrained('reports')->onDelete('cascade');
+            $table->foreignId('handler')->constrained('users')->onDelete('cascade');
             $table->longText('note')->nullable();
             $table->boolean('suspended')->default(0);
             $table->dateTime('from')->nullable();

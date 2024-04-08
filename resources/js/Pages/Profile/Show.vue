@@ -13,8 +13,6 @@ const props = defineProps({
     canReport: Boolean,
 });
 
-console.log(props.canReport);
-
 const options = [
   'Harassment',
   'Inappropriate Behavior',
