@@ -22,7 +22,7 @@ const message = ref('');
 const sendMessage = () => {
     router.post(route('support.message.store'), {
         content: message.value,
-        support_chat_room: props.messages[0].support_chat_room,
+        support_chat_room: props.selectedTicket.support_chat_room.id,
     },
     {
         onSuccess: () => {
