@@ -24,7 +24,7 @@ const { hasPerm } = usePermissions();
 
         <div>
             <div class="mx-auto">
-                <div v-if="hasPerm('access dashboard')" class="shadow rounded-sm text-white">
+                <div v-if="hasPerm('access dashboard statistics')" class="shadow rounded-sm text-white">
                     <div class="bg-orange-600 p-5 m-2 rounded-sm grid grid-flow-col justify-center text-center items-center">
                         <Info class="mr-[1rem]" :size="40"/>
                         <h1>Important Notice: Support System is down</h1>

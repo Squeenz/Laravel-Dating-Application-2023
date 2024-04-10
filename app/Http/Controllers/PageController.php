@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,6 +35,8 @@ class PageController extends Controller
      */
     public function create()
     {
+        $this->authorize('viewAny', Page::class);
+
         return Inertia::render('Staff/Pages/Create');
     }
 
@@ -42,6 +45,8 @@ class PageController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('create', Page::class);
+
         $validated = $request->validate([
             'page_name' => 'required',
             'slug' => 'required|regex:/^[a-z0-9-]+$/|unique:pages,slug',
@@ -71,6 +76,8 @@ class PageController extends Controller
      */
     public function edit(Page $page)
     {
+        $this->authorize('updateSpecificPage', $page);
+
         $layout = $page->layout;
 
         $displayBlocks = $layout->displayBlocks()->with('contents')->get();

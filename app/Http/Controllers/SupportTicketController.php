@@ -62,7 +62,7 @@ class SupportTicketController extends Controller
         $userMessageData = [
             'user' => $user->id,
             'support_chat_room' => $supportChatRoom->id,
-            'content' => $request->message,
+            'content' => encrypt($request->message),
         ];
 
         SupportTicketChatRoomMessages::create($userMessageData);
@@ -83,7 +83,10 @@ class SupportTicketController extends Controller
 
         if ($user->id === $supportTicket->user)
         {
-            $chatMessages = $supportTicket->supportChatRoom->supportChatMessages;
+            $chatMessages = $supportTicket->supportChatRoom->supportChatMessages->map(function ($message) {
+                $message->content = decrypt($message->content);
+                return $message;
+            });
         }
         else
         {

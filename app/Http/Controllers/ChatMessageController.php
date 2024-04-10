@@ -31,19 +31,8 @@ class ChatMessageController extends Controller
 
         $room = $chatMessage->chatRoom;
 
-        $user1ID = $chatMessage->user_id;
-
-        $user2Messages = ChatMessage::where('chat_room_id', $room->id)
-            ->where('user_id', '!=', $user1ID)
-            ->get();
-
-        //causes and erro becaue at the start the user 2 message doesn't exist
-
-        // Extract user IDs from $user2Messages
-        $user2IDs = $user2Messages->pluck('user_id')->unique()->toArray();
-
-        $user1 = User::find($user1ID);
-        $user2 = User::whereIn('id', $user2IDs)->first();
+        $user1 = $chatMessage->chatRoom->user1;
+        $user2 = $chatMessage->chatRoom->user2;
 
         event(new UserNotification($user1, $user2, "Message"));
 

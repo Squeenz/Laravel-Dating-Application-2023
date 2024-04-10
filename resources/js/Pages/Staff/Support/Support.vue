@@ -18,6 +18,7 @@ const page = usePage();
 const props = defineProps({
     tickets: Object,
     user: Object,
+    hasHandler: Boolean,
     selectedTicket: Object,
 });
 
@@ -90,9 +91,11 @@ const updateTicketStatus = (status) => {
                             v-if="props.selectedTicket"
                             class="m-[1rem] bg-gray-600 p-[2rem] rounded-sm">
                                 <div class="text-center justify-evenly flex">
-                                    <PrimaryButton v-if="props.selectedTicket" @click="selfAssingCase">SELF ASSING CASE</PrimaryButton>
-                                    <PrimaryButton @click="updateTicketStatus(1)">OPEN TICKET</PrimaryButton>
-                                    <PrimaryButton @click="updateTicketStatus(2)">CLOSE TICKET</PrimaryButton>
+                                    <PrimaryButton v-if="!props.hasHandler && hasPerm('self assing ticket') && props.selectedTicket.user !== page.props.auth.user.id" @click="selfAssingCase" class="m-1">SELF ASSING CASE</PrimaryButton>
+                                    <section v-if="hasPerm('update tickets')">
+                                        <PrimaryButton @click="updateTicketStatus(1)" class="m-1">OPEN TICKET</PrimaryButton>
+                                        <PrimaryButton @click="updateTicketStatus(2)" class="m-1">CLOSE TICKET</PrimaryButton>
+                                    </section>
                                 </div>
                                 <div class="p-2 w-full">
                                     <h1 class="text-center mb-[1rem]">Support Chat</h1>
@@ -121,10 +124,15 @@ const updateTicketStatus = (status) => {
                                         </div>
                                     </div>
 
-                                    <div v-if="props.selectedTicket.status != 2">
+                                    <div v-if="props.selectedTicket.status != 2 && props.hasHandler && hasPerm('send ticket message') && props.selectedTicket.user !== page.props.auth.user.id">
                                         <textarea class="resize-none w-full text-black h-[8rem]" v-model="message" name="message"></textarea>
                                         <PrimaryButton class="w-full justify-center" @click="sendMessage">Send Message</PrimaryButton>
                                     </div>
+                                    <div v-else-if="!props.hasHandler" class="bg-gray-900 p-[2rem] relative bottom-[10rem]">
+                                        <h1 class="text-orange-500 text-2xl">Notice</h1>
+                                        <p>In order to send a message you need to self assing to the case.</p>
+                                    </div>
+                                    <PermissionErrorMsg v-if="!hasPerm('send ticket message')" :role="$page.props.auth.role"/>
                                 </div>
                             </div>
                             </Transition>

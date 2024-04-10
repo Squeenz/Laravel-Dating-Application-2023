@@ -37,6 +37,8 @@ const showingNavigationDropdown = ref(false);
                                 <p class="text-white z-1 absolute top-[4.5rem] opacity-5"> Version v0.1 </p>
                             </div>
 
+                            <p class="text-center uppercase text-red-800">{{ $page.props.auth.role[0] }}</p>
+
                             <!-- Navigation Links -->
                             <div v-if="hasPerm('view reports') || hasPerm('view users') || hasPerm('view suspensions') || hasPerm('manage permissions') || hasPerm('create roles') || hasPerm('view pages controller') || hasPerm('view page') || hasPerm('view policies') || hasPerm('view tickets')" class="grid grid-flow-row">
                                 <h1 class="text-gray-500 text-[0.9rem]">Controls</h1>

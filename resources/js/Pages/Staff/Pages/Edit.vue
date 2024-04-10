@@ -141,7 +141,7 @@ const delItem = (element) => {
 
     <StaffLayout>
         <template #header>
-            <h2 class="font-semibold ml-[4rem] text-xl text-white leading-tight">
+            <h2 class="font-semibold text-xl text-white leading-tight">
                 Edit page
             </h2>
         </template>

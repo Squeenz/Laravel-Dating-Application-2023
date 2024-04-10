@@ -20,6 +20,7 @@ class SupportTicketChatRoomMessagesController extends Controller
             'support_chat_room' => 'required|integer',
         ]);
 
+        $validated['content'] = encrypt($validated['content']);
         $validated['user'] = $user->id;
 
         SupportTicketChatRoomMessages::create($validated);

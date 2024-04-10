@@ -9,22 +9,6 @@ use Illuminate\Http\Request;
 class ContentController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -36,22 +20,6 @@ class ContentController extends Controller
         ]);
 
         Content::create($validate);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Content $content)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Content $content)
-    {
-        //
     }
 
     /**

@@ -49,13 +49,19 @@ class StaffSupportTicketController extends Controller
     {
         $tickets = SupportTicket::all();
 
-        $chatMessages = $supportTicket->supportChatRoom->supportChatMessages;
+        $supportTicket->supportChatRoom->supportChatMessages->map(function ($message) {
+            $message->content = decrypt($message->content);
+            return $message;
+        });
 
         $user = User::findOrFail($supportTicket->user);
+
+        $supportTicket->supportChatRoom->handler === 0 ? $hasHandler = false: $hasHandler = true;
 
         return Inertia::render('Staff/Support/Support',[
             'tickets' => $tickets,
             'selectedTicket' => $supportTicket,
+            'hasHandler' => $hasHandler,
             'user' => $user,
         ]);
     }

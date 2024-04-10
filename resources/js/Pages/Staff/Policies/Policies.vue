@@ -161,7 +161,7 @@ const del = (policy) =>
                         </div>
                     </div>
                 </div>
-                <PermissionErrorMsg :role="$page.props.auth.role"/>
+                <PermissionErrorMsg v-else :role="$page.props.auth.role"/>
             </div>
         </div>
     </StaffLayout>

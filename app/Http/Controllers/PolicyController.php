@@ -27,6 +27,8 @@ class PolicyController extends Controller
      */
     public function staffIndex(): Response
     {
+        $this->authorize('viewAny', Policy::class);
+
         $policies = Policy::all();
 
         return Inertia::render('Staff/Policies/Policies', [
@@ -47,6 +49,8 @@ class PolicyController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Policy::class);
+
         $validated = $request->validate([
             'title' => 'required',
             'content' => 'required',
@@ -80,6 +84,8 @@ class PolicyController extends Controller
      */
     public function update(Request $request, Policy $policy)
     {
+        $this->authorize('update', $policy);
+
         $validated = $request->validate([
             'title' => 'required',
             'content' => 'required',
@@ -93,6 +99,7 @@ class PolicyController extends Controller
      */
     public function destroy(Policy $policy)
     {
+        $this->authorize('delete', $policy);
         $policy->delete();
     }
 }

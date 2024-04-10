@@ -13,13 +13,13 @@ class PagePolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return $user->hasPermissionTo('view pages controller');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Page $page): bool
+    public function view(User $user): bool
     {
         //
     }
@@ -29,7 +29,15 @@ class PagePolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->hasPermissionTo('add page controller');
+    }
+
+    /**
+     * Determine whether the user can update each specific page
+     */
+    public function updateSpecificPage(User $user, Page $page): bool
+    {
+        return $user->hasAnyPermission(['view page', 'add page component', 'edit page component', 'delete page component']);
     }
 
     /**
@@ -37,7 +45,7 @@ class PagePolicy
      */
     public function update(User $user, Page $page): bool
     {
-        return true;
+        return $user->hasPermissionTo('edit page controller');
     }
 
     /**
@@ -45,7 +53,7 @@ class PagePolicy
      */
     public function delete(User $user, Page $page): bool
     {
-        return true;
+        return $user->hasPermissionTo('delete page controller');
     }
 
     /**
