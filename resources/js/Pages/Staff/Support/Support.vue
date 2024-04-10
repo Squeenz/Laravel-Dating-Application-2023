@@ -6,6 +6,10 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import StaffLayout from '@/Layouts/StaffLayout.vue';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { usePermissions } from '@/Composables/usePermissions';
+import PermissionErrorMsg from '@/Components/PermissionErrorMsg.vue';
+
+const { hasPerm } = usePermissions();
 
 dayjs.extend(relativeTime);
 
@@ -49,14 +53,14 @@ const updateTicketStatus = (status) => {
 
     <StaffLayout>
         <template #header>
-            <h2 class="font-semibold ml-[4rem] text-xl text-white leading-tight">
+            <h2 class="font-semibold text-xl text-white leading-tight">
                 Ticket Managment
             </h2>
         </template>
 
         <div>
             <div class="mx-auto">
-                <div class="shadow rounded-sm text-white">
+                <div v-if="hasPerm('view tickets')" class="shadow rounded-sm text-white">
                     <div class="grid grid-flow-col">
                         <div class="bg-gray-700 grid grid-flow-col">
                             <div class="m-[1rem] bg-gray-600 p-[1rem] rounded-sm">
@@ -127,6 +131,7 @@ const updateTicketStatus = (status) => {
                         </div>
                     </div>
                 </div>
+                <PermissionErrorMsg v-else :role="$page.props.auth.role"/>
             </div>
         </div>
     </StaffLayout>

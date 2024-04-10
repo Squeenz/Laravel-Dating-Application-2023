@@ -7,6 +7,7 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import { Bell, MessageCircleHeart, Heart, Camera, CameraOff, ListChecks, BellPlus } from 'lucide-vue-next';
+import { usePermissions } from '@/Composables/usePermissions';
 
 const page = usePage();
 
@@ -45,6 +46,7 @@ const stopListening = () => {
     Echo.leave('matches');
 }
 
+const { hasPerm } = usePermissions();
 </script>
 
 <template>
@@ -66,7 +68,6 @@ const stopListening = () => {
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-
                                 <NavLink :href="route('matchmaking')" :active="route().current('matchmaking')">
                                    <Heart class="mr-1" :size="20"/> Matchmaking
                                 </NavLink>
@@ -125,7 +126,7 @@ const stopListening = () => {
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink href="#"> Staff Dashboard </DropdownLink>
+                                        <DropdownLink v-if="hasPerm('access dashboard')" :href="route('staff.dashboard')"> Dashboard </DropdownLink>
                                         <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
                                         <DropdownLink :href="route('logout')" @click="stopListening" method="post" as="button">
                                             Log Out

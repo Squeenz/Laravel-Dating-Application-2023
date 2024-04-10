@@ -4,13 +4,14 @@ import { Head, usePage, Link, router, useForm } from '@inertiajs/vue3';
 import StaffLayout from '@/Layouts/StaffLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import dayjs from 'dayjs';
-
 import { Trash2, Pencil, ShieldAlert, Save, Boxes, Plus } from 'lucide-vue-next';
-
 import draggable from 'vuedraggable';
-
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { usePermissions } from '@/Composables/usePermissions';
+import PermissionErrorMsg from '@/Components/PermissionErrorMsg.vue';
+
+const { hasPerm } = usePermissions();
 
 const props = defineProps({
     layoutID: Number,
@@ -141,13 +142,13 @@ const delItem = (element) => {
     <StaffLayout>
         <template #header>
             <h2 class="font-semibold ml-[4rem] text-xl text-white leading-tight">
-                Page creation
+                Edit page
             </h2>
         </template>
 
         <div>
             <div class="mx-auto">
-                <div class="shadow rounded-sm text-white">
+                <div v-if="hasPerm('view page')" class="shadow rounded-sm text-white">
                     <div class="grid grid-flow-col">
                         <div class="bg-gray-700">
                             <div class="mx-[1rem] mt-[1rem] bg-gray-600 p-[2rem] rounded-sm">
@@ -169,8 +170,8 @@ const delItem = (element) => {
                                     <div class="my-[1rem] bg-gray-700 p-[2rem] rounded-sm">
                                         <div v-if="element.type === 'textBox'">
                                             <div class="float-right grid grid-flow-col">
-                                                <Pencil v-if="states.createNew != false || element.new != true " class="m-2 text-orange-500" :size="20" @click="editToggle(element)"/>
-                                                <Trash2 v-if="states.createNew != false || element.new != true" class="m-2 text-red-500" :size="20" @click="delWithRelative(element)"/>
+                                                <Pencil v-if="states.createNew != false || element.new != true && hasPerm('edit page component')" class="m-2 text-orange-500" :size="20" @click="editToggle(element)"/>
+                                                <Trash2 v-if="states.createNew != false || element.new != true && hasPerm('delete page component')" class="m-2 text-red-500" :size="20" @click="delWithRelative(element)"/>
                                             </div>
 
                                             <h1 class="text-gray-600 font-extrabold">Text Box</h1>
@@ -241,7 +242,7 @@ const delItem = (element) => {
 
                         </div>
 
-                        <div class="bg-gray-600 text-center grid-flow-col">
+                        <div v-if="hasPerm('add page component')" class="bg-gray-600 text-center grid-flow-col">
                             <div class="flex justify-around p-2 m-2 bg-gray-700 rounded-sm">
                                 <Boxes/><h1>Page Components</h1>
                             </div>
@@ -258,6 +259,7 @@ const delItem = (element) => {
                         </div>
                     </div>
                 </div>
+                <PermissionErrorMsg v-else :role="$page.props.auth.role"/>
             </div>
         </div>
     </StaffLayout>

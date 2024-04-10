@@ -8,6 +8,10 @@ import { Trash2, Pencil, ShieldAlert, Plus } from 'lucide-vue-next';
 import TextEditor from '@/Components/TextEditor.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { usePermissions } from '@/Composables/usePermissions';
+import PermissionErrorMsg from '@/Components/PermissionErrorMsg.vue';
+
+const { hasPerm } = usePermissions();
 
 const props = defineProps({
     policies: Array
@@ -83,14 +87,14 @@ const del = (policy) =>
 
     <StaffLayout>
         <template #header>
-            <h2 class="font-semibold ml-[4rem] text-xl text-white leading-tight">
+            <h2 class="font-semibold text-xl text-white leading-tight">
                 Policy Managment
             </h2>
         </template>
 
         <div>
             <div class="mx-auto">
-                <div class="shadow rounded-sm text-white">
+                <div v-if="hasPerm('view policies')" class="shadow rounded-sm text-white">
                     <div class="grid grid-flow-col">
                         <div class="bg-gray-700">
                             <div class="mx-[1rem] mt-[1rem] bg-gray-600 p-[2rem] rounded-sm">
@@ -101,7 +105,7 @@ const del = (policy) =>
                             <div class="m-[1rem] bg-gray-600 p-[2rem]">
                                 <div class="flex justify-between mb-[1rem]">
                                     <h1 class="font-extrabold my-auto">Policies</h1>
-                                    <PrimaryButton class="justify-center" @click="states.create = !states.create"><Plus class="mr-5"/> create policy</PrimaryButton>
+                                    <PrimaryButton v-if="hasPerm('create policy')" class="justify-center" @click="states.create = !states.create"><Plus class="mr-5"/> create policy</PrimaryButton>
                                 </div>
 
                                 <Transition name="fade">
@@ -115,7 +119,7 @@ const del = (policy) =>
 
                                     <TextEditor v-model="content"/>
 
-                                   <PrimaryButton class="justify-center w-full my-[1rem]" @click="create">create</PrimaryButton>
+                                <PrimaryButton class="justify-center w-full my-[1rem]" @click="create">create</PrimaryButton>
                                 </div>
                                 </Transition>
 
@@ -126,12 +130,12 @@ const del = (policy) =>
                                         :class="selectedPolicyID === policy.id ? 'bg-gray-900' : ''"
                                         class="bg-gray-700 p-[1rem] rounded-md text-center">
                                         <div class="float-right flex">
-                                            <Pencil class="text-orange-500" @click="editToggle(policy)"/>
-                                            <Trash2 class="text-red-500 ml-[1rem]" @click="del(policy)"/>
+                                            <Pencil v-if="hasPerm('edit policy')" class="text-orange-500" @click="editToggle(policy)"/>
+                                            <Trash2 v-if="hasPerm('delete policy')" class="text-red-500 ml-[1rem]" @click="del(policy)"/>
                                         </div>
 
                                         <div
-                                            class="mt-[2rem]">
+                                            class="m-[1.6rem]">
                                             <h1 class="text-xl font-bold ">{{ policy.title }}</h1>
                                             <p class="italic text-gray-400">Updated: {{ dayjs(policy.created_at).format('DD/MM/YYYY') }}</p>
                                             <p class="italic text-gray-400">Created: {{ dayjs(policy.updated_at).format('DD/MM/YYYY') }}</p>
@@ -142,7 +146,7 @@ const del = (policy) =>
 
                                 <Transition name="fade">
                                     <div
-                                        v-if="states.edit"
+                                        v-if="states.edit && hasPerm('edit policy')"
                                         class="bg-gray-700 my-[1rem] p-[1rem] rounded-md">
                                         <p>Edit Form</p>
                                         <InputLabel class="text-white my-[1rem]">Title:</InputLabel>
@@ -157,6 +161,7 @@ const del = (policy) =>
                         </div>
                     </div>
                 </div>
+                <PermissionErrorMsg :role="$page.props.auth.role"/>
             </div>
         </div>
     </StaffLayout>

@@ -9,6 +9,10 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import { Heart, Users, Layers3, LifeBuoy, Settings, TableProperties } from 'lucide-vue-next';
+import { usePermissions } from '@/Composables/usePermissions';
+import PermissionErrorMsg from '@/Components/PermissionErrorMsg.vue';
+
+const { hasPerm } = usePermissions();
 
 const page = usePage();
 
@@ -34,10 +38,11 @@ const showingNavigationDropdown = ref(false);
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="grid grid-flow-row">
+                            <div v-if="hasPerm('view reports') || hasPerm('view users') || hasPerm('view suspensions') || hasPerm('manage permissions') || hasPerm('create roles') || hasPerm('view pages controller') || hasPerm('view page') || hasPerm('view policies') || hasPerm('view tickets')" class="grid grid-flow-row">
                                 <h1 class="text-gray-500 text-[0.9rem]">Controls</h1>
 
-                                <NavDropdown>
+                                <NavDropdown
+                                    v-if="hasPerm('view reports') || hasPerm('view users') || hasPerm('view suspensions')">
                                     <template #trigger>
                                             <Users class="mr-1" :size="20"/>
                                             <h1>Users</h1>
@@ -45,23 +50,27 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <NavDropdownLink
+                                            v-if="hasPerm('view users')"
                                             :href="route('staff.dashboard.users')" :active="route().current('staff.dashboard.users')">
                                             View
                                         </NavDropdownLink>
 
                                         <NavDropdownLink
+                                            v-if="hasPerm('view reports')"
                                             :href="route('staff.dashboard.reports')" :active="route().current('staff.dashboard.users')">
                                             Reports
                                         </NavDropdownLink>
 
                                         <NavDropdownLink
+                                            v-if="hasPerm('view suspensions')"
                                             :href="route('staff.dashboard.suspensions')" :active="route().current('staff.dashboard.suspensions')">
                                             Suspensions
                                         </NavDropdownLink>
                                     </template>
                                 </NavDropdown>
 
-                                <NavDropdown>
+                                <NavDropdown
+                                    v-if="hasPerm('manage permissions') || hasPerm('create roles')">
                                     <template #trigger>
                                             <TableProperties class="mr-1" :size="20"/>
                                             <h1>Roles</h1>
@@ -69,18 +78,21 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <NavDropdownLink
+                                            v-if="hasPerm('create roles')"
                                             :href="route('matchmaking')" :active="route().current('matchmaking')">
                                             Create
                                         </NavDropdownLink>
 
                                         <NavDropdownLink
+                                            v-if="hasPerm('manage permissions')"
                                             :href="route('matchmaking')" :active="route().current('matchmaking')">
                                             Permissions
                                         </NavDropdownLink>
                                     </template>
                                 </NavDropdown>
 
-                                <NavDropdown>
+                                <NavDropdown
+                                    v-if="hasPerm('view pages controller') || hasPerm('view page') || hasPerm('view policies')">
                                     <template #trigger>
                                             <Layers3 class="mr-1" :size="20"/>
                                             <h1>Pages</h1>
@@ -88,20 +100,24 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <NavDropdownLink
+                                            v-if="hasPerm('view pages controller')"
                                             :href="route('staff.dashboard.pages')" :active="route().current('staff.dashboard.pages')">
                                             Page Controller
                                         </NavDropdownLink>
 
-                                        <NavDropdownLink
-                                            v-for="page in page.props.pages"
-                                            :href="route('staff.dashboard.pages.edit', page.id)" :active="route().current('staff.dashboard.pages')"
-                                            :key="page"
-                                        >
-                                            {{ page.page_name }}
-                                        </NavDropdownLink>
+                                        <section
+                                            v-if="hasPerm('view page')">
+                                            <NavDropdownLink
+                                                v-for="page in page.props.pages"
+                                                :href="route('staff.dashboard.pages.edit', page.id)" :active="route().current('staff.dashboard.pages')"
+                                                :key="page"
+                                            >
+                                                {{ page.page_name }}
+                                            </NavDropdownLink>
+                                        </section>
 
-
                                         <NavDropdownLink
+                                            v-if="hasPerm('view policies')"
                                             :href="route('staff.dashboard.policies')" :active="route().current('staff.dashboard.policies')">
                                             Policies
                                         </NavDropdownLink>
@@ -109,7 +125,8 @@ const showingNavigationDropdown = ref(false);
                                     </template>
                                 </NavDropdown>
 
-                                <NavDropdown>
+                                <NavDropdown
+                                    v-if="hasPerm('view tickets')">
                                     <template #trigger>
                                             <LifeBuoy class="mr-1" :size="20"/>
                                             <h1>Support</h1>
@@ -117,12 +134,14 @@ const showingNavigationDropdown = ref(false);
 
                                     <template #content>
                                         <NavDropdownLink
+                                            v-if="hasPerm('view tickets')"
                                             :href="route('staff.dashboard.tickets')" :active="route().current('staff.dashboard.tickets')">
                                             Tickets
                                         </NavDropdownLink>
                                     </template>
                                 </NavDropdown>
                             </div>
+                            <PermissionErrorMsg v-else :role="$page.props.auth.role"/>
                         </div>
                     </div>
                 </div>
@@ -157,7 +176,6 @@ const showingNavigationDropdown = ref(false);
                         </template>
 
                         <template #content>
-                            <DropdownLink href="#"> Staff Dashboard </DropdownLink>
                             <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
                             <DropdownLink :href="route('logout')" method="post" as="button">
                                 Log Out

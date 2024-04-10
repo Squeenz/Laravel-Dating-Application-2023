@@ -6,6 +6,10 @@ import { ref, onMounted } from 'vue';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Users, MonitorDot, Ticket, TicketX, TicketCheck, Info, Heart, ThumbsUp } from 'lucide-vue-next';
+import { usePermissions } from '@/Composables/usePermissions';
+import PermissionErrorMsg from '@/Components/PermissionErrorMsg.vue';
+
+const { hasPerm } = usePermissions();
 </script>
 
 <template>
@@ -13,14 +17,14 @@ import { Users, MonitorDot, Ticket, TicketX, TicketCheck, Info, Heart, ThumbsUp 
 
     <StaffLayout>
         <template #header>
-            <h2 class="font-semibold ml-[4rem] text-xl text-white leading-tight">
+            <h2 class="font-semibold text-xl text-white leading-tight">
                 Overall Dashboard
             </h2>
         </template>
 
         <div>
             <div class="mx-auto">
-                <div class="shadow rounded-sm text-white">
+                <div v-if="hasPerm('access dashboard')" class="shadow rounded-sm text-white">
                     <div class="bg-orange-600 p-5 m-2 rounded-sm grid grid-flow-col justify-center text-center items-center">
                         <Info class="mr-[1rem]" :size="40"/>
                         <h1>Important Notice: Support System is down</h1>
@@ -65,6 +69,7 @@ import { Users, MonitorDot, Ticket, TicketX, TicketCheck, Info, Heart, ThumbsUp 
                         </div>
                     </div>
                 </div>
+                <PermissionErrorMsg v-else :role="$page.props.auth.role"/>
             </div>
         </div>
     </StaffLayout>

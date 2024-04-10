@@ -6,13 +6,15 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import { Bell, MessageCircleHeart, Heart, Camera, CameraOff, ListChecks, BellPlus } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { usePermissions } from '@/Composables/usePermissions';
+
+const { hasPerm } = usePermissions();
 
 const page = usePage();
 
 const user = computed(()=>{
     return page.props.auth.user;
 });
-
 </script>
 
 <template>
@@ -96,7 +98,7 @@ const user = computed(()=>{
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink href="#"> Staff Dashboard </DropdownLink>
+                                        <DropdownLink v-if="hasPerm('access dashboard')" :href="route('staff.dashboard')"> Dashboard </DropdownLink>
                                         <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             Log Out

@@ -6,6 +6,10 @@ import StaffLayout from '@/Layouts/StaffLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { usePermissions } from '@/Composables/usePermissions';
+import PermissionErrorMsg from '@/Components/PermissionErrorMsg.vue';
+
+const { hasPerm } = usePermissions();
 
 const page = usePage();
 
@@ -50,8 +54,7 @@ const submit = () => {
             router.patch(route('staff.dashboard.report.update', chosenReport.value ));
         }
     })
-}
-
+};
 </script>
 
 <template>
@@ -59,14 +62,14 @@ const submit = () => {
 
     <StaffLayout>
         <template #header>
-            <h2 class="font-semibold ml-[4rem] text-xl text-white leading-tight">
+            <h2 class="font-semibold text-xl text-white leading-tight">
                 Reports
             </h2>
         </template>
 
         <div>
             <div class="mx-auto">
-                <div class="shadow rounded-sm text-white">
+                <div v-if="hasPerm('view reports')" class="shadow rounded-sm text-white">
                     <div class="grid grid-flow-col">
                         <div class="bg-gray-700 grid grid-flow-col">
                             <div class="m-[1rem] bg-gray-600 p-[2rem] rounded-sm">
@@ -145,7 +148,7 @@ const submit = () => {
                                             <div class="my-[1rem]">
                                                 <InputLabel class="text-white">Note (did the user break the guidlines, etc..)</InputLabel>
                                                 <TextInput class="w-full text-black" v-model="form.note"/>
-                                                <PrimaryButton class="w-full justify-center mt-[1rem]" @click.prevent="suspendToggle">suspend</PrimaryButton>
+                                                <PrimaryButton v-if="hasPerm('suspend')" class="w-full justify-center mt-[1rem]" @click.prevent="suspendToggle">suspend</PrimaryButton>
                                             </div>
                                         </section>
 
@@ -164,7 +167,7 @@ const submit = () => {
                                             </div>
                                         </section>
 
-                                        <PrimaryButton class="w-full justify-center" @click="suspend">close case</PrimaryButton>
+                                        <PrimaryButton v-if="hasPerm('close report')" class="w-full justify-center" @click="suspend">close case</PrimaryButton>
                                     </form>
                                 </div>
 
@@ -173,6 +176,7 @@ const submit = () => {
                         </div>
                     </div>
                 </div>
+                <PermissionErrorMsg v-else :role="$page.props.auth.role"/>
             </div>
         </div>
     </StaffLayout>

@@ -95,7 +95,7 @@ Route::middleware(['auth', 'verified', 'checkPhotos', 'checkSuspension'])->group
 });
 
 //Staff routes
-Route::middleware(['auth', 'checkSuspension'])->group(function(){
+Route::middleware(['auth', 'checkSuspension', 'can:access dashboard',])->group(function(){
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.dashboard');
 
     //Page System Routes
