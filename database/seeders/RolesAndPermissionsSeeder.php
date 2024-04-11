@@ -25,11 +25,11 @@ class RolesAndPermissionsSeeder extends Seeder
 
         //Reports control
         Permission::create(['name' => 'view reports']);
-        Permission::create(['name' => 'suspend']);
         Permission::create(['name' => 'close report']);
 
         //Suspensions control
         Permission::create(['name' => 'view suspensions']);
+        Permission::create(['name' => 'suspend']);
 
         //Roles control
         Permission::create(['name' => 'assign role']);
@@ -69,6 +69,8 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'remove photos']);
         Permission::create(['name' => 'see matches']);
         Permission::create(['name' => 'use messages']);
+        Permission::create(['name' => 'create report']);
+        Permission::create(['name' => 'create ticket']);
 
         $role = Role::create(['name' => 'admin'])
             ->givePermissionTo(Permission::all());
@@ -80,7 +82,7 @@ class RolesAndPermissionsSeeder extends Seeder
             ->givePermissionTo(['access dashboard', 'view tickets', 'view suspensions', 'view reports', 'suspend', 'view policies', 'close report', 'send ticket message', 'update tickets', 'self assing ticket']);
 
         $role = Role::create(['name' => 'user'])
-            ->givePermissionTo(['use matchmaking', 'add photos', 'remove photos', 'see matches', 'use messages']);
+            ->givePermissionTo(['use matchmaking', 'create ticket', 'create report', 'send ticket message', 'add photos', 'remove photos', 'see matches', 'use messages']);
 
         $role = Role::create(['name' => 'suspended']);
     }

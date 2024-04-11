@@ -13,6 +13,8 @@ class SuspensionController extends Controller
 {
     public function index()
     {
+        $this->authorize('view', SuspensionController::class);
+
         $user = Auth::user();
 
         $reports = $user->reportSuspect;

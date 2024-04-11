@@ -90,7 +90,7 @@ class SupportTicketController extends Controller
         }
         else
         {
-            return abort(404);
+            return abort(403);
         }
 
         return Inertia::render('Support/Index', [

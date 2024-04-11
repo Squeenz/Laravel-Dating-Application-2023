@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Report;
 use App\Models\Suspension;
+use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\UserSuspensionNotification;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Permission\Models\Role;
 
 class StaffSuspensionController extends Controller
 {
@@ -17,6 +19,8 @@ class StaffSuspensionController extends Controller
      */
     public function index(): Response
     {
+        $this->authorize('viewAny', StaffSuspensionController::class);
+
         $suspensions = Suspension::all();
 
         return Inertia::render('Staff/Users/Suspensions', [
@@ -37,6 +41,8 @@ class StaffSuspensionController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('update', StaffSuspensionController::class);
+
         $validated = $request->validate([
             'report' => 'required|integer',
             'handler' => 'required|integer',
@@ -52,10 +58,11 @@ class StaffSuspensionController extends Controller
         {
             $report = Report::findOrFail($validated['report']);
 
-            $user = $report->suspect()->get();
+            $user = $report->suspect()->first();
 
             if ($user)
             {
+                $user->assignRole('suspended');
                 Notification::send($user, new UserSuspensionNotification($validated['from'], $validated['to'], $report->violated_rule));
             };
         };

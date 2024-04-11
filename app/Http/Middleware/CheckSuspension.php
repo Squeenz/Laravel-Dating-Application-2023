@@ -9,7 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-
 class CheckSuspension
 {
     /**
@@ -21,8 +20,17 @@ class CheckSuspension
     {
         $user = Auth::user();
 
-        if ($user) {
+        if ($user)
+        {
             $reports = $user->reportSuspect;
+
+            $userRoles = $user->getRoleNames();
+            $userSuspendedRole = false;
+
+            foreach ($userRoles as $role)
+            {
+                $role === 'suspended' ? $userSuspendedRole = true : $userSuspendedRole = false;
+            }
 
             $possibleSuspensions = [];
 
@@ -60,6 +68,11 @@ class CheckSuspension
                 {
                     return redirect(route('suspended.index'));
                 }
+            }
+            else if (!$currentSuspension && $userSuspendedRole)
+            {
+                $user->removeRole('suspended');
+                $user->assignRole('user');
             }
         }
 

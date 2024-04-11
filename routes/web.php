@@ -45,7 +45,7 @@ Route::get('/page/{slugName}', [PageController::class, 'index'])->name('page.ind
 Route::get('/policies', [PolicyController::class, 'index'])->name('policies.index');
 Route::get('/policies/{policy}', [PolicyController::class, 'show'])->name('policies.show');
 
-Route::middleware(['auth', 'verified', 'checkPhotos'])->group(function() {
+Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/report', [ReportController::class, 'store'])->name('report.store');
     Route::get('/suspended', [SuspensionController::class, 'index'])->name('suspended.index');
 
@@ -95,7 +95,7 @@ Route::middleware(['auth', 'verified', 'checkPhotos', 'checkSuspension'])->group
 });
 
 //Staff routes
-Route::middleware(['auth', 'checkSuspension', 'can:access dashboard',])->group(function(){
+Route::middleware(['auth', 'checkSuspension'])->group(function(){
     Route::get('/staff', [StaffController::class, 'index'])->name('staff.dashboard');
 
     //Page System Routes

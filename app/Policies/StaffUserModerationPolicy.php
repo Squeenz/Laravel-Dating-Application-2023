@@ -12,7 +12,7 @@ class StaffUserModerationPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        return $user->hasPermissionTo('view users');
     }
 
     /**
@@ -36,8 +36,7 @@ class StaffUserModerationPolicy
      */
     public function update(User $user, User $model): bool
     {
-        //check user rank
-        return true;
+        return $user->hasPermissionTo('edit users');
     }
 
     /**
@@ -45,8 +44,7 @@ class StaffUserModerationPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        //change this to check for staff rank or permission <----
-        return true;
+        return $user->hasPermissionTo('delete users');
     }
 
     /**

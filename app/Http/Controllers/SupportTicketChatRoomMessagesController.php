@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SupportTicketChatRoom;
 use App\Models\SupportTicketChatRoomMessages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,10 @@ class SupportTicketChatRoomMessagesController extends Controller
      */
     public function store(Request $request)
     {
+        $supportChatRoom = SupportTicketChatRoom::findOrFail($request->support_chat_room);
+
+        $this->authorize('canSendMessage', $supportChatRoom);
+
         $user = Auth::user();
 
         $validated = $request->validate([

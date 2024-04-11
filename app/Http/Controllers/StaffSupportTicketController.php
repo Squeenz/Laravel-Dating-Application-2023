@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SupportTicket;
 use App\Models\SupportTicketChatRoom;
 use App\Models\User;
+use App\Policies\StaffSupportTicketPolicy;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,8 @@ class StaffSupportTicketController extends Controller
      */
     public function index(): Response
     {
+        $this->authorize('viewAny', StaffSupportTicketController::class);
+
         $tickets = SupportTicket::all();
 
         return Inertia::render('Staff/Support/Support',[
@@ -47,6 +50,8 @@ class StaffSupportTicketController extends Controller
      */
     public function show(SupportTicket $supportTicket)
     {
+        $this->authorize('viewAny', StaffSupportTicketController::class);
+
         $tickets = SupportTicket::all();
 
         $supportTicket->supportChatRoom->supportChatMessages->map(function ($message) {
@@ -79,6 +84,8 @@ class StaffSupportTicketController extends Controller
      */
     public function updateStatus(SupportTicket $supportTicket, string $status): RedirectResponse
     {
+        $this->authorize('update', StaffSupportTicketController::class);
+
         $supportTicket->status = $status;
 
         $supportTicket->update();
@@ -91,6 +98,8 @@ class StaffSupportTicketController extends Controller
      */
     public function updateHandlerAndStatus(SupportTicket $supportTicket): RedirectResponse
     {
+        $this->authorize('updateHandlerStatus', StaffSupportTicketController::class);
+
         $staffUser = Auth::user();
 
         $supportTicket->status = 1;
