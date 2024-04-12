@@ -112,23 +112,25 @@ class MatchingController extends Controller
             'user2_id' => 'required|integer',
         ]);
 
-        $user1 = User::find($validated['user1_id']);
-        $user2 = User::find($validated['user2_id']);
+        $user1 = $validated['user1_id'];
+        $user2 = $validated['user2_id'];
+
+        $existingRecord = null;
 
         event(new UserNotification($user1, $user2, "Match"));
         event(new UserNotification($user2, $user1, "Match"));
 
         DB::transaction(function () use ($user1, $user2) {
-            $existingRecord = Matching::where('user1_id', $user1->id)
-                ->where('user2_id', $user2->id)
+            $existingRecord = Matching::where('user1_id', $user1)
+                ->where('user2_id', $user2)
                 ->lockForUpdate()
                 ->first();
 
             if (!$existingRecord)
             {
                 Matching::create([
-                    'user1_id' => $user1->id,
-                    'user2_id' => $user2->id,
+                    'user1_id' => $user1,
+                    'user2_id' => $user2,
                 ]);
 
                 event(new CreateChatRoom($user1, $user2));

@@ -28,18 +28,17 @@ onMounted(() => {
     Echo.private('matches')
             .listen('MatchFound', (e) => {
                 router.post(route('matchmaking.store'), {
-                    user1_id: e.user1.id,
-                    user2_id: e.user2.id,
+                    user1_id: e.user1,
+                    user2_id: e.user2,
                 });
             });
     Echo.private('chatRooms')
             .listen('CreateChatRoom', (e) => {
                 router.post(route('chat.room.store'), {
-                    user1_id: e.user1.id,
-                    user2_id: e.user2.id,
+                    user1_id: e.user1,
+                    user2_id: e.user2,
                 });
             });
-
 });
 
 const stopListening = () => {

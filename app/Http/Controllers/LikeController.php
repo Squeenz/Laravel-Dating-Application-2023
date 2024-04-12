@@ -35,12 +35,12 @@ class LikeController extends Controller
 
             if ($status == 1)
             {
-                event(new UserNotification($user, $likedUser, "Like"));
+                event(new UserNotification($validated['user_id'], $validated['liked_user_id'], "Like"));
             }
 
             // Check if it's a mutual like
             if ($user->likes->where('liked_user_id', $likedUser->id)->isNotEmpty() && $likedUser->likes->where('liked_user_id', $user->id)->isNotEmpty()) {
-                event(new MatchFound($user, $likedUser));
+                event(new MatchFound($user->id, $likedUser->id));
             }
         }
         else

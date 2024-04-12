@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, reactive } from 'vue';
 import { Head, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -10,6 +10,10 @@ const props = defineProps(['user', 'potentialMatches', 'potentialMatchesPhotos']
 const listIndex = ref(0);
 const currentPhotoIndex = ref(0);
 const lengthImagesArray = ref(0);
+
+const states = reactive({
+    processing: false,
+});
 
 onMounted(() => {
   // Watch for changes in user data and potential matches
@@ -48,11 +52,18 @@ const changePicture = (direction) => {
 };
 
 const reactToProfile = (status) => {
-  router.post(route('like.store', status), {
-    user_id: props.user.id,
-    liked_user_id: props.potentialMatches[listIndex.value].id,
-    is_like: status,
-  });
+    if (!states.processing){
+        states.processing = true;
+        router.post(route('like.store', status), {
+            user_id: props.user.id,
+            liked_user_id: props.potentialMatches[listIndex.value].id,
+            is_like: status,
+        }, {
+            onSuccess: () => {
+                states.processing = false;
+            },
+        });
+    }
 };
 </script>
 
