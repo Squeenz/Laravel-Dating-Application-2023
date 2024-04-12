@@ -64,7 +64,7 @@ const updateTicketStatus = (status) => {
                 <div v-if="hasPerm('view tickets')" class="shadow rounded-sm text-white">
                     <div class="grid grid-flow-col">
                         <div class="bg-gray-700 grid grid-flow-col">
-                            <div class="m-[1rem] bg-gray-600 p-[1rem] rounded-sm">
+                            <div v-if="props.tickets.length != 0" class="m-[1rem] bg-gray-600 p-[1rem] rounded-sm">
                                 <h1 class="text-center mb-[1rem]">Tickets</h1>
                                 <div
                                 v-for="ticket in props.tickets"
@@ -84,6 +84,9 @@ const updateTicketStatus = (status) => {
                                     <h1 class="bg-gray-800 p-1">Reason: {{ ticket.reason }}</h1>
                                     <h1 class="bg-gray-800 p-1 rounded-b-md">Created: {{ dayjs(ticket.created_at).format('DD/MM/YYYY hh:mm:ss A') }}</h1>
                                 </div>
+                            </div>
+                            <div v-else class="p-[1rem]">
+                                <h1 class="text-center">No tickets in the system</h1>
                             </div>
 
                             <Transition name="fade">

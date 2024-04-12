@@ -19,8 +19,8 @@ class UserNotification implements ShouldBroadcast
      */
     public function __construct($user, $otherUser, $type)
     {
-        $this->userID = $user->id;
-        $this->otherUserID = $otherUser->id;
+        $this->userID = $user;
+        $this->otherUserID = $otherUser;
         $this->type = $type;
     }
 

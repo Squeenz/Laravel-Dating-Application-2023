@@ -17,6 +17,8 @@ const { hasPerm } = usePermissions();
 const page = usePage();
 
 const showingNavigationDropdown = ref(false);
+
+console.log(page.props.auth.perms);
 </script>
 
 <template>

@@ -41,7 +41,7 @@ const sendMessage = () => {
     <GuestLayout>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div class="sm:py-[2rem] bg-[#0A0A0A] shadow rounded-sm">
-                <div v-if="props.tickets.length != 0" class="flex grid-flow-col text-white justify-evenly">
+                <div class="flex grid-flow-col text-white justify-evenly">
                     <div class="p-2 w-[50%]">
                         <h1 class="text-center mb-[1rem]">Tickets</h1>
                         <div
@@ -68,6 +68,7 @@ const sendMessage = () => {
                     </div>
 
                     <div
+                        v-if="route().current('support.show')"
                         class="p-2 w-full">
                         <h1 class="text-center mb-[1rem]">Support Chat</h1>
 
@@ -101,9 +102,9 @@ const sendMessage = () => {
                         </div>
                     </div>
                 </div>
-                <div v-else class="text-center p-[1rem] rounded-md text-white h-[36rem]">
+                <!-- <div v-else class="text-center p-[1rem] rounded-md text-white h-[36rem]">
                     <h1> You have no tickets</h1>
-                </div>
+                </div> -->
           </div>
     </div>
     </GuestLayout>

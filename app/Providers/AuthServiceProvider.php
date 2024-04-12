@@ -9,6 +9,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffReportController;
 use App\Http\Controllers\StaffSupportTicketController;
 use App\Http\Controllers\StaffSuspensionController;
+use App\Http\Controllers\StaffUserController;
 use App\Http\Controllers\SuspensionController;
 use App\Models\Page;
 use App\Models\Policy;
@@ -38,18 +39,16 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        User::class => StaffUserModerationPolicy::class,
         Page::class => PagePolicy::class,
         Policy::class => PolicyPolicy::class,
         SuspensionController::class => SuspensionPolicy::class,
-
         ReportController::class => ReportPolicy::class,
         SupportTicketChatRoomMessages::class => SupportTicketChatRoomPolicy::class,
         SupportTicketChatRoom::class => SupportTicketChatRoomPolicy::class,
 
         StaffReportController::class => StaffReportPolicy::class,
         StaffSuspensionController::class => StaffSuspensionPolicy::class,
-
+        StaffUserController::class => StaffUserModerationPolicy::class,
         StaffController::class => StaffDashboardPolicy::class,
         StaffSupportTicketController::class => StaffSupportTicketPolicy::class,
     ];

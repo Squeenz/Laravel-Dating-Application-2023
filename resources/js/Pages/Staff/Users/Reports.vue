@@ -72,7 +72,7 @@ const submit = () => {
                 <div v-if="hasPerm('view reports')" class="shadow rounded-sm text-white">
                     <div class="grid grid-flow-col">
                         <div class="bg-gray-700 grid grid-flow-col">
-                            <div class="m-[1rem] bg-gray-600 p-[2rem] rounded-sm">
+                            <div v-if="props.reports.length != 0" class="m-[1rem] bg-gray-600 p-[2rem] rounded-sm">
                                 <section class="bg-gray-700 rounded-sm p-2 grid grid-flow-col text-center">
                                     <h1>ID</h1>
                                     <h1>Suspect</h1>
@@ -94,6 +94,9 @@ const submit = () => {
                                     <h1 v-if="report.status === 0" class="text-gray-400">Unsolved</h1>
                                     <h1 v-else class="text-green-400">Resolved</h1>
                                 </div>
+                            </div>
+                            <div v-else class="p-[1rem]">
+                                <h1 class="text-center">No reports in the system</h1>
                             </div>
 
                             <Transition name="fade">

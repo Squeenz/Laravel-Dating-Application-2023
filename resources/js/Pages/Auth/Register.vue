@@ -62,7 +62,6 @@ const form = useForm({
     bio: '',
     email: '',
     location: '',
-    photos: '',
     interests: '',
     password: '',
     password_confirmation: '',

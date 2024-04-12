@@ -11,7 +11,7 @@ class StaffUserController extends Controller
 {
     public function index(): Response
     {
-        $this->authorize('viewAny');
+        $this->authorize('viewAny', StaffUserController::class);
 
         $users = User::paginate(15);
         return Inertia::render('Staff/Users/Users', [
