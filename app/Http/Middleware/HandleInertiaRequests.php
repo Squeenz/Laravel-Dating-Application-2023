@@ -36,7 +36,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
                 'role' => $request->user() ? $request->user()->getRoleNames() : 'guest',
-                'perms' => $request->user() ? $request->user()->getPermissionsViaRoles() : 'guest',
+                'perms' => $request->user() ? $request->user()->getPermissionsViaRoles() : ['none'],
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),

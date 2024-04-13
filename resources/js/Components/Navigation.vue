@@ -1,0 +1,207 @@
+<script setup>
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
+import NavLink from '@/Components/NavLink.vue';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import { ref } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import { Bell, MessageCircleHeart, Heart, Camera, CameraOff, ListChecks, BellPlus, LifeBuoy } from 'lucide-vue-next';
+import { usePermissions } from '@/Composables/usePermissions';
+
+const { hasPerm } = usePermissions();
+
+const page = usePage();
+
+const showingNavigationDropdown = ref(false);
+
+const stopListening = () => {
+    Echo.leave('matches');
+}
+</script>
+
+<template>
+            <nav class="bg-[#111111]">
+                <!-- Primary Navigation Menu -->
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-16">
+                        <div class="flex">
+                            <!-- Logo -->
+                            <div class="shrink-0 flex items-center">
+                                <Link :href="route('matchmaking')">
+                                    <ApplicationLogo
+                                        class="block h-9 w-auto fill-current text-red-800"
+                                    />
+                                </Link>
+                            </div>
+
+                            <!-- Navigation Links -->
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink
+                                    v-for="page in page.props.pages"
+                                    :key="page.id"
+                                    :href="route('page.index', page.slug)" :active="route().current('page.index', page.slug)"
+                                    >
+                                        {{ page.page_name }}
+                                </NavLink>
+
+                                <NavLink :href="route('policies.index')" :active="route().current('policies.index')">
+                                    Policies
+                                </NavLink>
+
+                                <NavLink v-if="hasPerm('create ticket')" :href="route('support.create')" :active="route().current('support.create')">
+                                    Support
+                                </NavLink>
+                                <NavLink v-if="hasPerm('create ticket')" :href="route('support.index')" :active="route().current('support.index')">
+                                   Support Tickets
+                                </NavLink>
+                            </div>
+                        </div>
+
+                        <div v-if="$page.props.auth.user" class="hidden sm:flex sm:items-center sm:ms-6">
+                            <NavLink class="border-b-0 active:border-b-0 hover:border-b-0 focus:border-b-0 mr-[1rem]" :href="route('notification')" :active="route().current('notification')">
+                                <div>
+                                    <h1
+                                        v-if="page.props.notification.unread != 0"
+                                        class="my-[-0.6rem] mx-[0.9rem] absolute text-center text-[0.7rem] h-[1.4rem] px-1 w-auto text-red-100 border-2 border-red-800 bg-red-600 rounded-full z-40"
+                                    >
+                                    {{ page.props.notification.unread }}
+                                    </h1>
+                                    <Bell class="text-red-900" :size="23" />
+                                </div>
+                            </NavLink>
+                            <!-- Settings Dropdown -->
+                            <div class="ms-3 relative">
+                                <Dropdown align="right" width="48">
+                                    <template #trigger>
+                                        <span class="inline-flex rounded-md">
+                                            <button
+                                                type="button"
+                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                            >
+                                                {{$page.props.auth.user.first_name + " " +  $page.props.auth.user.surname}} ({{ $page.props.auth.user.username}})
+
+                                                <svg
+                                                    class="ms-2 -me-0.5 h-4 w-4"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 20 20"
+                                                    fill="currentColor"
+                                                >
+                                                    <path
+                                                        fill-rule="evenodd"
+                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                        clip-rule="evenodd"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    </template>
+
+                                    <template #content>
+                                        <DropdownLink v-if="hasPerm('access dashboard')" :href="route('staff.dashboard')"> Dashboard </DropdownLink>
+                                        <DropdownLink :href="route('profile.show', $page.props.auth.user.id)">View Profile </DropdownLink>
+                                        <DropdownLink :href="route('profile.edit')">Edit Profile </DropdownLink>
+                                        <DropdownLink :href="route('logout')" @click="stopListening" method="post" as="button">
+                                            Log Out
+                                        </DropdownLink>
+                                    </template>
+                                </Dropdown>
+                            </div>
+                        </div>
+                        <div
+                            v-else
+                            class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
+                            >
+                            <NavLink :href="route('login')" :active="route().current('login')">
+                                Login
+                            </NavLink>
+                            <NavLink :href="route('register')" :active="route().current('register')">
+                                Register
+                            </NavLink>
+                        </div>
+
+                        <!-- Hamburger -->
+                        <div class="-me-2 flex items-center sm:hidden">
+                            <button
+                                @click="showingNavigationDropdown = !showingNavigationDropdown"
+                                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
+                            >
+                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                    <path
+                                        :class="{
+                                            hidden: showingNavigationDropdown,
+                                            'inline-flex': !showingNavigationDropdown,
+                                        }"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M4 6h16M4 12h16M4 18h16"
+                                    />
+                                    <path
+                                        :class="{
+                                            hidden: !showingNavigationDropdown,
+                                            'inline-flex': showingNavigationDropdown,
+                                        }"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Responsive Navigation Menu -->
+                <div
+                    v-if="$page.props.auth.user"
+                    :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
+                    class="sm:hidden"
+                >
+                    <div class="pt-2 pb-3 space-y-1">
+                        <ResponsiveNavLink :href="route('matchmaking')" :active="route().current('dashboard')">
+                            Matchmaking
+                        </ResponsiveNavLink>
+                    </div>
+
+                    <!-- Responsive Settings Options -->
+                    <div class="pt-4 pb-1 border-t border-gray-200">
+                        <div class="px-4">
+                            <div class="font-medium text-base text-gray-800">
+                                {{ $page.props.auth.user.name }}
+                            </div>
+                            <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
+                        </div>
+
+                        <div class="mt-3 space-y-1">
+                            <ResponsiveNavLink :href="route('profile.show', $page.props.auth.user.id)">View Profile</ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('profile.edit')">Edit Profile </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+                                Log Out
+                            </ResponsiveNavLink>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div v-if="$page.props.auth.user" id="subNavigation" class="bg-gradient-to-r from-red-500 from-10% via-orange-500 via-30% to-red-500 to-90%">
+                <div class="flex justify-evenly">
+                    <NavLink v-if="hasPerm('use matchmaking')" :href="route('matchmaking')" :active="route().current('matchmaking')" class="text-white">
+                        <Heart class="mr-1" :size="20"/> Matchmaking
+                    </NavLink>
+                    <NavLink v-if="hasPerm('use messages')"  :href="route('chat.app')" :active="route().current('chat.app')" class="text-white">
+                        <MessageCircleHeart class="mr-1" :size="20"/> Messenger
+                    </NavLink>
+                    <NavLink v-if="hasPerm('see matches')"  :href="route('matches')" :active="route().current('matches')" class="text-white">
+                        <ListChecks class="mr-1" :size="20"/> Matches
+                    </NavLink>
+                    <NavLink v-if="hasPerm('add photos')"  :href="route('photos.create')" :active="route().current('photos.create')" class="text-white">
+                        <Camera class="mr-1" :size="20"/> Add Photos
+                    </NavLink>
+                    <NavLink v-if="hasPerm('remove photos')"  :href="route('photos.remove')" :active="route().current('photos.remove')" class="text-white">
+                        <CameraOff class="mr-1" :size="20"/> Remove Photos
+                    </NavLink>
+                </div>
+            </div>
+</template>

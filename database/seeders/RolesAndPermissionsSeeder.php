@@ -72,18 +72,22 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'create report']);
         Permission::create(['name' => 'create ticket']);
 
-        $role = Role::create(['name' => 'admin'])
+        Role::create(['name' => 'admin'])
             ->givePermissionTo(Permission::all());
 
-        $role = Role::create(['name' => 'moderator'])
+        Role::create(['name' => 'moderator'])
             ->givePermissionTo(['access dashboard', 'view tickets', 'access dashboard statistics', 'view users', 'view suspensions', 'edit users', 'delete users', 'view page', 'add page component', 'edit page component', 'delete page component', 'view pages controller', 'add page controller', 'edit page controller', 'delete page controller', 'view reports', 'view policies', 'create policy', 'edit policy', 'delete policy', 'suspend', 'close report', 'send ticket message', 'update tickets', 'self assing ticket']);
 
-        $role = Role::create(['name' => 'support'])
+        Role::create(['name' => 'support'])
             ->givePermissionTo(['access dashboard', 'view tickets', 'view suspensions', 'view reports', 'suspend', 'view policies', 'close report', 'send ticket message', 'update tickets', 'self assing ticket']);
 
-        $role = Role::create(['name' => 'user'])
+        Role::create(['name' => 'user'])
             ->givePermissionTo(['use matchmaking', 'create ticket', 'create report', 'send ticket message', 'add photos', 'remove photos', 'see matches', 'use messages']);
 
-        $role = Role::create(['name' => 'suspended']);
+        Role::create(['name' => 'pending verification'])
+            ->givePermissionTo(['create ticket', 'send ticket message']);
+
+        Role::create(['name' => 'suspended'])
+            ->givePermissionTo(['create ticket', 'send ticket message']);
     }
 }

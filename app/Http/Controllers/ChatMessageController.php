@@ -16,6 +16,7 @@ class ChatMessageController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('update', ChatMessageController::class);
 
         $validated = $request->validate([
             'chat_room_id' => 'required|integer',

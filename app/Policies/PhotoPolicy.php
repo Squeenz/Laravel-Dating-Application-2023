@@ -11,10 +11,19 @@ class PhotoPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAdd(User $user): bool
     {
-        //
+        return $user->hasPermissionTo('add photos');
     }
+
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewRemove(User $user): bool
+    {
+        return $user->hasPermissionTo('remove photos');
+    }
+
 
     /**
      * Determine whether the user can view the model.
@@ -29,7 +38,7 @@ class PhotoPolicy
      */
     public function create(User $user): bool
     {
-        //
+        return $user->hasPermissionTo('add photos');
     }
 
     /**

@@ -4,6 +4,11 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
+use App\Http\Controllers\ChatApplicationController;
+use App\Http\Controllers\ChatMessageController;
+use App\Http\Controllers\ChatRoomController;
+use App\Http\Controllers\IdentityController;
+use App\Http\Controllers\MatchingController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffReportController;
@@ -11,6 +16,8 @@ use App\Http\Controllers\StaffSupportTicketController;
 use App\Http\Controllers\StaffSuspensionController;
 use App\Http\Controllers\StaffUserController;
 use App\Http\Controllers\SuspensionController;
+use App\Models\ChatMessage;
+use App\Models\Identity;
 use App\Models\Page;
 use App\Models\Policy;
 use App\Models\Report;
@@ -19,6 +26,9 @@ use App\Models\SupportTicketChatRoom;
 use App\Models\SupportTicketChatRoomMessages;
 use App\Models\Suspension;
 use App\Models\User;
+use App\Policies\ChatMessengerPolicy;
+use App\Policies\IdentityPolicy;
+use App\Policies\MatchingPolicy;
 use App\Policies\PagePolicy;
 use App\Policies\PolicyPolicy;
 use App\Policies\ReportPolicy;
@@ -41,6 +51,13 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Page::class => PagePolicy::class,
         Policy::class => PolicyPolicy::class,
+        IdentityController::class => IdentityPolicy::class,
+        MatchingController::class => MatchingPolicy::class,
+
+        ChatApplicationController::class => ChatMessengerPolicy::class,
+        ChatMessageController::class => ChatMessengerPolicy::class,
+        ChatRoomController::class => ChatMessengerPolicy::class,
+
         SuspensionController::class => SuspensionPolicy::class,
         ReportController::class => ReportPolicy::class,
         SupportTicketChatRoomMessages::class => SupportTicketChatRoomPolicy::class,

@@ -15,6 +15,8 @@ class ChatRoomController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('update', ChatRoomController::class);
+
         $validated = $request->validate([
             'user1_id' => 'required|integer',
             'user2_id' => 'required|integer',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
+use App\Policies\PhotoPolicy;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,6 +36,8 @@ class PhotoController extends Controller
      */
     public function create(): Response
     {
+        $this->authorize('viewAdd', Photo::class);
+
         return Inertia::render('Photos/Add', [
             'numberPhotos' => Photo::where('user_id', Auth::user()->id)->count(),
         ]);
@@ -45,6 +48,12 @@ class PhotoController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('create', Photo::class);
+
+        $validated = $request->validate([
+            'photo.*' => 'required|image|mimes:jpeg,png,jpg'
+        ]);
+
         //check if the files exisits in the request
         if ($request->hasFile('photo')) {
             //define files as the files from the request
@@ -67,12 +76,12 @@ class PhotoController extends Controller
                 foreach ($files as $file) {
                     $file->store('photos', 'private');
 
+                    $validated['user_id'] = Auth::user()->id;
+                    $validated['photo'] = $file->hashName();
+
                     //using the photo model we create the new item in the database and we pass,
                     //auth id and the hashed file name
-                    Photo::create([
-                        'user_id' => Auth::user()->id,
-                        'photo' => $file->hashName(),
-                    ]);
+                    Photo::create($validated);
                 }
 
                 //then redirect the user to the dashboard
@@ -115,6 +124,8 @@ class PhotoController extends Controller
      */
     public function remove(): Response
     {
+        $this->authorize('viewRemove', Photo::class);
+
         return Inertia::render('Photos/Remove', [
             'userPhotos' => Auth::user()->photos,
         ]);

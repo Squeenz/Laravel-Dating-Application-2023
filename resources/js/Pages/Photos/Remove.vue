@@ -18,7 +18,7 @@ defineProps(['userPhotos']);
 
         <div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div class="sm:h-[51.3rem] sm:py-[1rem] sm:px-[1rem] bg-[#0A0A0A] shadow rounded-sm text-white">
+                    <div class="sm:py-[1rem] sm:px-[1rem] bg-[#0A0A0A] shadow rounded-sm text-white">
                         <div class="flex flex-wrap">
                             <div v-for="photo in userPhotos" :key="photo.id" class="rounded-[0.1rem] mx-[1.7rem] grid">
                                 <Link

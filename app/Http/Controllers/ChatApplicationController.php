@@ -11,6 +11,8 @@ class ChatApplicationController extends Controller
 {
     public function index(): Response
     {
+        $this->authorize('viewAny', ChatApplicationController::class);
+
         $userID = Auth::user()->id;
 
         $chatRooms = ChatRoom::with(['user1', 'user2'])
@@ -27,6 +29,8 @@ class ChatApplicationController extends Controller
 
     public function show(ChatRoom $chatRoom, $roomName)
     {
+        $this->authorize('view', ChatApplicationController::class);
+
         $userID = Auth::user()->id;
 
         $chatRoom = ChatRoom::with('chatMessages')

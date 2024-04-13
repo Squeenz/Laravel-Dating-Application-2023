@@ -5,6 +5,7 @@ use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\ChatRoomController;
 use App\Http\Controllers\ContentController;
 use App\Http\Controllers\DisplayBlockController;
+use App\Http\Controllers\IdentityController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\MatchingController;
@@ -46,6 +47,10 @@ Route::get('/policies', [PolicyController::class, 'index'])->name('policies.inde
 Route::get('/policies/{policy}', [PolicyController::class, 'show'])->name('policies.show');
 
 Route::middleware(['auth', 'verified'])->group(function() {
+    Route::get('/identity-verification/status', [IdentityController::class, 'index'])->name('identity.index');
+    Route::get('/identity-verification', [IdentityController::class, 'create'])->name('identity.create');
+    Route::post('/identity-verification/upload', [IdentityController::class, 'store'])->name('identity.store');
+
     Route::post('/report', [ReportController::class, 'store'])->name('report.store');
     Route::get('/suspended', [SuspensionController::class, 'index'])->name('suspended.index');
 

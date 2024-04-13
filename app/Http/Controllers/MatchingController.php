@@ -16,6 +16,8 @@ class MatchingController extends Controller
 {
     public function index(): Response
     {
+        $this->authorize('viewAny', MatchingController::class);
+
         $user = User::find(Auth::user()->id);
 
         $matches = Matching::where('user1_id', $user->id)
@@ -47,6 +49,8 @@ class MatchingController extends Controller
      */
     public function matchmaking()
     {
+        $this->authorize('view', MatchingController::class);
+
         $user = Auth::user();
 
         $userInterests = explode(',', $user->interests);
@@ -107,6 +111,8 @@ class MatchingController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('update', MatchingController::class);
+
         $validated = $request->validate([
             'user1_id' => 'required|integer',
             'user2_id' => 'required|integer',

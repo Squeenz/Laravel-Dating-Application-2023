@@ -10,6 +10,15 @@ import { usePermissions } from '@/Composables/usePermissions';
 import PermissionErrorMsg from '@/Components/PermissionErrorMsg.vue';
 
 const { hasPerm } = usePermissions();
+
+const props = defineProps({
+    users: Number,
+    likes: Number,
+    matches: Number,
+    totalTickets: Number,
+    openTickets: Number,
+    closedTickets: Number
+});
 </script>
 
 <template>
@@ -33,39 +42,34 @@ const { hasPerm } = usePermissions();
                     <div class="grid grid-flow-col">
                         <div class="bg-red-900 p-5 m-2 rounded-sm text-center">
                             <Users class="mx-auto" :size="40"/>
-                            <h1>Total Users: 2</h1>
-                        </div>
-
-                        <div class="bg-red-900 p-5 m-2 rounded-sm text-center">
-                            <MonitorDot class="mx-auto" :size="40"/>
-                            <h1>Online Users: 1</h1>
+                            <h1>Total Users: {{ props.users }}</h1>
                         </div>
 
                         <div class="bg-red-900 p-5 m-2 rounded-sm text-center">
                             <ThumbsUp class="mx-auto" :size="40"/>
-                            <h1>Total Likes: 2</h1>
+                            <h1>Total Likes: {{ props.likes }}</h1>
                         </div>
 
                         <div class="bg-red-900 p-5 m-2 rounded-sm text-center">
                             <Heart class="mx-auto" :size="40"/>
-                            <h1>Total Matches: 1</h1>
+                            <h1>Total Matches: {{ props.matches }}</h1>
                         </div>
                     </div>
 
                     <div class="grid grid-flow-col">
                         <div class="bg-red-900 p-5 m-2 rounded-sm text-center">
                             <Ticket class="mx-auto" :size="40"/>
-                            <h1>Total Tickets: 0</h1>
+                            <h1>Total Tickets: {{ props.totalTickets }}</h1>
                         </div>
 
                         <div class="bg-red-900 p-5 m-2 rounded-sm text-center">
                             <TicketX class="mx-auto" :size="40"/>
-                            <h1>Open Tickets: 0</h1>
+                            <h1>Open Tickets: {{ props.openTickets }}</h1>
                         </div>
 
                         <div class="bg-red-900 p-5 m-2 rounded-sm text-center">
                             <TicketCheck class="mx-auto" :size="40"/>
-                            <h1>Closed Tickets: 0</h1>
+                            <h1>Closed Tickets: {{ props.closedTickets }}</h1>
                         </div>
                     </div>
                 </div>
