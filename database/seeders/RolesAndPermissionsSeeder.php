@@ -20,6 +20,8 @@ class RolesAndPermissionsSeeder extends Seeder
 
         //Users control
         Permission::create(['name' => 'view users']);
+        Permission::create(['name' => 'view identities']);
+        Permission::create(['name' => 'verify users']);
         Permission::create(['name' => 'delete users']);
         Permission::create(['name' => 'edit users']);
 
@@ -79,7 +81,7 @@ class RolesAndPermissionsSeeder extends Seeder
             ->givePermissionTo(['access dashboard', 'view tickets', 'access dashboard statistics', 'view users', 'view suspensions', 'edit users', 'delete users', 'view page', 'add page component', 'edit page component', 'delete page component', 'view pages controller', 'add page controller', 'edit page controller', 'delete page controller', 'view reports', 'view policies', 'create policy', 'edit policy', 'delete policy', 'suspend', 'close report', 'send ticket message', 'update tickets', 'self assing ticket']);
 
         Role::create(['name' => 'support'])
-            ->givePermissionTo(['access dashboard', 'view tickets', 'view suspensions', 'view reports', 'suspend', 'view policies', 'close report', 'send ticket message', 'update tickets', 'self assing ticket']);
+            ->givePermissionTo(['access dashboard', 'view identities', 'verify users', 'view tickets', 'view suspensions', 'view reports', 'suspend', 'view policies', 'close report', 'send ticket message', 'update tickets', 'self assing ticket']);
 
         Role::create(['name' => 'user'])
             ->givePermissionTo(['use matchmaking', 'create ticket', 'create report', 'send ticket message', 'add photos', 'remove photos', 'see matches', 'use messages']);

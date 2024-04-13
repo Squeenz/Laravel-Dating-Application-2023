@@ -17,7 +17,6 @@ class IdentityController extends Controller
     public function index()
     {
         $this->authorize('viewAny', IdentityController::class);
-
         return Inertia::render('Identity/Index');
     }
 

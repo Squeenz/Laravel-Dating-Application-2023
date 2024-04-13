@@ -19,6 +19,7 @@ use App\Http\Controllers\StaffReportController;
 use App\Http\Controllers\StaffSupportTicketController;
 use App\Http\Controllers\StaffSuspensionController;
 use App\Http\Controllers\StaffUserController;
+use App\Http\Controllers\StaffVerifyUserController;
 use App\Http\Controllers\SupportTicketChatRoomMessagesController;
 use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\SuspensionController;
@@ -61,7 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/support/create', [SupportTicketController::class, 'store'])->name('support.store');
 });
 
-Route::middleware(['auth', 'verified', 'checkPhotos', 'checkSuspension'])->group(function() {
+Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function() {
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -69,7 +70,7 @@ Route::middleware(['auth', 'verified', 'checkPhotos', 'checkSuspension'])->group
     Route::get('/photos/remove', [PhotoController::class, 'remove'])->name('photos.remove');
 });
 
-Route::middleware(['auth', 'verified', 'checkPhotos', 'checkSuspension'])->group(function() {
+Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function() {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notification');
     Route::post('/notifications/create', [NotificationController::class, 'store'])->name('notification.store');
     Route::post('/notifications', [NotificationController::class, 'readNotifications'])->name('notification.read.all');
@@ -77,7 +78,7 @@ Route::middleware(['auth', 'verified', 'checkPhotos', 'checkSuspension'])->group
 });
 
 //Matchmaking system routes
-Route::middleware(['auth', 'verified', 'checkPhotos', 'checkSuspension'])->group(function() {
+Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function() {
     Route::get('/matches', [MatchingController::class, 'index'])->name('matches');
     Route::get('/matchmaking', [MatchingController::class, 'matchmaking'])->name('matchmaking');
     Route::post('/matchmaking', [MatchingController::class, 'store'])->name('matchmaking.store');
@@ -92,7 +93,7 @@ Route::middleware(['auth', 'verified', 'checkSuspension'])->group(function() {
 });
 
 //ChatApplication
-Route::middleware(['auth', 'verified', 'checkPhotos', 'checkSuspension'])->group(function(){
+Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function(){
     Route::get('/chat', [ChatApplicationController::class, 'index'])->name('chat.app');
     Route::get('/chat/{roomName}', [ChatApplicationController::class, 'show'])->name('chat.app.show');
     Route::post('/chat/message', [ChatMessageController::class, 'store'])->name('chat.store');
@@ -128,6 +129,10 @@ Route::middleware(['auth', 'checkSuspension'])->group(function(){
     Route::patch('/staff/users/{report}/update', [StaffReportController::class, 'update'])->name('staff.dashboard.report.update');
     Route::get('/staff/users/suspensions', [StaffSuspensionController::class, 'index'])->name('staff.dashboard.suspensions');
     Route::post('/staff/user/suspension', [StaffSuspensionController::class, 'store'])->name('staff.dashboard.suspension.store');
+
+    Route::get('/staff/users/verify', [StaffVerifyUserController::class, 'index'])->name('staff.dashboard.identity.index');
+    Route::get('/staff/users/verify/evidence/{filename}', [StaffVerifyUserController::class, 'getPrivateEvidence'])->name('staff.dashboard.identity.evidence');
+    Route::patch('/staff/users/verify/evidence/update/{identity}/{status}', [StaffVerifyUserController::class, 'update'])->name('staff.dashboard.identity.update');
 
     //Support Ticket Routes
     Route::get('/staff/tickets', [StaffSupportTicketController::class, 'index'])->name('staff.dashboard.tickets');

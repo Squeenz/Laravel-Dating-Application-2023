@@ -9,7 +9,7 @@ import { Link, router, usePage } from '@inertiajs/vue3';
 import { Bell, MessageCircleHeart, Heart, Camera, CameraOff, ListChecks, BellPlus, LifeBuoy } from 'lucide-vue-next';
 import { usePermissions } from '@/Composables/usePermissions';
 
-const { hasPerm } = usePermissions();
+const { hasRole, hasPerm } = usePermissions();
 
 const page = usePage();
 
@@ -54,6 +54,12 @@ const stopListening = () => {
                                 </NavLink>
                                 <NavLink v-if="hasPerm('create ticket')" :href="route('support.index')" :active="route().current('support.index')">
                                    Support Tickets
+                                </NavLink>
+                                <NavLink v-if="hasRole('pending verification') && $page.props.auth.verifiedSubmitted === 0"  :href="route('identity.create')" :active="route().current('identity.create')">
+                                    Verify Account
+                                </NavLink>
+                                <NavLink v-if="hasRole('pending verification') && $page.props.auth.verifiedSubmitted === 1"  :href="route('identity.index')" :active="route().current('identity.index')">
+                                    Verification Status
                                 </NavLink>
                             </div>
                         </div>

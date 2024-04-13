@@ -17,8 +17,6 @@ const { hasPerm } = usePermissions();
 const page = usePage();
 
 const showingNavigationDropdown = ref(false);
-
-console.log(page.props.auth.perms);
 </script>
 
 <template>
@@ -57,6 +55,12 @@ console.log(page.props.auth.perms);
                                             v-if="hasPerm('view users')"
                                             :href="route('staff.dashboard.users')" :active="route().current('staff.dashboard.users')">
                                             View
+                                        </NavDropdownLink>
+
+                                        <NavDropdownLink
+                                            v-if="!hasPerm('verify users')"
+                                            :href="route('staff.dashboard.users')" :active="route().current('staff.dashboard.users')">
+                                            Verify
                                         </NavDropdownLink>
 
                                         <NavDropdownLink

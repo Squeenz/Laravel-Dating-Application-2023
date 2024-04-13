@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckPhoto
+class CheckPhotosAndVerified
 {
     /**
      * Handle an incoming request.
@@ -20,9 +20,20 @@ class CheckPhoto
         //Returns the authenticated user
         $user = Auth::user();
 
+        if ($user->hasRole('pending verification'))
+        {
+            if (!$user->identity)
+            {
+                return redirect(route('identity.create'));
+            }
+            else
+            {
+                return redirect(route('identity.index'));
+            }
+        }
         //return the amount of photos the user has, if it's 0 and the user isn't currently in the route
         //we redirect them
-        if ($user->hasPhotos->count() == 0 && !$request->is('photos.create'))
+        else if ($user->hasPhotos->count() == 0 && !$request->is('photos.create'))
         {
             return redirect(route('photos.create'));
         }
