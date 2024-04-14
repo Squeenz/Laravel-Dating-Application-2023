@@ -33,7 +33,7 @@ class CheckPhotosAndVerified
         }
         //return the amount of photos the user has, if it's 0 and the user isn't currently in the route
         //we redirect them
-        else if ($user->hasPhotos->count() == 0 && !$request->is('photos.create'))
+        else if ($user->hasPhotos->count() == 0 && !$request->is('photos.create') && $user->hasRole('user'))
         {
             return redirect(route('photos.create'));
         }

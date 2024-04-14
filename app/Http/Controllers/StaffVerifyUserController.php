@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Identity;
-use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -16,6 +16,8 @@ class StaffVerifyUserController extends Controller
  */
     public function getPrivateEvidence($fileName)
     {
+        $this->authorize('viewEvidence', StaffVerifyUserController::class);
+
         $filePath = '/evidence/'. $fileName;
 
         if (Storage::disk('private')->exists($filePath))
@@ -31,17 +33,34 @@ class StaffVerifyUserController extends Controller
 
     public function index(): Response
     {
+        $this->authorize('viewAny', StaffVerifyUserController::class);
+
         $identities = Identity::with('user')->get();
 
         return Inertia::render('Staff/Users/Verify', [
             'identities' => $identities,
         ]);
+
     }
 
-    public function update(Request $request, Identity $identity, string $status)
+    public function update(Request $request, Identity $identity, string $status): RedirectResponse
     {
-        //add policy
+        $this->authorize('update', StaffVerifyUserController::class);
+
         $identity->valid = $status;
         $identity->update();
+
+        $user = $identity->user()->get()->first();
+
+        if ($status === '2')
+        {
+            $user->syncRoles('user');
+        }
+        else if ($status === '1')
+        {
+            $user->syncRoles('pending verification');
+        }
+
+        return redirect()->back();
     }
 }

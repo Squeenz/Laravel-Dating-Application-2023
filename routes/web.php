@@ -13,6 +13,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\PreferencesController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StaffReportController;
@@ -60,6 +61,10 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/support/message/send', [SupportTicketChatRoomMessagesController::class, 'store'])->name('support.message.store');
     Route::get('/support', [SupportTicketController::class, 'create'])->name('support.create');
     Route::post('/support/create', [SupportTicketController::class, 'store'])->name('support.store');
+});
+
+Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function() {
+    Route::get('/preferences', [PreferencesController::class, 'index'])->name('preferences.index');
 });
 
 Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function() {

@@ -43,12 +43,17 @@ const submit = () => {
     form.patch(route('staff.dashboard.identity.update', {
         identity: chosenIdentity.value.id,
         status: form.valid,
-    }));
+    }), {
+        onSuccess: () => {
+            states.identityToggle = false;
+            chosenIdentity.value = [];
+        }
+    });
 };
 </script>
 
 <template>
-    <Head title="identities" />
+    <Head title="Verify Users" />
 
     <StaffLayout>
         <template #header>
@@ -59,7 +64,7 @@ const submit = () => {
 
         <div>
             <div class="mx-auto">
-                <div v-if="!hasPerm('view identities')" class="shadow rounded-sm text-white">
+                <div v-if="hasPerm('view identities')" class="shadow rounded-sm text-white">
                     <div class="grid grid-flow-col">
                         <div class="bg-gray-700 grid grid-flow-col">
                             <div v-if="props.identities.length != 0"
@@ -88,8 +93,9 @@ const submit = () => {
                                         <td>{{ identity.user.first_name }}</td>
                                         <td>{{ identity.user.surname }}</td>
                                         <td>{{ identity.user.dob }}</td>
-                                        <td v-if="identity.valid === 0" class="text-gray-400">Unsolved</td>
-                                        <td v-else class="text-green-400">Resolved</td>
+                                        <td v-if="identity.valid === 0" class="text-gray-400">Not Verified</td>
+                                        <td v-else-if="identity.valid === 2" class="text-green-400">Valid</td>
+                                        <td v-else class="text-red-400">Not Valid</td>
                                         <td>{{ dayjs(identity.created_at).format('DD/MM/YYYY hh:mm:ss') }}</td>
                                         <td>{{ dayjs(identity.updated_at).format('DD/MM/YYYY hh:mm:ss') }}</td>
                                     </tr>
@@ -106,6 +112,11 @@ const submit = () => {
                                 class="m-[1rem] bg-gray-600 p-[2rem] rounded-sm">
                                 <X :size="20" class="float-right" @click="states.identityToggle = false"/>
                                 <h1 class="text-center">Identity Information</h1>
+
+                                <div class="my-2 p-2 bg-gray-800 rounded-sm">
+                                    <h1 class="text-orange-400 text-xl">Notice</h1>
+                                    <h1>Make sure that the user information is valid, otherwise invalidate the user</h1>
+                                </div>
 
                                 <div class="m-[1rem] bg-gray-500 p-[2rem] rounded-sm">
                                     <section class="p-2 bg-gray-700 rounded-sm text-center">
@@ -137,44 +148,32 @@ const submit = () => {
                                     </section>
 
                                     <section>
-                                        <h1>Self image</h1>
-                                        <img
-                                        class="h-[15rem] float-left"
-                                        :src="route('staff.dashboard.identity.evidence', chosenIdentity.self)"
-                                        :alt="chosenIdentity.self + ' evidence '"
-                                        draggable="false"
-                                        />
+                                         <div class="grid grid-cols-2">
+                                            <div>
+                                                <h1>Self image</h1>
+                                                <img
+                                                class="h-[100%]  float-left"
+                                                :src="route('staff.dashboard.identity.evidence', chosenIdentity.self)"
+                                                :alt="chosenIdentity.self + ' evidence '"
+                                                draggable="false"
+                                                />
+                                            </div>
 
-                                        <h1>Document image</h1>
-                                        <img
-                                        class="h-[15rem] float-left"
-                                        :src="route('staff.dashboard.identity.evidence', chosenIdentity.document)"
-                                        :alt="chosenIdentity.document + ' evidence '"
-                                        draggable="false"
-                                        />
-
+                                            <div>
+                                                <h1>Document image</h1>
+                                                <img
+                                                class="h-[100%] float-left"
+                                                :src="route('staff.dashboard.identity.evidence', chosenIdentity.document)"
+                                                :alt="chosenIdentity.document + ' evidence '"
+                                                draggable="false"
+                                                />
+                                            </div>
+                                        </div>
                                     </section>
 
-                                    <form @submit.prevent="submit">
-                                        <section
-                                            v-if="states.suspendToggle"
-                                            class="my-[1rem]">
-                                            <p>Select length to suspend the user for</p>
-                                            <div class="my-[1rem]">
-                                                <InputLabel class="text-white">From</InputLabel>
-                                                <TextInput class="w-full text-black" type="datetime-local" v-model="form.from"/>
-                                            </div>
-
-                                            <div class="my-[1rem]">
-                                                <InputLabel class="text-white">To</InputLabel>
-                                                <TextInput class="w-full text-black" type="datetime-local" v-model="form.to"/>
-                                            </div>
-                                        </section>
-
-                                        <section v-if="!hasPerm('close identity')">
-                                            <PrimaryButton class="w-full mt-2 justify-center" @click="verify(1)">Valid</PrimaryButton>
-                                            <PrimaryButton class="w-full mt-2 justify-center" @click="verify(0)">Invalid</PrimaryButton>
-                                        </section>
+                                    <form @submit.prevent="submit" class="mt-[2rem]" v-if="hasPerm('verify users')">
+                                        <PrimaryButton class="w-full mt-2 justify-center" @click="verify(2)">Valid</PrimaryButton>
+                                        <PrimaryButton class="w-full mt-2 justify-center" @click="verify(1)">Invalid</PrimaryButton>
                                     </form>
                                 </div>
 

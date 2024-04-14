@@ -58,7 +58,7 @@ const showingNavigationDropdown = ref(false);
                                         </NavDropdownLink>
 
                                         <NavDropdownLink
-                                            v-if="!hasPerm('verify users')"
+                                            v-if="hasPerm('verify users')"
                                             :href="route('staff.dashboard.users')" :active="route().current('staff.dashboard.users')">
                                             Verify
                                         </NavDropdownLink>

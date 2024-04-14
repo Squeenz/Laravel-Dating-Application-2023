@@ -34,6 +34,8 @@ class IdentityController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('update', IdentityController::class);
+
         $user = Auth::user();
 
         $validated = $request->validate([

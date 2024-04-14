@@ -15,6 +15,7 @@ use App\Http\Controllers\StaffReportController;
 use App\Http\Controllers\StaffSupportTicketController;
 use App\Http\Controllers\StaffSuspensionController;
 use App\Http\Controllers\StaffUserController;
+use App\Http\Controllers\StaffVerifyUserController;
 use App\Http\Controllers\SuspensionController;
 use App\Models\ChatMessage;
 use App\Models\Identity;
@@ -37,6 +38,7 @@ use App\Policies\StaffReportPolicy;
 use App\Policies\StaffSupportTicketPolicy;
 use App\Policies\StaffSuspensionPolicy;
 use App\Policies\StaffUserModerationPolicy;
+use App\Policies\StaffVerifyUserPolicy;
 use App\Policies\SupportTicketChatRoomPolicy;
 use App\Policies\SuspensionPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -63,6 +65,7 @@ class AuthServiceProvider extends ServiceProvider
         SupportTicketChatRoomMessages::class => SupportTicketChatRoomPolicy::class,
         SupportTicketChatRoom::class => SupportTicketChatRoomPolicy::class,
 
+        StaffVerifyUserController::class => StaffVerifyUserPolicy::class,
         StaffReportController::class => StaffReportPolicy::class,
         StaffSuspensionController::class => StaffSuspensionPolicy::class,
         StaffUserController::class => StaffUserModerationPolicy::class,

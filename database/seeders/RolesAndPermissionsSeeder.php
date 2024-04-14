@@ -78,7 +78,7 @@ class RolesAndPermissionsSeeder extends Seeder
             ->givePermissionTo(Permission::all());
 
         Role::create(['name' => 'moderator'])
-            ->givePermissionTo(['access dashboard', 'view tickets', 'access dashboard statistics', 'view users', 'view suspensions', 'edit users', 'delete users', 'view page', 'add page component', 'edit page component', 'delete page component', 'view pages controller', 'add page controller', 'edit page controller', 'delete page controller', 'view reports', 'view policies', 'create policy', 'edit policy', 'delete policy', 'suspend', 'close report', 'send ticket message', 'update tickets', 'self assing ticket']);
+            ->givePermissionTo(['access dashboard', 'view identities', 'verify users', 'view tickets', 'access dashboard statistics', 'view users', 'view suspensions', 'edit users', 'delete users', 'view page', 'add page component', 'edit page component', 'delete page component', 'view pages controller', 'add page controller', 'edit page controller', 'delete page controller', 'view reports', 'view policies', 'create policy', 'edit policy', 'delete policy', 'suspend', 'close report', 'send ticket message', 'update tickets', 'self assing ticket']);
 
         Role::create(['name' => 'support'])
             ->givePermissionTo(['access dashboard', 'view identities', 'verify users', 'view tickets', 'view suspensions', 'view reports', 'suspend', 'view policies', 'close report', 'send ticket message', 'update tickets', 'self assing ticket']);

@@ -23,4 +23,13 @@ class IdentityPolicy
     {
         return $user->hasRole('pending verification') && !$user->identity;
     }
+
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function update(User $user): bool
+    {
+        return $user->hasRole('pending verification') && !$user->identity;
+    }
 }
