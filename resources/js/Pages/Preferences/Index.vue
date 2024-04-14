@@ -13,7 +13,7 @@ const stage = ref(1);
 const rangeValues = ref({
    age:{
         min: 18,
-        max: 19,
+        max: 60,
    },
    locationDistance: 0,
 });

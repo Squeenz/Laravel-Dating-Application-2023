@@ -24,6 +24,7 @@ use App\Http\Controllers\StaffVerifyUserController;
 use App\Http\Controllers\SupportTicketChatRoomMessagesController;
 use App\Http\Controllers\SupportTicketController;
 use App\Http\Controllers\SuspensionController;
+use App\Http\Controllers\AttributeController;
 use App\Models\SupportTicketChatRoomMessages;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -63,7 +64,10 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/support/create', [SupportTicketController::class, 'store'])->name('support.store');
 });
 
-Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function() {
+Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function() {#
+    Route::get('/attributes', [AttributeController::class, 'index'])->name('attributes.index');
+    Route::post('/attributes', [AttributeController::class, 'store'])->name('attributes.store');
+
     Route::get('/preferences', [PreferencesController::class, 'index'])->name('preferences.index');
 });
 
