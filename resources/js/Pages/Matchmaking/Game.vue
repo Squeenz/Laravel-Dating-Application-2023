@@ -28,7 +28,7 @@ const setUserIndexAndPhotoCount = () => {
   currentPhotoIndex.value = 0;
 
   if (props.user.length !== 0 && props.potentialMatches[listIndex.value]) {
-    const userId = props.potentialMatches[listIndex.value].id;
+    const userId = props.potentialMatches[listIndex.value].user.information.id;
 
     // Check if potentialMatchesPhotos for the current user is available
     if (props.potentialMatchesPhotos[userId]) {
@@ -56,7 +56,7 @@ const reactToProfile = (status) => {
         states.processing = true;
         router.post(route('like.store', status), {
             user_id: props.user.id,
-            liked_user_id: props.potentialMatches[listIndex.value].id,
+            liked_user_id: props.potentialMatches[listIndex.value].user.information.id,
             is_like: status,
         }, {
             onSuccess: () => {
@@ -84,11 +84,15 @@ const reactToProfile = (status) => {
                 <PrimaryButton @click="reactToProfile(0)" class="w-[10rem] mr-[5rem] justify-center"> <HeartCrack :size="60"/> </PrimaryButton>
 
                 <div class="bg-white m-1 w-[30rem] rounded-md">
-                    <div :key="potentialMatches[listIndex].id">
+                    <div>
+                        <h1>Score: {{ potentialMatches[listIndex].user.scores }}</h1>
+                    </div>
+                    <div :key="potentialMatches[listIndex].user.information.id">
                         <img
-                            :src="route('photos.get', potentialMatchesPhotos[potentialMatches[listIndex].id][currentPhotoIndex].photo)"
-                            :alt="potentialMatches[listIndex].first_name + ' photo'"
+                            :src="route('photos.get', potentialMatchesPhotos[potentialMatches[listIndex].user.information.id][currentPhotoIndex].photo)"
+                            :alt="potentialMatches[listIndex].user.information.first_name + ' photo'"
                             class="m-auto"
+                            draggable="false"
                             width="300"
                         >
 
@@ -99,10 +103,10 @@ const reactToProfile = (status) => {
                         </div>
 
                         <div class="p-2">
-                            <h1>{{ potentialMatches[listIndex].first_name }} {{ potentialMatches[listIndex].surname }} ({{ potentialMatches[listIndex].username }})</h1>
+                            <h1>{{ potentialMatches[listIndex].user.information.first_name }} {{ potentialMatches[listIndex].user.information.surname }} ({{ potentialMatches[listIndex].user.information.username }})</h1>
                             <h1> Age: {{ potentialMatches[listIndex].dob }}</h1>
                             <h1>Interests</h1>
-                            <p>{{ potentialMatches[listIndex].interests }}</p>
+                            <p>{{ potentialMatches[listIndex].user.information.interests }}</p>
                         </div>
                     </div>
                 </div>

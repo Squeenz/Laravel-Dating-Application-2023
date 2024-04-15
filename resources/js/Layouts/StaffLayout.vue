@@ -44,7 +44,7 @@ const showingNavigationDropdown = ref(false);
                                 <h1 class="text-gray-500 text-[0.9rem]">Controls</h1>
 
                                 <NavDropdown
-                                    v-if="hasPerm('view reports') || hasPerm('view users') || hasPerm('view suspensions')">
+                                    v-if="hasPerm('view reports') || hasPerm('view users') || hasPerm('view suspensions') || hasPerm('verify users')">
                                     <template #trigger>
                                             <Users class="mr-1" :size="20"/>
                                             <h1>Users</h1>
@@ -59,7 +59,7 @@ const showingNavigationDropdown = ref(false);
 
                                         <NavDropdownLink
                                             v-if="hasPerm('verify users')"
-                                            :href="route('staff.dashboard.users')" :active="route().current('staff.dashboard.users')">
+                                            :href="route('staff.dashboard.identity.index')" :active="route().current('staff.dashboard.users')">
                                             Verify
                                         </NavDropdownLink>
 

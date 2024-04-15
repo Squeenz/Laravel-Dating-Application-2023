@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Events\UserNotification;
+use App\Models\Like;
+use DateTime;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -44,6 +46,126 @@ class MatchingController extends Controller
         ]);
     }
 
+    private function calculateAge(User $user)
+    {
+        $dob = new DateTime($user->dob);
+        $currentDate = new DateTime();
+        $age = $currentDate->diff($dob)->y;
+
+        return $age;
+    }
+
+    private function getAgeRangeValues(User $user)
+    {
+        $data = $user->preferences()->get()->toArray();
+
+        $ageData = [];
+
+        foreach ($data as $item)
+        {
+            foreach ($item as $columnName => $value)
+            {
+                if ($columnName === 'age_range')
+                {
+                    $range = explode(',', $value);
+
+                    $ageData = [
+                        'min' => $range[0],
+                        'max' => $range[1],
+                    ];
+                }
+            }
+        }
+
+        return $ageData;
+    }
+
+    private function getIndividualValuesFromList(User $user, bool $attrib)
+    {
+        // Retrieve attributes or preferences based on the $attrib parameter
+        $data = ($attrib)
+            ? $user->attributes()->get()->toArray()
+            : $user->preferences()->get()->toArray();
+
+        $excludedColumns = ['id', 'user_id', 'age_range', 'created_at', 'updated_at'];
+        $individualValues = [];
+
+        // Extract individual values from each row
+        foreach ($data as $item)
+        {
+            foreach ($item as $columnName => $value)
+            {
+                // Skip excluded columns
+                if (in_array($columnName, $excludedColumns))
+                {
+                    continue;
+                }
+
+                // If the value contains commas, split it into individual values
+                $values = explode(',', $value);
+                // Add each value to the individual values array
+                foreach ($values as $singleValue)
+                {
+                    $individualValues[] = $singleValue;
+                }
+            }
+        }
+
+        return $individualValues;
+    }
+
+    private function calculateSimilarityScore(User $user1, User $user2)
+    {
+        $user1Age = $this->calculateAge($user1);
+        $user2Age = $this->calculateAge($user2);
+
+        $user1AgeRange = $this->getAgeRangeValues($user1);
+        $user2AgeRange = $this->getAgeRangeValues($user2);
+
+        $user1Attributes = $this->getIndividualValuesFromList($user1, true);
+        $user1Preferences = $this->getIndividualValuesFromList($user1, false);
+        $user2Attributes = $this->getIndividualValuesFromList($user2, true);
+        $user2Preferences = $this->getIndividualValuesFromList($user2, false);
+
+        $ageScore = 0;
+        $attributeScore = 0;
+        $preferencesScore = 0;
+
+        $tolerance = 3;
+
+        foreach ($user1AgeRange as $key => $value)
+        {
+            if ($key === 'min' && $user2Age >= ($value - $tolerance) && isset($user1AgeRange['max']) && $user2Age <= ($user1AgeRange['max'] + $tolerance))
+            {
+                $ageScore++;
+            }
+            elseif ($key === 'max' && $user2Age <= ($value + $tolerance) && isset($user1AgeRange['min']) && $user2Age >= ($user1AgeRange['min'] - $tolerance))
+            {
+                $ageScore++;
+            }
+        }
+
+        // Calculate similarity score for attributes
+        foreach ($user1Attributes as $attribute) {
+            if (in_array($attribute, $user2Attributes)) {
+                $attributeScore++;
+            }
+        }
+
+        // Calculate similarity score for preferences
+        foreach ($user1Preferences as $preference) {
+            if ($preference === "Does not matter") {
+                continue;
+            }
+
+            if (in_array($preference, $user2Preferences)) {
+                $preferencesScore++;
+            }
+        }
+
+        return [$ageScore, $attributeScore, $preferencesScore];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -51,40 +173,56 @@ class MatchingController extends Controller
     {
         $this->authorize('view', MatchingController::class);
 
-        $user = Auth::user();
+        $currentUser = Auth::user();
+        $currentUserGenderPrefrence = $currentUser->preferences->gender;
 
-        $userInterests = explode(',', $user->interests);
+        // Get liked user IDs for the current user
+        $likedUserIds = Like::where('user_id', $currentUser->id)
+            ->pluck('liked_user_id')
+            ->toArray();
 
-        // Get users with similar interests excluding the current user
-        $potentialMatches = User::where('id', '!=', $user->id)
-        ->where(function ($query) use ($userInterests) {
-            foreach ($userInterests as $interest) {
-                $query->orWhere('interests', 'LIKE', '%' . $interest . '%');
+        $users = User::where('id', '!=', $currentUser->id)
+            ->whereNotIn('id', $likedUserIds)
+            ->get();
+
+        $potentialMatches = [];
+
+        foreach ($users as $user)
+        {
+            if ($user->gender === $currentUserGenderPrefrence || $currentUserGenderPrefrence === 'Does not matter') {
+                $scores = [
+                    'ageScore' => $this->calculateSimilarityScore($currentUser, $user)[0],
+                    'attributeScore' => $this->calculateSimilarityScore($currentUser, $user)[1],
+                    'preferencesScore' => $this->calculateSimilarityScore($currentUser, $user)[2],
+                ];
+
+                $potentialMatches[] = [
+                    'user' => [
+                        'information' => $user,
+                        'scores' => $scores
+                    ]
+                ];
             }
-        })
-        ->where(function ($query) use ($user) {
-            $query->whereNotExists(function ($subQuery) use ($user) {
-                $subQuery->select(DB::raw(1))
-                        ->from('likes')
-                        ->whereRaw('likes.liked_user_id = users.id')
-                        ->where('likes.user_id', $user->id);
-            });
-        })
-        ->get();
-
-        // Calculate the number of matching interests for each user
-        foreach ($potentialMatches as $potentialMatch) {
-            $potentialMatch->matchingInterestsCount = count(array_intersect(explode(',', $potentialMatch->interests), $userInterests));
         }
 
-        // Order the potential matches by the number of matching interests in descending order
-        $potentialMatches = $potentialMatches->sortByDesc('matchingInterestsCount');
+        usort($potentialMatches, function($a, $b) {
+            $totalScoreA = array_sum($a['user']['scores']);
+            $totalScoreB = array_sum($b['user']['scores']);
+
+            // Compare total scores
+            if ($totalScoreA === $totalScoreB) {
+                return 0;
+            }
+            return ($totalScoreA < $totalScoreB) ? 1 : -1;
+        });
 
         $potentialMatchesPhotos = [];
 
         foreach ($potentialMatches as $key => $potentialMatch)
         {
-            $potentialMatchHasPhotos = $potentialMatch->hasPhotos()->get();
+            $user = $potentialMatch['user']['information'];
+
+            $potentialMatchHasPhotos = $user->hasPhotos()->get();
 
             if ($potentialMatchHasPhotos->isEmpty())
             {
@@ -92,15 +230,12 @@ class MatchingController extends Controller
             }
             else
             {
-                $potentialMatchesPhotos[$potentialMatch->id] = $potentialMatch->photos;
+                $potentialMatchesPhotos[$user->id] = $user->photos;
             }
         }
 
-        // You can limit the results to 10 after sorting
-        $potentialMatches = $potentialMatches->take(10);
-
         return Inertia::render('Matchmaking/Game', [
-            'user' => Auth::user(),
+            'user' => $currentUser,
             'potentialMatches' => $potentialMatches,
             'potentialMatchesPhotos' => $potentialMatchesPhotos,
         ]);

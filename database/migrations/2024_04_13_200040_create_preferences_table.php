@@ -13,24 +13,23 @@ return new class extends Migration
     {
         Schema::create('preferences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user')->constrained('users')->onDelete('cascade');
-            $table->string('gender_preference')->nullable();
-            $table->json('age_range_preference')->nullable();
-            $table->string('location_preference')->nullable();
-            $table->json('game_preference')->nullable();
-            $table->json('movie_preference')->nullable();
-            $table->string('relationship_type_preference')->nullable();
-            $table->string('height_preference')->nullable();
-            $table->json('interest_hobby_preference')->nullable();
-            $table->json('language_preference')->nullable();
-            $table->string('smoking_drinking_preference')->nullable();
-            $table->string('religion_preference')->nullable();
-            $table->string('ethnicity_preference')->nullable();
-            $table->json('physical_appearance_preference')->nullable();
-            $table->string('pets_preference')->nullable();
-            $table->string('children_preference')->nullable();
-            $table->string('political_views_preference')->nullable();
-            $table->json('personality_traits_preference')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('gender');
+            $table->string('age_range');
+            $table->string('smoking_status');
+            $table->string('has_children');
+            $table->string('wants_children');
+            $table->string('education_level');
+            $table->string('occupation');
+            $table->string('height');
+            $table->string('body_type');
+            $table->string('ethnicity');
+            $table->string('religion');
+            $table->string('drinking_habits');
+            $table->string('dietary');
+            $table->string('exercise_frequency');
+            $table->string('languages_spoken');
+            $table->string('pets');
             $table->timestamps();
         });
     }

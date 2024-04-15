@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Preferences;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,7 +16,11 @@ class PreferencesController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Preferences/Index');
+        $allOptions = Preferences::getAllOptions();
+
+        return Inertia::render('Preferences/Index',[
+            'allOptions' => $allOptions,
+        ]);
     }
 
     /**
@@ -28,9 +34,16 @@ class PreferencesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+        $user = Auth::user()->id;
+
+        $validated = $request->validate(Preferences::rules());
+        $validated['user_id'] = $user;
+
+        Preferences::create($validated);
+
+        return redirect(route('matchmaking'));
     }
 
     /**

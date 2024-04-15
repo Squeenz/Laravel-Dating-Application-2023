@@ -4,6 +4,7 @@ import { Head, router, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import { Heart, HeartCrack, ChevronLeft, ChevronRight } from 'lucide-vue-next';
@@ -33,9 +34,6 @@ const form = useForm({
     religion: '',
     hobbies: '',
 });
-
-const selectedInterests = ref([]);
-const selectedPersonalityTraits = ref([]);
 
 const sectionTitles = [];
 const sectionOptions = [];
@@ -79,10 +77,7 @@ const selectedItem = (fieldName, option, type) => {
     } else {
         form[fieldName] = option;
     }
-
-    console.log(form);
 };
-
 </script>
 
 <template>
@@ -102,6 +97,7 @@ const selectedItem = (fieldName, option, type) => {
                     :key="section"
                     class="m-2">
                     <InputLabel class="text-white my-1" :for="section" :value="section"/>
+                    <InputError v-if="form.hasErrors"  :message="form.errors[sectionTitles[index]]"/>
                     <div class="grid grid-cols-5 gap-2 text-cente">
                         <button v-for="option in sectionOptions[index].options"
                             :key="option"

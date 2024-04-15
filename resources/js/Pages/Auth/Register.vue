@@ -12,46 +12,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relativeTime);
 
-let stage = ref(1);
-let confirmBox = ref(false);
-
-const interests = [
-  "Hiking and nature",
-  "Camping and stargazing",
-  "Rock climbing",
-  "Experimental cooking",
-  "Foodie adventures",
-  "Farmers' markets",
-  "Yoga and meditation",
-  "Running and marathons",
-  "CrossFit",
-  "Art galleries and museums",
-  "Theater and musicals",
-  "Painting and pottery",
-  "Travel exploration",
-  "Backpacking adventures",
-  "Road trips",
-  "Book club enthusiast",
-  "Literary events",
-  "Independent bookstores",
-  "Concerts and festivals",
-  "Learning music instruments",
-  "Vinyl records",
-  "Board games",
-  "Video game marathons",
-  "Gaming communities",
-  "Community service",
-  "Animal shelter volunteer",
-  "Fundraising for causes",
-  "Online courses",
-  "Language exchange",
-  "Science and tech events",
-  "Live sports",
-  "Recreational sports",
-  "Fantasy sports leagues",
-  "Sustainable living",
-  "Upcycling and DIY",
-];
+const stage = ref(1);
+const confirmInformationBox = ref(false);
+const agreeWithPolicies = ref(false);
 
 const form = useForm({
     username: '',
@@ -62,7 +25,6 @@ const form = useForm({
     bio: '',
     email: '',
     location: '',
-    interests: '',
     password: '',
     password_confirmation: '',
 });
@@ -260,22 +222,6 @@ const dateOfBirthCheck = (dob) => {
                         />
                         <InputError class="mt-2" :message="form.errors.bio"/>
                     </div>
-
-                    <div>
-                        <InputLabel class="text-white my-1" for="interests" value="Interests"/>
-
-                        <div class="grid grid-cols-5 gap-2 text-center">
-                            <button v-for="n in interests"
-                                :key="n"
-                                :class="{'bg-red-800': form.interests.includes(n), 'bg-gray-900': !form.interests.includes(n)}"
-                                class="items-center px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition ease-in-out duration-150"
-                                type="button"
-                                @click="addInterest(n)"
-                                >
-                                {{ n }}
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
                 <div v-if="stage === 3">
@@ -286,10 +232,16 @@ const dateOfBirthCheck = (dob) => {
                             <InputError v-if="form.hasErrors" class="mt-2" :message="form.errors[field]"/>
                         </div>
 
+                        <section class="text-center">
+                            <checkbox id="confirmBox" @click="confirmInformationBox = !confirmInformationBox" v-model:checked="confirmInformationBox"/>
+                            <label for="checkbox" class="text-red-600"> I confirm the details are correct</label>
+                        </section>
 
-                    <!--<input type="checkbox" id="confirmBox" @click="confirmBox = !confirmBox" v-model="confirmBox"/> -->
-                        <checkbox id="confirmBox" @click="confirmBox = !confirmBox" v-model:checked="confirmBox"/>
-                        <label for="checkbox" class="text-red-600"> I confirm the details are correct</label>
+                        <section class="text-center">
+                            <checkbox id="confirmBox" @click="agreeWithPolicies = !agreeWithPolicies " v-model:checked="agreeWithPolicies "/>
+                            <label for="checkbox" class="text-red-600"> I agree with the policies in place</label>
+                            <a  class="text-white" :href="route('policies.index')" target="_blank"> (Click Here To Read)</a>
+                        </section>
                     </div>
                 </div>
 
@@ -301,7 +253,7 @@ const dateOfBirthCheck = (dob) => {
                         <PrimaryButton v-if="stage != 3" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('next')">
                             Next Step
                         </PrimaryButton>
-                        <PrimaryButton v-else class="ms-4" :class="{ 'opacity-25': !confirmBox }" :disabled=" !confirmBox" :on-click="dateOfBirthCheck(form.dob)">
+                        <PrimaryButton v-else class="ms-4" :class="{ 'opacity-25': !(confirmInformationBox && agreeWithPolicies) }" :disabled="!(confirmInformationBox && agreeWithPolicies)" :on-click="dateOfBirthCheck(form.dob)">
                             Register
                         </PrimaryButton>
                     </div>

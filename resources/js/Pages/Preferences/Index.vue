@@ -1,123 +1,60 @@
 <script setup>
-import { ref, onMounted, watch, reactive } from 'vue';
-import { Head, router } from '@inertiajs/vue3';
+import { ref, onMounted, watch, reactive,  } from 'vue';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import { Heart, HeartCrack, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
-const stage = ref(1);
-
-const rangeValues = ref({
-   age:{
-        min: 18,
-        max: 60,
-   },
-   locationDistance: 0,
+const props = defineProps({
+    allOptions: Object,
 });
 
-const selectedInterests = ref([]);
-const selectedPersonalityTraits = ref([]);
+const minAge = ref(18);
+const maxAge = ref(60);
 
-const genders = ref([
-    'Male',
-    'Female',
-    'Other',
-]);
+const form = useForm({
+    gender: '',
+    age_range: minAge.value + ',' + maxAge.value,
+    smoking_status: '',
+    drinking_habits: '',
+    body_type: '',
+    exercise_frequency: '',
+    pets: '',
+    dietary: '',
+    languages_spoken: '',
+    has_children: '',
+    wants_children: '',
+    education_level: '',
+    occupation: '',
+    height: '',
+    ethnicity: '',
+    religion: '',
+});
 
-const interests = [
-  "Hiking and nature",
-  "Camping and stargazing",
-  "Rock climbing",
-  "Experimental cooking",
-  "Foodie adventures",
-  "Farmers' markets",
-  "Yoga and meditation",
-  "Running and marathons",
-  "CrossFit",
-  "Art galleries and museums",
-  "Theater and musicals",
-  "Painting and pottery",
-  "Travel exploration",
-  "Backpacking adventures",
-  "Road trips",
-  "Book club enthusiast",
-  "Literary events",
-  "Independent bookstores",
-  "Concerts and festivals",
-  "Learning music instruments",
-  "Vinyl records",
-  "Board games",
-  "Video game marathons",
-  "Gaming communities",
-  "Community service",
-  "Animal shelter volunteer",
-  "Fundraising for causes",
-  "Online courses",
-  "Language exchange",
-  "Science and tech events",
-  "Live sports",
-  "Recreational sports",
-  "Fantasy sports leagues",
-  "Sustainable living",
-  "Upcycling and DIY",
-];
+const sectionTitles = [];
+const sectionOptions = [];
 
-const personalityTraits = [
-    "Outgoing",
-    "Introverted",
-    "Ambitious",
-    "Easygoing",
-    "Adventurous",
-    "Spontaneous",
-    "Intellectual",
-    "Creative",
-    "Humorous",
-    "Optimistic",
-    "Pessimistic",
-    "Caring",
-    "Compassionate",
-    "Empathetic",
-    "Analytical",
-    "Practical",
-    "Emotional",
-    "Rational",
-    "Confident",
-    "Insecure",
-    "Assertive",
-    "Passive",
-    "Independent",
-    "Dependent",
-    "Sociable",
-    "Reserved",
-    "Sensible",
-    "Sensual",
-    "Traditional",
-    "Open-minded",
-    "Liberal",
-    "Conservative",
-    "Risk-taker",
-    "Risk-averse",
-    "Ambiverted",
-    "Assertive",
-    "Passive",
-    "Friendly",
-    "Warm",
-    "Cold",
-    "Generous",
-    "Stingy",
-    "Trusting",
-    "Skeptical",
-    "Patient",
-    "Impatient",
-    "Reliable",
-    "Unreliable"
-];
+for (const key in props.allOptions) {
+    if (Object.hasOwnProperty.call(props.allOptions, key)) {
+        sectionTitles.push(key); // Push the title (key)
+        sectionOptions.push(props.allOptions[key]); // Push the values
+    }
+}
 
+// Modify sectionTitles array to capitalize words separated by underscores
+const modifiedTitles = sectionTitles.map((title, index) => {
+    if (title.includes('_')) {
+        return title.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    } else {
+        return title.charAt(0).toUpperCase() + title.slice(1); // Capitalize first letter if no underscores
+    }
+});
 
-const addInterest = (n) => {
+const addSelectedItem = (array, n) => {
     if (!selectedInterests.value.includes(n)){
         selectedInterests.value.push(n);
     } else {
@@ -125,13 +62,22 @@ const addInterest = (n) => {
     }
 }
 
-const addPersonalityTrait = (n) => {
-    if (!selectedPersonalityTraits.value.includes(n)){
-        selectedPersonalityTraits.value.push(n);
+const selectedItem = (fieldName, option, type) => {
+    if (type === false && form[fieldName] === option) {
+        form[fieldName] = ''; // Reset to empty string if the same option is clicked again
+    } else if (type !== false) {
+        const optionsArray = form[fieldName].split(',');
+        const optionIndex = optionsArray.indexOf(option);
+        if (optionIndex !== -1) {
+            optionsArray.splice(optionIndex, 1); // Remove the option from the array
+            form[fieldName] = optionsArray.join(','); // Join the remaining options back into a string
+        } else {
+            form[fieldName] += (form[fieldName] ? ',' : '') + option; // Add the option if it's not already present
+        }
     } else {
-        selectedPersonalityTraits.value.splice(selectedPersonalityTraits.value.indexOf(n), 1);
+        form[fieldName] = option;
     }
-}
+};
 </script>
 
 <template>
@@ -145,29 +91,17 @@ const addPersonalityTrait = (n) => {
                 <p class="text-gray-500">This will ensure we find the best matches for you</p>
             </div>
 
-            <form @submit.prevent="submit" :key="stage">
-
-                <div class="w-full flex justify-center">
-                    <label v-for="gender in genders"
-                        :key="gender"
-                        class="p-1 rounded-sm m-[auto]">
-                        <Checkbox name="remember"/>
-                        <span class="m-1 text-white">{{ gender }}</span>
-                    </label>
-                </div>
-
+            <form @submit.prevent="form.post(route('preferences.store'))">
                 <div class="m-2 rounded-sm p-6 bg-red-900">
                     <InputLabel class="text-white my-1" for="age_range_preference" value="Age"/>
-                    <h1 class="text-white">Min: {{ rangeValues.age.min }}</h1>
-                    <TextInput class="accent-gray-500 h-2 w-full" type="range" min="18" :max="rangeValues.age.max - 1" v-model="rangeValues.age.min" step="1"/>
+                    <h1 class="text-white">Min: {{ minAge }}</h1>
+                    <TextInput class="accent-gray-500 h-2 w-full" type="range" min="18" :max="maxAge + 1" v-model="minAge" step="1"/>
 
-                    <h1 class="text-white">Max: {{ rangeValues.age.max }}</h1>
-                    <TextInput type="range" class="accent-gray-500 h-2 w-full" :min="rangeValues.age.min" max="60" v-model="rangeValues.age.max" step="1"/>
-
-                    <InputError class="mt-2" />
+                    <h1 class="text-white">Max: {{ maxAge }}</h1>
+                    <TextInput type="range" class="accent-gray-500 h-2 w-full" :min="minAge" max="60" v-model="maxAge" step="1"/>
                 </div>
 
-                <div class="m-2 rounded-sm p-6 bg-red-900">
+                <!-- <div class="m-2 rounded-sm p-6 bg-red-900">
 
                     <InputLabel class="text-white my-1" for="location_preference" value="Maximum Distance for Matches"/>
                     <div class="relative mb-6">
@@ -179,47 +113,25 @@ const addPersonalityTrait = (n) => {
                         <span class="text-sm text-white absolute end-0 -bottom-6">Max (Any)</span>
                     </div>
 
-                    <InputError class="mt-2" />
-                </div>
+                </div> -->
 
-                <div class="m-2">
-                    <InputLabel class="text-white my-1" for="interests_hobbies_preference" value="Interests & Hobbies"/>
-                    <!-- <TextInput
-                        id="location_preference"
-                        type="text"
-                        class="mt-1 block w-full"
-
-                        autofocus
-                        autocomplete="location_preference"
-                    /> -->
+                <div
+                    v-for="(section, index) in modifiedTitles"
+                    :key="section"
+                    class="m-2">
+                    <InputLabel class="text-white my-1" :for="section" :value="section"/>
+                    <InputError v-if="form.hasErrors"  :message="form.errors[sectionTitles[index]]"/>
                     <div class="grid grid-cols-5 gap-2 text-cente">
-                        <button v-for="n in interests"
-                            :key="n"
-                            :class="{'bg-red-800': selectedInterests.includes(n), 'bg-gray-900': !selectedInterests.includes(n)}"
+                        <button v-for="option in sectionOptions[index].options"
+                            :key="option"
+                            :class="{'bg-red-800': form[sectionTitles[index]] != '' && form[sectionTitles[index]].includes(option), 'bg-gray-900': !form[sectionTitles[index]].includes(option)}"
                             class=" px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition ease-in-out duration-150"
                             type="button"
-                            @click="addInterest(n)"
+                            @click="selectedItem(sectionTitles[index], option, sectionOptions[index].multiple)"
                             >
-                            {{ n }}
+                            {{ option }}
                         </button>
                     </div>
-                    <InputError class="mt-2" />
-                </div>
-
-                <div class="m-2">
-                    <InputLabel class="text-white my-1" for="personality_traits_preference" value="Personality Traits"/>
-                    <div class="grid grid-cols-5 gap-2 text-cente">
-                        <button v-for="n in personalityTraits"
-                            :key="n"
-                            :class="{'bg-red-800': selectedPersonalityTraits.includes(n), 'bg-gray-900': !selectedPersonalityTraits.includes(n)}"
-                            class=" px-4 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition ease-in-out duration-150"
-                            type="button"
-                            @click="addPersonalityTrait(n)"
-                            >
-                            {{ n }}
-                        </button>
-                    </div>
-                    <InputError class="mt-2" />
                 </div>
 
                 <PrimaryButton class="mt-2 flex justify-center w-full">submit</PrimaryButton>

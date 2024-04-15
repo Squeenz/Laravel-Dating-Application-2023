@@ -69,6 +69,7 @@ Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspensio
     Route::post('/attributes', [AttributeController::class, 'store'])->name('attributes.store');
 
     Route::get('/preferences', [PreferencesController::class, 'index'])->name('preferences.index');
+    Route::post('/preferences', [PreferencesController::class, 'store'])->name('preferences.store');
 });
 
 Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function() {

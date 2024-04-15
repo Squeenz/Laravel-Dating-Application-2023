@@ -11,20 +11,19 @@ class Attribute extends Model
 {
     use HasFactory;
 
-    // Define constant arrays for attribute options
-    public const SMOKING_STATUSES = [
+    private const SMOKING_STATUSES = [
         'Non-smoker',
         'Occasional smoker',
         'Regular smoker'
     ];
 
-    public const DRINKING_HABITS = [
+    private const DRINKING_HABITS = [
         'Non-drinker',
         'Social drinker',
         'Heavy drinker'
     ];
 
-    public const BODY_TYPES = [
+    private const BODY_TYPES = [
         'Slim',
         'Athletic',
         'Average',
@@ -33,20 +32,20 @@ class Attribute extends Model
         'Overweight'
     ];
 
-    public const EXERCISE_FREQUENCIES = [
+    private const EXERCISE_FREQUENCIES = [
         'Rarely',
         'Occasionally',
         'Regularly'
     ];
 
-    public const PETS_OPTIONS = [
+    private const PETS_OPTIONS = [
         'Dog',
         'Cat',
         'Other',
         'None'
     ];
 
-    public const DIETARY_OPTIONS = [
+    private const DIETARY_OPTIONS = [
         'Vegetarian',
         'Vegan',
         'Gluten-free',
@@ -54,7 +53,7 @@ class Attribute extends Model
         'Omnivore'
     ];
 
-    public const LANGUAGE_OPTIONS = [
+    private const LANGUAGE_OPTIONS = [
         'English',
         'Spanish',
         'French',
@@ -65,7 +64,7 @@ class Attribute extends Model
         'Japanese',
     ];
 
-    public const MUSIC_GENRES = [
+    private const MUSIC_GENRES = [
         'Pop',
         'Rock',
         'Hip-hop',
@@ -77,7 +76,7 @@ class Attribute extends Model
         'Folk',
     ];
 
-    public const MOVIES_GENRES = [
+    private const MOVIES_GENRES = [
         'Action',
         'Comedy',
         'Drama',
@@ -89,7 +88,7 @@ class Attribute extends Model
         'Documentary',
     ];
 
-    public const BOOKS_GENRES = [
+    private const BOOKS_GENRES = [
         'Fiction',
         'Non-fiction',
         'Mystery',
@@ -102,7 +101,7 @@ class Attribute extends Model
         'Other'
     ];
 
-    public const TRAVEL_OPTIONS = [
+    private const TRAVEL_OPTIONS = [
         'Beach',
         'Mountains',
         'City',
@@ -116,18 +115,18 @@ class Attribute extends Model
         'Budget'
     ];
 
-    public const HAS_CHILDREN_OPTIONS = [
+    private const HAS_CHILDREN_OPTIONS = [
         'Yes',
         'No'
     ];
 
-    public const WANTS_CHILDREN_OPTIONS = [
+    private const WANTS_CHILDREN_OPTIONS = [
         'Yes',
         'No',
         'Undecided'
     ];
 
-    public const EDUCATION_LEVELS = [
+    private const EDUCATION_LEVELS = [
         'High school',
         'Associate degree',
         'Bachelor\'s degree',
@@ -136,7 +135,7 @@ class Attribute extends Model
         'Other'
     ];
 
-    public const OCCUPATION_OPTIONS = [
+    private const OCCUPATION_OPTIONS = [
         'Student',
         'Professional',
         'Manager',
@@ -146,13 +145,13 @@ class Attribute extends Model
         'Retired',
     ];
 
-    public const HEIGHT_OPTIONS = [
+    private const HEIGHT_OPTIONS = [
         'Short',
         'Average',
         'Tall'
     ];
 
-    public const BODY_TYPE_OPTIONS = [
+    private const BODY_TYPE_OPTIONS = [
         'Slim',
         'Athletic',
         'Average',
@@ -161,7 +160,7 @@ class Attribute extends Model
         'Overweight'
     ];
 
-    public const ETHNICITY_OPTIONS = [
+    private const ETHNICITY_OPTIONS = [
         'Caucasian',
         'African American',
         'Hispanic',
@@ -171,7 +170,7 @@ class Attribute extends Model
         'Other'
     ];
 
-    public const RELIGION_OPTIONS = [
+    private const RELIGION_OPTIONS = [
         'Christianity',
         'Islam',
         'Judaism',
@@ -182,7 +181,7 @@ class Attribute extends Model
         'None'
     ];
 
-    public const HOBBIES_OPTIONS = [
+    private const HOBBIES_OPTIONS = [
         'Reading',
         'Sports',
         'Cooking',
@@ -254,29 +253,29 @@ class Attribute extends Model
     public static function rules()
     {
         return [
-            'smoking_status' => 'nullable|string|in:' . implode(',', self::SMOKING_STATUSES),
-            'drinking_habits' => 'nullable|string|in:' . implode(',', self::DRINKING_HABITS),
-            'has_children' => 'nullable|string|in:' . implode(',', self::HAS_CHILDREN_OPTIONS),
-            'wants_children' => 'nullable|string|in:' . implode(',', self::WANTS_CHILDREN_OPTIONS),
-            'education_level' => ['nullable', 'string', new CheckArrayString(self::EDUCATION_LEVELS)],
-            'occupation' => ['nullable', 'string', new CheckArrayString(self::OCCUPATION_OPTIONS)],
-            'height' => 'nullable|string|in:' . implode(',', self::HEIGHT_OPTIONS),
-            'body_type' => 'nullable|string|in:' . implode(',', self::BODY_TYPE_OPTIONS),
-            'ethnicity' => 'nullable|string|in:' . implode(',', self::ETHNICITY_OPTIONS),
-            'religion' => 'nullable|string|in:' . implode(',', self::RELIGION_OPTIONS),
-            'dietary' => 'nullable|string|in:' . implode(',', self::DIETARY_OPTIONS),
-            'exercise_frequency' => 'nullable|string|in:' . implode(',', self::EXERCISE_FREQUENCIES),
-            'hobbies' => [ 'nullable', 'string', new CheckArrayString(self::HOBBIES_OPTIONS)],
-            'languages_spoken' => [ 'nullable', 'string', new CheckArrayString(self::LANGUAGE_OPTIONS)],
-            'pets' => [ 'nullable', 'string', new CheckArrayString(self::PETS_OPTIONS)],
-            'music_genres' => [ 'nullable', 'string', new CheckArrayString(self::MUSIC_GENRES)],
-            'movies_genres' => [ 'nullable', 'string', new CheckArrayString(self::MOVIES_GENRES)],
-            'books_genres' => [ 'nullable', 'string', new CheckArrayString(self::BOOKS_GENRES)],
-            'travel' => [ 'nullable', 'string', new CheckArrayString(self::TRAVEL_OPTIONS)]
+            'smoking_status' => 'required|string|in:' . implode(',', self::SMOKING_STATUSES),
+            'drinking_habits' => 'required|string|in:' . implode(',', self::DRINKING_HABITS),
+            'has_children' => 'required|string|in:' . implode(',', self::HAS_CHILDREN_OPTIONS),
+            'wants_children' => 'required|string|in:' . implode(',', self::WANTS_CHILDREN_OPTIONS),
+            'education_level' => ['required', 'string', new CheckArrayString(self::EDUCATION_LEVELS)],
+            'occupation' => ['required', 'string', new CheckArrayString(self::OCCUPATION_OPTIONS)],
+            'height' => 'required|string|in:' . implode(',', self::HEIGHT_OPTIONS),
+            'body_type' => 'required|string|in:' . implode(',', self::BODY_TYPE_OPTIONS),
+            'ethnicity' => 'required|string|in:' . implode(',', self::ETHNICITY_OPTIONS),
+            'religion' => 'required|string|in:' . implode(',', self::RELIGION_OPTIONS),
+            'dietary' => 'required|string|in:' . implode(',', self::DIETARY_OPTIONS),
+            'exercise_frequency' => 'required|string|in:' . implode(',', self::EXERCISE_FREQUENCIES),
+            'hobbies' => ['required', 'string', new CheckArrayString(self::HOBBIES_OPTIONS)],
+            'languages_spoken' => ['required', 'string', new CheckArrayString(self::LANGUAGE_OPTIONS)],
+            'pets' => ['required', 'string', new CheckArrayString(self::PETS_OPTIONS)],
+            'music_genres' => ['required', 'string', new CheckArrayString(self::MUSIC_GENRES)],
+            'movies_genres' => ['required', 'string', new CheckArrayString(self::MOVIES_GENRES)],
+            'books_genres' => ['required', 'string', new CheckArrayString(self::BOOKS_GENRES)],
+            'travel' => ['required', 'string', new CheckArrayString(self::TRAVEL_OPTIONS)]
         ];
     }
 
-/**
+    /**
      * Get all attribute options in JSON format.
      *
      * @return array
