@@ -19,6 +19,8 @@ class PhotoController extends Controller
      */
     public function getPrivatePhotos($fileName)
     {
+        $this->authorize('viewRemove', Photo::class);
+
         $filePath = '/photos/'. $fileName;
 
         if (Storage::disk('private')->exists($filePath))
@@ -34,12 +36,18 @@ class PhotoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Response
+    public function index(): Response
     {
         $this->authorize('viewAdd', Photo::class);
 
-        return Inertia::render('Photos/Add', [
-            'numberPhotos' => Photo::where('user_id', Auth::user()->id)->count(),
+        $user = Auth::user();
+
+        $userPhotoCount = $user->photos->count();
+        $userPhotos = $user->photos;
+
+        return Inertia::render('Photos/Manage', [
+            'numberPhotos' => $userPhotoCount,
+            'userPhotos' => $user->photos,
         ]);
     }
 
@@ -49,6 +57,9 @@ class PhotoController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', Photo::class);
+
+        $user = Auth::user();
+        $userPhotoCount = $user->photos->count();
 
         $validated = $request->validate([
             'photo.*' => 'required|image|mimes:jpeg,png,jpg'
@@ -70,53 +81,48 @@ class PhotoController extends Controller
                 }
             }
 
-            //if the file is true we store the items
-            if ($isValid) {
-                //for each file, we store it into storage/private/photos
-                foreach ($files as $file) {
-                    $file->store('photos', 'private');
+                //if the file is true we store the items
+                if ($isValid) {
+                    //for each file, we store it into storage/private/photos
+                    foreach ($files as $position => $file) {
+                        $file->store('photos', 'private');
 
-                    $validated['user_id'] = Auth::user()->id;
-                    $validated['photo'] = $file->hashName();
+                        $validated['user_id'] = $user->id;
+                        $validated['photo'] = $file->hashName();
+                        $validated['primary'] = ($userPhotoCount === 0 && $position === 0) ? 1 : 0;
 
-                    //using the photo model we create the new item in the database and we pass,
-                    //auth id and the hashed file name
-                    Photo::create($validated);
+                        //using the photo model we create the new item in the database and we pass,
+                        //auth id and the hashed file name
+                        Photo::create($validated);
+                    }
+
+                    return redirect(route('photos.manage'));
                 }
-
-                //then redirect the user to the dashboard
-                return redirect(route('matchmaking'));
             }
-        }
-        else
-        {
-            // if no photos are uplaoded we return them to the same page
-            return redirect(route('photos.create'));
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Photo $photo)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Photo $photo)
-    {
-        //
+            else
+            {
+                // if no photos are uplaoded we return them to the same page
+                return redirect(route('photos.manage'));
+            }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Photo $photo)
+    public function update(Request $request, Photo $photo): RedirectResponse
     {
-        //
+        $this->authorize('update', $photo);
+
+        $user = Auth::user();
+
+        Photo::where('user_id', $user->id)
+            ->where('primary', 1)
+            ->update(['primary' => 0]);
+
+        $photo->primary = 1;
+        $photo->save();
+
+        return redirect(route('photos.manage'));
     }
 
     /**
@@ -146,6 +152,6 @@ class PhotoController extends Controller
         //delete the record from the datbase using the model
         $photo->delete();
 
-        return redirect(route('photos.remove'));
+        return redirect(route('photos.manage'));
     }
 }

@@ -16,6 +16,8 @@ const stage = ref(1);
 const confirmInformationBox = ref(false);
 const agreeWithPolicies = ref(false);
 
+const genderOptions = ref(['Male','Female','Other']);
+
 const form = useForm({
     username: '',
     first_name: '',
@@ -28,6 +30,10 @@ const form = useForm({
     password: '',
     password_confirmation: '',
 });
+
+const selectGender = (gender) => {
+    form.gender = gender;
+}
 
 const submit = () => {
     form.post(route('register'), {
@@ -90,127 +96,30 @@ const dateOfBirthCheck = (dob) => {
 
         <div class="w-full sm:max-w-3xl mt-6 px-6 py-4 bg-[#0A0A0A] shadow-md overflow-hidden sm:rounded-lg mx-auto">
             <h1 class="text-[2rem] text-center text-white">Register</h1>
-            <p class="text-center text-gray-200">Step {{ stage }} out of 3</p>
             <form @submit.prevent="submit" :key="stage" enctype="multipart/form-data">
                 <div v-if="stage === 1">
-                    <div>
-                        <InputLabel class="text-white my-1" for="gender" value="Gender"/>
-                        <TextInput
-                            id="gender"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.gender"
-                            autofocus
-                            autocomplete="gender"
-                        />
-                        <InputError class="mt-2" :message="form.errors.gender"/>
+                        <div>
+                            <InputLabel class="text-white my-1" for="gender" value="Gender"/>
+                            <InputError class="mt-2" :message="form.errors.gender"/>
+                            <div class="flex">
+                                <div
+                                v-for="gender in genderOptions"
+                                :key="gender"
+                                class="m-2 mx-auto">
+                                <button
+                                    :class="{'bg-red-800': form.gender.includes(gender), 'bg-gray-900': !form.gender.includes(gender)}"
+                                    class="px-[4rem] py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition ease-in-out duration-150"
+                                    type="button"
+                                    @click="selectGender(gender)"
+                                    >
+                                    {{ gender }}
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div>
-                        <InputLabel class="text-white my-1" for="firstname" value="First name"/>
-                        <TextInput
-                            id="firstname"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.first_name"
-                            autofocus
-                            autocomplete="firstname"
-                        />
-                        <InputError class="mt-2" :message="form.errors.first_name"/>
-                    </div>
-
-                    <div>
-                        <InputLabel class="text-white my-1" for="surname" value="Surname"/>
-                        <TextInput
-                            id="surname"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.surname"
-                            autofocus
-                            autocomplete="surname"
-                        />
-                        <InputError class="mt-2" :message="form.errors.surname"/>
-                    </div>
-
-                    <div>
-                        <InputLabel class="text-white my-1" for="dob" value="Date of birth"/>
-                        <TextInput
-                            id="dob"
-                            type="date"
-                            class="mt-1 block w-full"
-                            v-model="form.dob"
-                            autofocus
-                            autocomplete="dob"
-                        />
-                        <InputError class="mt-2" :message="form.errors.dob"/>
-                    </div>
-
-                    <div>
-                        <InputLabel  class="text-white my-1" for="location" value="Location"/>
-                        <TextInput
-                            id="location"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.location"
-                            autofocus
-                            autocomplete="location"
-                        />
-                        <InputError class="mt-2" :message="form.errors.location"/>
-                    </div>
-
-                    <div>
-                        <InputLabel class="text-white my-1" for="email" value="Email"/>
-                        <TextInput
-                            id="email"
-                            type="email"
-                            class="mt-1 block w-full"
-                            v-model="form.email"
-                            autofocus
-                            autocomplete="email"
-                        />
-                        <InputError class="mt-2" :message="form.errors.email"/>
-                    </div>
-
-                    <div>
-                        <InputLabel class="text-white my-1" for="password" value="Password" />
-                        <TextInput
-                            id="password"
-                            type="password"
-                            class="mt-1 block w-full"
-                            v-model="form.password"
-                            autocomplete="new-password"
-                        />
-                        <InputError class="mt-2" :message="form.errors.password" />
-                    </div>
-
-                    <div>
-                        <InputLabel class="text-white my-1" for="password_confirmation" value="Confirm Password" />
-                        <TextInput
-                            id="password_confirmation"
-                            type="password"
-                            class="mt-1 block w-full"
-                            v-model="form.password_confirmation"
-                            autocomplete="new-password"
-                        />
-                        <InputError class="mt-2" :message="form.errors.password_confirmation" />
-                    </div>
-                </div>
-
-                <div v-if="stage === 2">
-                    <div>
-                        <InputLabel class="text-white my-1" for="username" value="Username"/>
-                        <TextInput
-                            id="username"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.username"
-                            autofocus
-                            autocomplete="username"
-                        />
-                        <InputError class="mt-2" :message="form.errors.username"/>
-                    </div>
-
-                    <div>
+                        <InputError class="mt-2" :message="form.errors.bio"/>
                         <InputLabel class="text-white my-1" for="bio" value="Bio"/>
                         <TextInput
                             id="bio"
@@ -220,16 +129,118 @@ const dateOfBirthCheck = (dob) => {
                             autofocus
                             autocomplete="bio"
                         />
-                        <InputError class="mt-2" :message="form.errors.bio"/>
+                    </div>
+
+                    <div>
+                        <InputError class="mt-2" :message="form.errors.username"/>
+                        <InputLabel class="text-white my-1" for="username" value="Username"/>
+                        <TextInput
+                            id="username"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.username"
+                            autofocus
+                            autocomplete="username"
+                        />
+                    </div>
+
+                    <div>
+                        <InputLabel class="text-white my-1" for="firstname" value="First name"/>
+                        <InputError class="mt-2" :message="form.errors.first_name"/>
+                        <TextInput
+                            id="firstname"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.first_name"
+                            autofocus
+                            autocomplete="firstname"
+                        />
+                    </div>
+
+                    <div>
+                        <InputError class="mt-2" :message="form.errors.surname"/>
+                        <InputLabel class="text-white my-1" for="surname" value="Surname"/>
+                        <TextInput
+                            id="surname"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.surname"
+                            autofocus
+                            autocomplete="surname"
+                        />
+                    </div>
+
+                    <div>
+                        <InputError class="mt-2" :message="form.errors.dob"/>
+                        <InputLabel class="text-white my-1" for="dob" value="Date of birth"/>
+                        <TextInput
+                            id="dob"
+                            type="date"
+                            class="mt-1 block w-full"
+                            v-model="form.dob"
+                            autofocus
+                            autocomplete="dob"
+                        />
+                    </div>
+
+                    <div>
+                        <InputError class="mt-2" :message="form.errors.location"/>
+                        <InputLabel  class="text-white my-1" for="location" value="Location"/>
+                        <TextInput
+                            id="location"
+                            type="text"
+                            class="mt-1 block w-full"
+                            v-model="form.location"
+                            autofocus
+                            autocomplete="location"
+                        />
+                    </div>
+
+                    <div>
+                        <InputError class="mt-2" :message="form.errors.email"/>
+                        <InputLabel class="text-white my-1" for="email" value="Email"/>
+                        <TextInput
+                            id="email"
+                            type="email"
+                            class="mt-1 block w-full"
+                            v-model="form.email"
+                            autofocus
+                            autocomplete="email"
+                        />
+                    </div>
+
+                    <div>
+                        <InputError class="mt-2" :message="form.errors.password" />
+                        <InputLabel class="text-white my-1" for="password" value="Password" />
+                        <TextInput
+                            id="password"
+                            type="password"
+                            class="mt-1 block w-full"
+                            v-model="form.password"
+                            autocomplete="new-password"
+                        />
+                    </div>
+
+                    <div>
+                        <InputError class="mt-2" :message="form.errors.password_confirmation" />
+                        <InputLabel class="text-white my-1" for="password_confirmation" value="Confirm Password" />
+                        <TextInput
+                            id="password_confirmation"
+                            type="password"
+                            class="mt-1 block w-full"
+                            v-model="form.password_confirmation"
+                            autocomplete="new-password"
+                        />
                     </div>
                 </div>
 
-                <div v-if="stage === 3">
+
+                <div v-if="stage === 2">
                     <div>
                         <h1 class="text-white">Profile Details</h1>
                         <div v-for="(value, field ) in form.data()" :key="field">
-                            <p v-if="field != 'password' && field != 'password_confirmation'" class="text-white">{{ field }}: {{ value }}</p>
                             <InputError v-if="form.hasErrors" class="mt-2" :message="form.errors[field]"/>
+                            <p v-if="field != 'password' && field != 'password_confirmation'" class="text-white">{{ field }}: {{ value }}</p>
                         </div>
 
                         <section class="text-center">
@@ -250,7 +261,7 @@ const dateOfBirthCheck = (dob) => {
                         <PrimaryButton v-if="stage != 1" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('prev')">
                             Previous Step
                         </PrimaryButton>
-                        <PrimaryButton v-if="stage != 3" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('next')">
+                        <PrimaryButton v-if="stage != 2" class="ms-4" :class="{ 'opacity-25': form.processing }" type="button" :disabled="form.processing" @click="changeStep('next')">
                             Next Step
                         </PrimaryButton>
                         <PrimaryButton v-else class="ms-4" :class="{ 'opacity-25': !(confirmInformationBox && agreeWithPolicies) }" :disabled="!(confirmInformationBox && agreeWithPolicies)" :on-click="dateOfBirthCheck(form.dob)">

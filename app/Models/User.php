@@ -93,10 +93,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->like($dislikedUser, false);
     }
 
-    public function matchings(): BelongsToMany
+    public function matchings(): HasMany
     {
-        return $this->belongsToMany(Matching::class, 'matchings', 'user1_id', 'user2_id')
-        ->where('user1_id', $this->id)
+        return $this->hasMany(Matching::class, 'user1_id', 'id')
         ->orWhere('user2_id', $this->id);
     }
 

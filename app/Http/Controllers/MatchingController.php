@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Events\UserNotification;
 use App\Models\Like;
+use App\Models\Photo;
 use DateTime;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -22,27 +23,43 @@ class MatchingController extends Controller
 
         $user = User::find(Auth::user()->id);
 
-        $matches = Matching::where('user1_id', $user->id)
-            ->orWhere('user2_id', $user->id)
-            ->get();
+        // $matches = Matching::where('user1_id', $user->id)
+        //     ->orWhere('user2_id', $user->id)
+        //     ->get();
 
-        // Initialize an array to store other users
-        $otherUsers = [];
+        // // Initialize an array to store other users
+        // $otherUsers = [];
 
-        // Iterate through matches to find the other user for each match
-        foreach ($matches as $match) {
-            if ($match->user1_id == $user->id) {
-                $otherUserId = $match->user2_id;
-            } else {
-                $otherUserId = $match->user1_id;
-            }
+        // // Iterate through matches to find the other user for each match
+        // foreach ($matches as $match) {
+        //     if ($match->user1_id == $user->id) {
+        //         $otherUserId = $match->user2_id;
+        //     } else {
+        //         $otherUserId = $match->user1_id;
+        //     }
 
-            // Fetch the other user based on 'user2_id' and add to the array
-            $otherUsers[] = User::find($otherUserId);
+        //     // Fetch the other user based on 'user2_id' and add to the array
+        //     $otherUsers[] = User::find($otherUserId);
+        // }
+
+        $userMatches = $user->matchings()->get();
+        $data = [];
+
+        foreach ($userMatches as $match) {
+            $otherUserID = ($match->user1_id == $user->id) ? $match->user2_id : $match->user1_id;
+
+            // Eager load the user and their primary photo
+            $otherUser = User::with(['photos'])->find($otherUserID);
+
+            $data[] = [
+                'user' => $otherUser,
+                'matchInformation' => $match,
+                'userPrimaryPhoto' => $otherUser->photos()->where('primary', 1)->get(),
+            ];
         }
 
         return Inertia::render('Matches/Matches', [
-            'users' => $otherUsers,
+            'matches' => $data,
         ]);
     }
 
@@ -133,26 +150,23 @@ class MatchingController extends Controller
 
         $tolerance = 3;
 
-        foreach ($user1AgeRange as $key => $value)
-        {
-            if ($key === 'min' && $user2Age >= ($value - $tolerance) && isset($user1AgeRange['max']) && $user2Age <= ($user1AgeRange['max'] + $tolerance))
-            {
+        // Calculate age score
+        foreach ($user1AgeRange as $key => $value) {
+            if ($key === 'min' && $user2Age >= ($value - $tolerance) && isset($user1AgeRange['max']) && $user2Age <= ($user1AgeRange['max'] + $tolerance)) {
                 $ageScore++;
-            }
-            elseif ($key === 'max' && $user2Age <= ($value + $tolerance) && isset($user1AgeRange['min']) && $user2Age >= ($user1AgeRange['min'] - $tolerance))
-            {
+            } elseif ($key === 'max' && $user2Age <= ($value + $tolerance) && isset($user1AgeRange['min']) && $user2Age >= ($user1AgeRange['min'] - $tolerance)) {
                 $ageScore++;
             }
         }
 
-        // Calculate similarity score for attributes
+        // Calculate attribute score
         foreach ($user1Attributes as $attribute) {
             if (in_array($attribute, $user2Attributes)) {
                 $attributeScore++;
             }
         }
 
-        // Calculate similarity score for preferences
+        // Calculate preference score
         foreach ($user1Preferences as $preference) {
             if ($preference === "Does not matter") {
                 continue;
@@ -160,9 +174,12 @@ class MatchingController extends Controller
 
             if (in_array($preference, $user2Preferences)) {
                 $preferencesScore++;
+            } elseif (in_array($preference, $user2Attributes)) { // Check for matches between preferences and attributes
+                $preferencesScore++;
             }
         }
 
+        // Combine the scores and return
         return [$ageScore, $attributeScore, $preferencesScore];
     }
 
@@ -199,6 +216,8 @@ class MatchingController extends Controller
                 $potentialMatches[] = [
                     'user' => [
                         'information' => $user,
+                        'attributes' => $user->attributes()->get(),
+                        'age' => $this->calculateAge($currentUser),
                         'scores' => $scores
                     ]
                 ];

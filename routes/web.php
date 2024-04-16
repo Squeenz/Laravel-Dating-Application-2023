@@ -54,6 +54,13 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/identity-verification', [IdentityController::class, 'create'])->name('identity.create');
     Route::post('/identity-verification/upload', [IdentityController::class, 'store'])->name('identity.store');
 
+    Route::get('/attributes', [AttributeController::class, 'index'])->name('attributes.index');
+    Route::post('/attributes', [AttributeController::class, 'store'])->name('attributes.store');
+
+    Route::get('/preferences', [PreferencesController::class, 'index'])->name('preferences.index');
+    Route::post('/preferences', [PreferencesController::class, 'store'])->name('preferences.store');
+
+
     Route::post('/report', [ReportController::class, 'store'])->name('report.store');
     Route::get('/suspended', [SuspensionController::class, 'index'])->name('suspended.index');
 
@@ -64,20 +71,11 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::post('/support/create', [SupportTicketController::class, 'store'])->name('support.store');
 });
 
-Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function() {#
-    Route::get('/attributes', [AttributeController::class, 'index'])->name('attributes.index');
-    Route::post('/attributes', [AttributeController::class, 'store'])->name('attributes.store');
-
-    Route::get('/preferences', [PreferencesController::class, 'index'])->name('preferences.index');
-    Route::post('/preferences', [PreferencesController::class, 'store'])->name('preferences.store');
-});
-
 Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function() {
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/photos/remove', [PhotoController::class, 'remove'])->name('photos.remove');
 });
 
 Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspension'])->group(function() {
@@ -98,8 +96,9 @@ Route::middleware(['auth', 'verified', 'checkPhotosAndVerified', 'checkSuspensio
 Route::middleware(['auth', 'verified', 'checkSuspension'])->group(function() {
     Route::get('/photos/get/{filename}', [PhotoController::class, 'getPrivatePhotos'])->name('photos.get');
     Route::delete('/photos/destroy/{photo}', [PhotoController::class, 'destroy'])->name('photos.destroy');
-    Route::get('/photos/add', [PhotoController::class, 'create'])->name('photos.create');
+    Route::get('/photos/manage', [PhotoController::class, 'index'])->name('photos.manage');
     Route::post('/photos/upload', [PhotoController::class, 'store'])->name('photos.store');
+    Route::patch('/photos/update/{photo}', [PhotoController::class, 'update'])->name('photos.update');
 });
 
 //ChatApplication

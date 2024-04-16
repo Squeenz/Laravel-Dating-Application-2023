@@ -12,6 +12,7 @@ class Photo extends Model
 
     protected $fillable = [
         'user_id',
+        'primary',
         'photo',
     ];
 

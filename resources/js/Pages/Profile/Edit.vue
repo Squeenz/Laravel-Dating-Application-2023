@@ -19,10 +19,6 @@ defineProps({
     <Head title="Profile" />
 
     <AuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-white leading-tight">Profile</h2>
-        </template>
-
         <div>
             <div class="bg-[#0A0A0A] shadow rounded-sm max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 

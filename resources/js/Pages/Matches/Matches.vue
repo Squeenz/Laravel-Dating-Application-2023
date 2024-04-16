@@ -8,36 +8,28 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
 //define the prop to recieve the count of photos from the server
-const props = defineProps(['users']);
-
+const props = defineProps(['matches']);
 </script>
 
 <template>
     <Head title="Matches" />
     <AuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-white leading-tight">
-                Your Matches
-            </h2>
-        </template>
-
         <div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="sm:py-[1rem] sm:px-[1rem] bg-[#0A0A0A] shadow rounded-sm text-white">
                     <h1>New Matches</h1>
                     <div
-                        v-for="user in users"
-                        :key="user.id"
+                        v-for="match in props.matches"
+                        :key="match"
                         >
-                        <div v-if="dayjs(user.updated_at).date() >= dayjs().date()" >
+                        <div v-if="dayjs(match.matchInformation.created_at).date() >= dayjs().date()" >
                             <div class="grid grid-flow-col w-full m-2 justify-around bg-red-900 rounded-md">
-                                <img class="h-[5rem] w-[5rem] bg-red-500 rounded-full my-auto">
+                                <img class="h-40 w-30 rounded-xl" :src="route('photos.get', match.userPrimaryPhoto[0].photo)" draggable="false">
                                 <div class="my-auto">
-                                    <h1>{{ user.first_name }} {{ user.surname }}  ({{ user.username }})</h1>
-                                    <h1>Age: {{ user.dob }}</h1>
-                                    <h1>Date: {{ dayjs(user.created_at).format("DD/MM/YYYY") }} ({{ dayjs(user.updated_at).fromNow() }})</h1>
+                                    <h1>{{ match.user.first_name }} {{ match.user.surname }}  ({{ match.user.username }})</h1>
+                                    <h1>Date: {{ dayjs(match.matchInformation.created_at).format("DD/MM/YYYY") }} ({{ dayjs(match.matchInformation.updated_at).fromNow() }})</h1>
                                 </div>
-                                <!-- <Link :href="route('profile.show', user.id)" class="my-auto"><PrimaryButton>Profile</PrimaryButton></Link> -->
+                                <Link :href="route('profile.show', match.user.id)" class="my-auto"><PrimaryButton>Profile</PrimaryButton></Link>
                             </div>
                         </div>
                     </div>
@@ -46,19 +38,21 @@ const props = defineProps(['users']);
                 <div class="sm:py-[1rem] sm:px-[1rem] bg-[#0A0A0A] shadow rounded-sm text-white">
                     <h1>Old Matches</h1>
                     <div
-                        v-for="user in users"
-                        :key="user.id"
+                        v-for="match in props.matches"
+                        :key="match"
                         >
-                        <div v-if="dayjs(user.updated_at).date() <= dayjs().date()" >
+                        <div v-if="dayjs(match.matchInformation.created_at).date() < dayjs().date()" >
                             <div class="grid grid-flow-col w-full m-2 justify-around bg-red-900 rounded-md">
-                                <img class="h-[5rem] w-[5rem] bg-red-500 rounded-full my-auto">
+                                <img class="h-40 w-30 rounded-xl" :src="route('photos.get', match.userPrimaryPhoto[0].photo)" draggable="false">
                                 <div class="my-auto">
-                                    <h1>{{ user.first_name }} {{ user.surname }}  ({{ user.username }})</h1>
-                                    <h1>Age: {{ user.dob }}</h1>
-                                    <h1>Date: {{ dayjs(user.created_at).format("DD/MM/YYYY") }} ({{ dayjs(user.updated_at).fromNow() }})</h1>
+                                    <h1>{{ match.user.first_name }} {{ match.user.surname }}  ({{ match.user.username }})</h1>
+                                    <h1>Date: {{ dayjs(match.matchInformation.created_at).format("DD/MM/YYYY") }} ({{ dayjs(match.matchInformation.updated_at).fromNow() }})</h1>
                                 </div>
-                                <!-- <Link :href="route('profile.show', user.id)" class="my-auto"><PrimaryButton>Profile</PrimaryButton></Link> -->
+                                <Link :href="route('profile.show', match.user.id)" class="my-auto"><PrimaryButton>Profile</PrimaryButton></Link>
                             </div>
+                        </div>
+                        <div v-else>
+                            <h1 class="mt-[1rem] text-gray-400">No old matches</h1>
                         </div>
                     </div>
                 </div>

@@ -50,18 +50,12 @@ const message = () => {
     <Head title="Chats" />
 
     <AuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-white leading-tight">
-                Chats
-            </h2>
-        </template>
-
         <div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="sm:h-[51.3rem] sm:py-[1rem] sm:px-[1rem] bg-[#0A0A0A] shadow rounded-sm text-white">
 
                     <div>
-                        <div class="grid grid-flow-row w-[25rem] float-left">
+                        <div class="grid grid-flow-row w-[20rem] float-left">
                             <div class="p-6">Chat Rooms</div>
 
                             <div class="overflow-y-auto no-scrollbar h-[45rem] scroll-smooth">
@@ -70,10 +64,10 @@ const message = () => {
                                 :key="chatRoom.id"
                                 :href="route('chat.app.show', chatRoom.name)"
                                 class="p-1 grid grid-cols-3 m-2 rounded-xl"
-                                :class="route().current('chat.app.show', chatRoom.name) ? 'bg-red-900' : 'bg-slate-300'"
+                                :class="route().current('chat.app.show', chatRoom.name) ? 'bg-red-900' : 'bg-gray-600'"
                                 >
-                                    <div class="h-20 w-20 bg-red-500 rounded-full text-center">IMG</div>
-                                    <h1 v-if="chatRoom.user2.id !== user.id" class="mt-[1rem] font-bold">{{ chatRoom.user2.first_name }} {{ chatRoom.user2.surname }} ({{ chatRoom.user2.username }})</h1>
+                                    <img class="h-40 w-30 rounded-xl" :src="route('photos.get', otherUser.primaryPhoto[0].photo)" draggable="false">
+                                    <h1 v-if="chatRoom.user2.id !== user.id" class="my-auto mx-[3rem] font-bold">{{ chatRoom.user2.first_name }} {{ chatRoom.user2.surname }} ({{ chatRoom.user2.username }})</h1>
                                     <h1 v-else class="my-auto font-bold">{{ chatRoom.user1.first_name }} {{ chatRoom.user1.surname }} ({{ chatRoom.user1.username }})</h1>
                                 </Link>
                             </div>
@@ -98,7 +92,7 @@ const message = () => {
                                         <div
                                         v-else
                                             >
-                                            <h1>{{   otherUser.first_name + " " + otherUser.surname + " (" + otherUser.username + ")" }}: {{  chatMessage.content }} </h1> <br/>
+                                            <h1>{{   otherUser.information.first_name + " " + otherUser.information.surname + " (" + otherUser.information.username + ")" }}: {{  chatMessage.content }} </h1> <br/>
                                             <h6 class=" float-right text-[0.8rem] text-gray-300">{{ dayjs(chatMessage.created_at).fromNow() }}</h6>
                                         </div>
                                 </div>

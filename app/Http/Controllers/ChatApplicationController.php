@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ChatRoom;
+use App\Models\Photo;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 use Inertia\Inertia;
@@ -22,8 +23,16 @@ class ChatApplicationController extends Controller
         })
         ->get();
 
+        foreach ($chatRooms as $chatRoom) {
+            $otherUserID = $chatRoom->user1_id == $userID ? $chatRoom->user2_id : $chatRoom->user1_id;
+            $otherUserPrimaryPhoto = Photo::where('user_id', $otherUserID)->where('primary', 1)->get();
+        }
+
         return Inertia::render('Messenger/App', [
             'chatRooms' => $chatRooms,
+            'otherUser' => [
+                'primaryPhoto' => $otherUserPrimaryPhoto,
+             ]
         ]);
     }
 
@@ -61,12 +70,16 @@ class ChatApplicationController extends Controller
         });
 
         $otherUser = $chatRoom->user1_id == $userID ? $chatRoom->user2 : $chatRoom->user1;
+        $otherUserPrimaryPhoto = Photo::where('user_id', $otherUser->id)->where('primary', 1)->get();
 
         return Inertia::render('Messenger/App', [
             'roomID' => $chatRoom->id,
             'chatRooms' => $chatRooms,
             'chatMessages' => $chatMessages,
-            'otherUser' => $otherUser,
+            'otherUser' => [
+               'information' => $otherUser,
+               'primaryPhoto' => $otherUserPrimaryPhoto,
+            ]
         ]);
     }
 

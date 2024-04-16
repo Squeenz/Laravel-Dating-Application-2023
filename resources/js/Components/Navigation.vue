@@ -202,11 +202,8 @@ const stopListening = () => {
                     <NavLink v-if="hasPerm('see matches')"  :href="route('matches')" :active="route().current('matches')" class="text-white">
                         <ListChecks class="mr-1" :size="20"/> Matches
                     </NavLink>
-                    <NavLink v-if="hasPerm('add photos')"  :href="route('photos.create')" :active="route().current('photos.create')" class="text-white">
-                        <Camera class="mr-1" :size="20"/> Add Photos
-                    </NavLink>
-                    <NavLink v-if="hasPerm('remove photos')"  :href="route('photos.remove')" :active="route().current('photos.remove')" class="text-white">
-                        <CameraOff class="mr-1" :size="20"/> Remove Photos
+                    <NavLink v-if="hasPerm('add photos')"  :href="route('photos.manage')" :active="route().current('photos.manage')" class="text-white">
+                        <Camera class="mr-1" :size="20"/> Manage Photos
                     </NavLink>
                 </div>
             </div>

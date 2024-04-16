@@ -35,7 +35,7 @@ class RegisteredUserController extends Controller
             'username' => 'required|string|max:255',
             'first_name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
+            'gender' => 'required|string|in:Male,Female,Other',
             'dob' => 'required|string|max:255',
             'bio' => 'required|string|max:255',
             'location' => 'required|string|max:255',

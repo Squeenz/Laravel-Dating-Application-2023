@@ -13,9 +13,11 @@ class CheckPhotosAndVerified
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
         //Returns the authenticated user
         $user = Auth::user();
@@ -24,22 +26,31 @@ class CheckPhotosAndVerified
         {
             if (!$user->identity)
             {
-                return redirect(route('identity.create'));
+                return redirect()->route('identity.create');
             }
-            else
+            else if ($user->identity)
             {
-                return redirect(route('identity.index'));
+                return redirect()->route('identity.index');
             }
         }
         //return the amount of photos the user has, if it's 0 and the user isn't currently in the route
         //we redirect them
-        else if ($user->hasPhotos->count() == 0 && !$request->is('photos.create') && $user->hasRole('user'))
+        else if ($user->hasRole('user'))
         {
-            return redirect(route('photos.create'));
+            if ($user->attributes()->count() === 0)
+            {
+                return redirect()->route('attributes.index');
+            }
+            else if ($user->preferences()->count() === 0)
+            {
+                return redirect()->route('preferences.index');
+            }
+            else if ($user->photos()->count() === 0)
+            {
+                return redirect()->route('photos.manage');
+            }
         }
-        else
-        {
-            return $next($request);
-        }
+
+        return $next($request);
     }
 }

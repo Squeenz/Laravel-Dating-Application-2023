@@ -95,10 +95,6 @@ const toggleReportMenu = () =>
     </Transition>
 
     <AuthenticatedLayout>
-      <template #header>
-        <h2 class="font-semibold text-xl text-white leading-tight">Profile</h2>
-      </template>
-
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="sm:py-[1rem] sm:px-[1rem] bg-[#0A0A0A] shadow rounded-sm">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">

@@ -13,8 +13,8 @@ const props = defineProps({
     allOptions: Object,
 });
 
-const minAge = ref(18);
-const maxAge = ref(60);
+const minAge = ref('18');
+const maxAge = ref('60');
 
 const form = useForm({
     gender: '',
@@ -54,14 +54,6 @@ const modifiedTitles = sectionTitles.map((title, index) => {
     }
 });
 
-const addSelectedItem = (array, n) => {
-    if (!selectedInterests.value.includes(n)){
-        selectedInterests.value.push(n);
-    } else {
-        selectedInterests.value.splice(selectedInterests.value.indexOf(n), 1);
-    }
-}
-
 const selectedItem = (fieldName, option, type) => {
     if (type === false && form[fieldName] === option) {
         form[fieldName] = ''; // Reset to empty string if the same option is clicked again
@@ -100,20 +92,6 @@ const selectedItem = (fieldName, option, type) => {
                     <h1 class="text-white">Max: {{ maxAge }}</h1>
                     <TextInput type="range" class="accent-gray-500 h-2 w-full" :min="minAge" max="60" v-model="maxAge" step="1"/>
                 </div>
-
-                <!-- <div class="m-2 rounded-sm p-6 bg-red-900">
-
-                    <InputLabel class="text-white my-1" for="location_preference" value="Maximum Distance for Matches"/>
-                    <div class="relative mb-6">
-                        <label for="labels-range-input" class="sr-only">Labels range</label>
-                        <input id="labels-range-input" type="range" v-model="rangeValues.locationDistance" min="5" max="10000" class="accent-gray-500 w-full h-2 rounded-lg cursor-pointer">
-                        <span class="text-sm text-white absolute start-0 -bottom-6">Min (5 miles)</span>
-                        <span class="text-sm text-white absolute start-1/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">50</span>
-                        <span class="text-sm text-white absolute start-2/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">100</span>
-                        <span class="text-sm text-white absolute end-0 -bottom-6">Max (Any)</span>
-                    </div>
-
-                </div> -->
 
                 <div
                     v-for="(section, index) in modifiedTitles"
